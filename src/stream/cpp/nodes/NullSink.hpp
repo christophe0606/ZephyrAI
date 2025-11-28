@@ -6,7 +6,6 @@
 #include "custom.hpp"
 #include "StreamNode.hpp"
 #include "GenericNodes.hpp"
-#include "arm_math_types.h"
 
 
 using namespace arm_cmsis_stream;
@@ -42,6 +41,7 @@ class NullSink: public GenericSink<OUT, outputSamples>
     int run() final
     {
         OUT *input = this->getReadBuffer();
+        (void)input; // Suppress unused variable warning
         
         return (CG_SUCCESS);
     };

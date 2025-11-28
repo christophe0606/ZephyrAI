@@ -27,7 +27,7 @@ NN_FEATURES = 49
 MFCC_OVERLAP = NN_FEATURES-1
 
 # Use CMSIS VStream to connect to microphones
-src = ZephyrAudioSource("audioSource",NB)
+src = ZephyrDebugAudioSource("debugSource",NB)
 deinterleave = DeinterleaveStereo("deinterleave",Q15_STEREO,NB)
 convert = StereoToMono("stereoToMono",Q15_SCALAR,NB)
 

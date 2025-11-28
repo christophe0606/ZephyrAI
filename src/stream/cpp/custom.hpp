@@ -27,11 +27,15 @@
 #ifndef CUSTOM_H_
 #define CUSTOM_H_
 
+#include "arm_mve.h"
+
 extern "C"
 {
 #include <zephyr/kernel.h>
 #include "config.h"
-#include "arm_math_types.h"
+
+extern struct k_event cg_streamEvent;
+
 }
 
 struct cf32 {
@@ -45,13 +49,13 @@ struct sf32 {
 };
 
 struct cq15 {
-    q15_t real;
-    q15_t imag;
+    int16_t real;
+    int16_t imag;
 };
 
 struct sq15 {
-    q15_t left;
-    q15_t right;
+    int16_t left;
+    int16_t right;
 };
 
 class ZephyrMutex
@@ -151,15 +155,18 @@ class ZephyrLock
 #define CG_BEFORE_SCHEDULE \
   uint32_t errorFlags = 0;
 
-#define CG_BEFORE_NODE_EXECUTION(ID)                                                                             \
-{                                                                                                                \
-    errorFlags = k_event_wait(&gAudioEvents,AUDIO_SINK_UNDERFLOW_EVENT | AUDIO_SOURCE_OVERFLOW_EVENT, false, K_FOREVER); \                                                                                                    \
-    if (errorFlags & AUDIO_SOURCE_OVERFLOW_EVENT)                                                                \
-    {                                                                                                            \
-        cgStaticError = CG_BUFFER_OVERFLOW;                                                                      \
-        goto errorHandling;                                                                                      \
-    }                                                                                                            \
-}
+  // When real audio events are generated the NO_WAIT
+  // must be replaced with forever
+#define CG_BEFORE_NODE_EXECUTION(ID)                                                                                       \
+{                                                                                                                          \
+    errorFlags = k_event_wait(&cg_streamEvent,AUDIO_SINK_UNDERFLOW_EVENT | AUDIO_SOURCE_OVERFLOW_EVENT, false, K_NO_WAIT); \
+    if (errorFlags & AUDIO_SOURCE_OVERFLOW_EVENT)                                                                          \
+    {                                                                                                                      \
+        cgStaticError = CG_BUFFER_OVERFLOW;                                                                                \
+        goto errorHandling;                                                                                                \
+    }                                                                                                                      \
+    printf("%d\n",ID);                                                                                                     \
+}                                                                                                                          
 
 
 #define CG_TIME_STAMP_TYPE uint32_t

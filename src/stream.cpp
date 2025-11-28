@@ -4,17 +4,184 @@
 #include "dsp/basic_math_functions.h"
 
 #include "custom.hpp"
+#include "EventQueue.hpp"
+#include "StreamNode.hpp"
+#include "cstream_node.h"
+
+#include "cg_queue.hpp"
 
 extern "C" {
 #include "stream.h"
+#include "scheduler.h"
+}
+
+struct k_mem_slab cg_eventPool;
+struct k_mem_slab cg_bufPool;
+struct k_mem_slab cg_mutexPool;
+
+// Event to the event thread
+struct k_event cg_eventEvent;
+
+// Event to the interrupt thread
+struct k_event cg_interruptEvent;
+
+// Event to the stream thread
+struct k_event cg_streamEvent;
+
+
+static void *event_pool_buffer;
+static void *buf_pool_buffer;
+static void *mutex_pool_buffer;
+
+
+static k_tid_t tid_stream = nullptr;
+static k_tid_t cg_eventThread = nullptr;
+static k_tid_t tid_interrupts = nullptr;
+
+static struct k_thread stream_thread;
+static struct k_thread event_thread;
+static struct k_thread interrupt_thread;
+
+
+#define NB_MAX_EVENTS 20
+#define NB_MAX_BUFS 20
+#define STACK_SIZE 4096
+
+#define AUDIO_THREAD_PRIORITY 0
+#define NORMAL_PRIORITY 5
+
+static K_THREAD_STACK_DEFINE(interrupt_thread_stack, STACK_SIZE);
+static K_THREAD_STACK_DEFINE(event_thread_stack, STACK_SIZE);
+static K_THREAD_STACK_DEFINE(stream_thread_stack, STACK_SIZE);
+
+using namespace arm_cmsis_stream;
+
+// Translate interrupt events into CMSIS Stream events
+void interrupt_thread_function(void *, void *, void *)
+{
+    DEBUG_PRINT("Started interrupt thread\n");
+    // There no interrupt event (yet) to transmit to the
+    // CMSIS Stream graph. So this thread is empty for now.
+}
+
+void event_thread_function(void *, void *, void *)
+{
+    DEBUG_PRINT("Started event thread\n");
+
+    
+
+    arm_cmsis_stream::EventQueue::cg_eventQueue->execute();
+
+    // Delete the event queue when done
+
+    delete arm_cmsis_stream::EventQueue::cg_eventQueue;
+    arm_cmsis_stream::EventQueue::cg_eventQueue = nullptr;
+
+
+}
+
+void stream_thread_function(void *, void *, void *)
+{
+    uint32_t nb_iter;
+    int error;
+    DEBUG_PRINT("Stream thread started\n");
+
+    // Init nodes and starts audio stream
+    error = init_scheduler();
+    if (error != CG_SUCCESS)
+    {
+        ERROR_PRINT("Error: Failure during scheduler initialization.\n");
+        goto err_main;
+    }
+    
+
+    DEBUG_PRINT("Starting scheduler\n");
+    nb_iter = scheduler(&error);
+    if (error != 0)
+    {
+        ERROR_PRINT("Scheduler error %d\n", error);
+    }
+    DEBUG_PRINT("Scheduler done after %d iterations\n", nb_iter);
+
+err_main:
+    DEBUG_PRINT("End stream thread\n");
+    free_scheduler();
+
 }
 
 int init_stream()
 {
+    /* Init memory slabs */
+    event_pool_buffer = nullptr;
+    buf_pool_buffer = nullptr;
+    mutex_pool_buffer = nullptr;
+
+    event_pool_buffer = k_malloc(NB_MAX_EVENTS * (sizeof(ListValue) + 16));
+    int err = k_mem_slab_init(&cg_eventPool, event_pool_buffer, sizeof(ListValue) + 16,NB_MAX_EVENTS);
+    if (err != 0)
+    {
+        ERROR_PRINT("Failed to init event pool slab\n");
+        return(err);
+    }
+
+    buf_pool_buffer = k_malloc(NB_MAX_BUFS * (sizeof(Tensor<double>) + 16));
+    err = k_mem_slab_init(&cg_bufPool, buf_pool_buffer, sizeof(Tensor<double>) + 16,NB_MAX_BUFS);
+    if (err != 0)
+    {
+        ERROR_PRINT("Failed to init buf pool slab\n");
+        return(err);
+    }
+
+    mutex_pool_buffer = k_malloc(NB_MAX_BUFS * (sizeof(CG_MUTEX) + 16));
+    err = k_mem_slab_init(&cg_mutexPool, mutex_pool_buffer, sizeof(CG_MUTEX) + 16,NB_MAX_BUFS);
+    if (err != 0)
+    {
+        ERROR_PRINT("Failed to init mutex pool slab\n");
+        return(err);
+    }
+
+    /* Init events */
+    k_event_init(&cg_eventEvent);
+    k_event_init(&cg_interruptEvent);
+    k_event_init(&cg_streamEvent);
+
+    /* Event queue init */
+    arm_cmsis_stream::EventQueue::cg_eventQueue = new (std::nothrow) MyQueue(6, 5, 4);
+    if (arm_cmsis_stream::EventQueue::cg_eventQueue == nullptr)
+    {
+        ERROR_PRINT("Can't create CMSIS Event Queue\n");
+        return(ENOMEM);
+    }
+
+
+    /* Thread inits */
+    tid_interrupts = k_thread_create(&interrupt_thread, interrupt_thread_stack,
+                                 K_THREAD_STACK_SIZEOF(interrupt_thread_stack),
+                                 interrupt_thread_function,
+                                 NULL, NULL, NULL,
+                                 NORMAL_PRIORITY, 0, K_NO_WAIT);
+
+    cg_eventThread = k_thread_create(&event_thread, event_thread_stack,
+                                 K_THREAD_STACK_SIZEOF(event_thread_stack),
+                                 event_thread_function,
+                                 NULL, NULL, NULL,
+                                 NORMAL_PRIORITY, K_FP_REGS, K_NO_WAIT);
+
+    tid_stream = k_thread_create(&stream_thread, stream_thread_stack,
+                                 K_THREAD_STACK_SIZEOF(stream_thread_stack),
+                                 stream_thread_function,
+                                 NULL, NULL, NULL,
+                                 NORMAL_PRIORITY, K_FP_REGS, K_NO_WAIT);
+
     return(0);
 }
 
 void deinit_stream()
 {
-
+   if (event_pool_buffer)
+      k_free(event_pool_buffer);
+   if (buf_pool_buffer)
+      k_free(buf_pool_buffer);
+   if (mutex_pool_buffer)
+      k_free(mutex_pool_buffer);
 }

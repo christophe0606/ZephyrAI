@@ -4,7 +4,6 @@
 #include "custom.hpp"
 #include "StreamNode.hpp"
 #include "GenericNodes.hpp"
-#include "arm_math_types.h"
 
 using namespace arm_cmsis_stream;
 

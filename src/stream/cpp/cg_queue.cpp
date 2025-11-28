@@ -24,14 +24,13 @@
  * limitations under the License.
  */
 
-#include "cg_queue.hpp"
 #include "config.h"
 #include "custom.hpp"
+#include "cg_queue.hpp"
 #include <cstdint>
 #include <variant>
 
-extern struct k_thread * cg_eventThread;
-extern struct k_event *cg_eventEvent;
+extern struct k_event cg_eventEvent;
 
 using namespace arm_cmsis_stream;
 
@@ -90,10 +89,9 @@ bool MyQueue::push(arm_cmsis_stream::Message &&event)
         }
     }
     CG_EXIT_CRITICAL_SECTION(queue_mutex, error);
-    if (cg_eventThread != nullptr)
-    {
-        k_event_post(cg_eventEvent, MY_QUEUE_NEW_EVENT_FLAG);
-    }
+    
+    k_event_post(&cg_eventEvent, MY_QUEUE_NEW_EVENT_FLAG);
+    
 
     return ok;
 }
@@ -142,10 +140,8 @@ void MyQueue::clear()
 void MyQueue::end() noexcept
 {
     mustEnd_.store(true);
-    if (cg_eventThread != nullptr)
-    {
-        k_event_post(cg_eventThread, MY_QUEUE_NEW_EVENT_FLAG);
-    }
+    k_event_post(&cg_eventEvent, MY_QUEUE_NEW_EVENT_FLAG);
+    
 };
 
 // The thread priority will be changed according to the event priority
@@ -201,7 +197,7 @@ void MyQueue::execute()
                 {
 
                     k_tid_t tid = k_current_get();
-                    int p = msg.event.priority;
+                    uint32_t p = msg.event.priority;
                     if (p >= nb_priorities)
                     {
                         p = nb_priorities - 1; // Highest priority
@@ -227,6 +223,6 @@ void MyQueue::execute()
         }
         // If new event was pushed and missed with the
         // empty test
-        k_event_wait(cg_eventEvent, MY_QUEUE_NEW_EVENT_FLAG, false, K_FOREVER);
+        k_event_wait(&cg_eventEvent, MY_QUEUE_NEW_EVENT_FLAG, false, K_FOREVER);
     }
 }

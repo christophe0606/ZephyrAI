@@ -83,3 +83,4 @@ uv2csolution.log
 build/
 RTE/
 __pycache__/
+log.txt

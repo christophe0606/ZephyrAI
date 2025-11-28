@@ -2,6 +2,7 @@ from .CFFT import *
 from .DeinterleaveStereo import *
 from .InterleaveStereo import *
 from .ZephyrAudioSource import *
+from .ZephyrDebugAudioSource import *
 from .RealToComplex import *
 from .Convert import *
 from .Hanning import *

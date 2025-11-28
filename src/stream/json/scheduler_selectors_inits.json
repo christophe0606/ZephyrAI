@@ -1,5 +1,5 @@
 {
-  "ZephyrAudioSource<sq15,320>": {
+  "ZephyrDebugAudioSource<sq15,320>": {
     "isTemplate": true,
     "selectors": []
   },

@@ -11,10 +11,10 @@ digraph structs {
     edge [arrowsize="0.5",color="black",fontcolor="black",fontname="Times-Roman"]
 
 
-audioSource [label=<
+debugSource [label=<
 <TABLE color="black" bgcolor="none" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
   <TR>
-    <TD ALIGN="CENTER" PORT="i"><FONT COLOR="black" POINT-SIZE="14.0">audioSource<BR/>(ZephyrAudioSource)</FONT></TD>
+    <TD ALIGN="CENTER" PORT="i"><FONT COLOR="black" POINT-SIZE="14.0">debugSource<BR/>(ZephyrDebugAudioSource)</FONT></TD>
   </TR>
 </TABLE>>];
 
@@ -59,7 +59,7 @@ stereoToMono [label=<
 
 
 
-audioSource:i -> deinterleave:i [style="solid",color="black",fontsize="12.0",fontcolor="black",label=<sq15(320)>
+debugSource:i -> deinterleave:i [style="solid",color="black",fontsize="12.0",fontcolor="black",label=<sq15(320)>
 ,headlabel=<<TABLE BORDER="0" CELLPADDING="4"><TR><TD><FONT COLOR="blue" POINT-SIZE="12.0" >320</FONT>
 </TD></TR></TABLE>>
 ,taillabel=<<TABLE BORDER="0" CELLPADDING="4"><TR><TD><FONT COLOR="blue" POINT-SIZE="12.0" >320</FONT>

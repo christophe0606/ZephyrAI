@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#if 0
+#if 1
 #define DEBUG_PRINT(fmt, ...) \
     fprintf(stderr, "[DEBUG] " fmt, ##__VA_ARGS__)
 #else 

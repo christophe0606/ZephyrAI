@@ -7,6 +7,9 @@ project(hello_world)
 
 target_sources(app PRIVATE src/main.c
   src/stream.cpp
+  src/stream/scheduler/scheduler.cpp
+  src/stream/cpp/cg_queue.cpp
 )
 
-target_include_directories(app PUBLIC src src/stream/cpp)
+target_include_directories(app PUBLIC src src/stream/scheduler 
+  src/stream/cpp)

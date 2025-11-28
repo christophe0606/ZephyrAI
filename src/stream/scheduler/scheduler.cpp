@@ -100,7 +100,7 @@ static uint8_t schedule[4]=
 Internal ID identification for the nodes
 
 */
-#define AUDIOSOURCE_INTERNAL_ID 0
+#define DEBUGSOURCE_INTERNAL_ID 0
 #define DEINTERLEAVE_INTERNAL_ID 1
 #define NULLSINK_INTERNAL_ID 2
 #define STEREOTOMONO_INTERNAL_ID 3
@@ -146,7 +146,7 @@ FIFO<q15_t,FIFOSIZE3,1,0> *fifo3;
 } fifos_t;
 
 typedef struct {
-    ZephyrAudioSource<sq15,320> *audioSource;
+    ZephyrDebugAudioSource<sq15,320> *debugSource;
     DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320> *deinterleave;
     NullSink<q15_t,320> *nullSink;
     StereoToMono<q15_t,320,q15_t,320,q15_t,320> *stereoToMono;
@@ -198,13 +198,13 @@ int init_scheduler()
     CG_BEFORE_NODE_INIT;
     cg_status initError;
 
-    nodes.audioSource = new (std::nothrow) ZephyrAudioSource<sq15,320>(*(fifos.fifo0),1);
-    if (nodes.audioSource==NULL)
+    nodes.debugSource = new (std::nothrow) ZephyrDebugAudioSource<sq15,320>(*(fifos.fifo0),1);
+    if (nodes.debugSource==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[AUDIOSOURCE_ID]=createStreamNode(*nodes.audioSource);
-    nodes.audioSource->setID(AUDIOSOURCE_ID);
+    identifiedNodes[DEBUGSOURCE_ID]=createStreamNode(*nodes.debugSource);
+    nodes.debugSource->setID(DEBUGSOURCE_ID);
 
     nodes.deinterleave = new (std::nothrow) DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>(*(fifos.fifo0),*(fifos.fifo1),*(fifos.fifo2));
     if (nodes.deinterleave==NULL)
@@ -234,7 +234,7 @@ int init_scheduler()
 /* Subscribe nodes for the event system*/
 
     initError = CG_SUCCESS;
-    initError = nodes.audioSource->init();
+    initError = nodes.debugSource->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
@@ -276,9 +276,9 @@ void free_scheduler()
        delete fifos.fifo3;
     }
 
-    if (nodes.audioSource!=NULL)
+    if (nodes.debugSource!=NULL)
     {
-        delete nodes.audioSource;
+        delete nodes.debugSource;
     }
     if (nodes.deinterleave!=NULL)
     {
@@ -320,7 +320,7 @@ uint32_t scheduler(int *error)
                 case 0:
                 {
                     
-                   cgStaticError = nodes.audioSource->run();
+                   cgStaticError = nodes.debugSource->run();
                 }
                 break;
 

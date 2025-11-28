@@ -4,10 +4,12 @@
 #include <cstdio>
 #include <type_traits>
 
-
+extern "C"
+{
 extern struct k_mem_slab cg_eventPool;
 extern struct k_mem_slab cg_bufPool;
 extern struct k_mem_slab cg_mutexPool;
+}
 
 template <typename T>
 class ZephyrEventPoolAllocator
