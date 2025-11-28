@@ -1,0 +1,6 @@
+{
+  "audioSource": 0,
+  "deinterleave": 1,
+  "nullSink": 2,
+  "stereoToMono": 3
+}

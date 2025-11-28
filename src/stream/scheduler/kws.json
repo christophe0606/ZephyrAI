@@ -1,0 +1,2247 @@
+{
+  "name": "structs",
+  "directed": true,
+  "strict": false,
+  "_draw_": 
+  [
+    {
+      "op": "c",
+      "grad": "none",
+      "color": "#fffffe00"
+    },
+    {
+      "op": "C",
+      "grad": "none",
+      "color": "#ffffff"
+    },
+    {
+      "op": "P",
+      "points": [[0.000,0.000],[0.000,119.200],[1803.500,119.200],[1803.500,0.000]]
+    }
+  ],
+  "bb": "0,0,1803.5,119.2",
+  "bgcolor": "white",
+  "rankdir": "LR",
+  "xdotversion": "1.7",
+  "_subgraph_cnt": 0,
+  "objects": [
+    {
+      "_gvid": 0,
+      "name": "audioSource",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[8.000,34.000],[8.000,75.500],[150.000,75.500],[150.000,34.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[8.000,34.000],[8.000,75.500],[150.000,75.500],[150.000,34.000]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [43.750,57.200],
+          "align": "l",
+          "width": 70.500,
+          "text": "audioSource"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [13.000,41.450],
+          "align": "l",
+          "width": 132.000,
+          "text": "(VStreamAudioSource)"
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.6875",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD ALIGN=\"CENTER\" PORT=\"i\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">audioSource<BR\/>(VStreamAudioSource)<\/FONT><\/TD>\n  <\/TR>\n<\/TABLE>",
+      "pos": "79,54.75",
+      "shape": "plaintext",
+      "width": "2.1944"
+    },
+    {
+      "_gvid": 1,
+      "name": "audioWin",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[651.250,72.000],[651.250,113.500],[743.750,113.500],[743.750,72.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[651.250,72.000],[651.250,113.500],[743.750,113.500],[743.750,72.000]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [670.500,95.200],
+          "align": "l",
+          "width": 54.000,
+          "text": "audioWin"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [656.250,79.450],
+          "align": "l",
+          "width": 82.500,
+          "text": "(SlidingBuffer)"
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.6875",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD ALIGN=\"CENTER\" PORT=\"i\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">audioWin<BR\/>(SlidingBuffer)<\/FONT><\/TD>\n  <\/TR>\n<\/TABLE>",
+      "pos": "697.5,92.75",
+      "shape": "plaintext",
+      "width": "1.5069"
+    },
+    {
+      "_gvid": 2,
+      "name": "deinterleave",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[250.000,18.750],[250.000,66.750],[397.000,66.750],[397.000,18.750]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[250.000,42.750],[250.000,66.750],[262.000,66.750],[262.000,42.750]]
+        },
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [254.880,50.350],
+          "align": "l",
+          "width": 2.250,
+          "text": "i"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[262.000,18.750],[262.000,66.750],[384.000,66.750],[384.000,18.750]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [290.380,45.200],
+          "align": "l",
+          "width": 65.250,
+          "text": "deinterleave"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [266.750,29.450],
+          "align": "l",
+          "width": 112.500,
+          "text": "(DeinterleaveStereo)"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[384.000,42.750],[384.000,66.750],[397.000,66.750],[397.000,42.750]]
+        },
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [389.380,50.350],
+          "align": "l",
+          "width": 2.250,
+          "text": "l"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[250.000,18.750],[250.000,42.750],[262.000,42.750],[262.000,18.750]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[384.000,18.750],[384.000,42.750],[397.000,42.750],[397.000,18.750]]
+        },
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [388.620,26.350],
+          "align": "l",
+          "width": 3.750,
+          "text": "r"
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.77778",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD PORT=\"i\"><FONT POINT-SIZE=\"12.0\" COLOR=\"black\">i<\/FONT><\/TD>\n    <TD ALIGN=\"CENTER\" ROWSPAN=\"2\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">deinterleave<BR\/>(DeinterleaveStereo)<\/FONT><\/TD>\n    <TD PORT=\"l\"><FONT POINT-SIZE=\"12.0\" COLOR=\"black\">l<\/FONT><\/TD>\n  <\/TR>\n<TR>\n \n<TD><\/TD>\n<TD PORT=\"r\"><FONT POINT-SIZE=\"12.0\" COLOR=\"black\">r<\/FONT><\/TD>\n<\/TR>\n\n<\/TABLE>",
+      "pos": "323.5,42.75",
+      "shape": "plaintext",
+      "width": "2.2639"
+    },
+    {
+      "_gvid": 3,
+      "name": "mfcc",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[836.250,72.000],[836.250,113.500],[895.000,113.500],[895.000,72.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[836.250,72.000],[836.250,113.500],[895.000,113.500],[895.000,72.000]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [851.380,95.200],
+          "align": "l",
+          "width": 28.500,
+          "text": "mfcc"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [841.250,79.450],
+          "align": "l",
+          "width": 48.750,
+          "text": "(MFCC)"
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.6875",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD ALIGN=\"CENTER\" PORT=\"i\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">mfcc<BR\/>(MFCC)<\/FONT><\/TD>\n  <\/TR>\n<\/TABLE>",
+      "pos": "865.62,92.75",
+      "shape": "plaintext",
+      "width": "1.0382"
+    },
+    {
+      "_gvid": 4,
+      "name": "mfccWin",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[981.500,72.000],[981.500,113.500],[1074.000,113.500],[1074.000,72.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[981.500,72.000],[981.500,113.500],[1074.000,113.500],[1074.000,72.000]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1001.880,95.200],
+          "align": "l",
+          "width": 51.750,
+          "text": "mfccWin"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [986.500,79.450],
+          "align": "l",
+          "width": 82.500,
+          "text": "(SlidingBuffer)"
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.6875",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD ALIGN=\"CENTER\" PORT=\"i\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">mfccWin<BR\/>(SlidingBuffer)<\/FONT><\/TD>\n  <\/TR>\n<\/TABLE>",
+      "pos": "1027.8,92.75",
+      "shape": "plaintext",
+      "width": "1.5069"
+    },
+    {
+      "_gvid": 5,
+      "name": "nullRight",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[492.500,4.000],[492.500,45.500],[558.750,45.500],[558.750,4.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[492.500,4.000],[492.500,45.500],[558.750,45.500],[558.750,4.000]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [500.880,27.200],
+          "align": "l",
+          "width": 49.500,
+          "text": "nullRight"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [497.500,11.450],
+          "align": "l",
+          "width": 56.250,
+          "text": "(NullSink)"
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.6875",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD ALIGN=\"CENTER\" PORT=\"i\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">nullRight<BR\/>(NullSink)<\/FONT><\/TD>\n  <\/TR>\n<\/TABLE>",
+      "pos": "525.62,24.75",
+      "shape": "plaintext",
+      "width": "1.1424"
+    },
+    {
+      "_gvid": 6,
+      "name": "send",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[1166.500,56.750],[1166.500,104.750],[1338.500,104.750],[1338.500,56.750]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1166.500,80.750],[1166.500,104.750],[1194.500,104.750],[1194.500,80.750]]
+        },
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1179.380,88.350],
+          "align": "l",
+          "width": 2.250,
+          "text": "i"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1194.500,56.750],[1194.500,104.750],[1306.500,104.750],[1306.500,56.750]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1237.380,83.200],
+          "align": "l",
+          "width": 26.250,
+          "text": "send"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1199.500,67.450],
+          "align": "l",
+          "width": 102.000,
+          "text": "(SendToNetwork)"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1306.500,80.750],[1306.500,104.750],[1338.500,104.750],[1338.500,80.750]]
+        },
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1311.250,88.350],
+          "align": "l",
+          "width": 22.500,
+          "text": "oev0"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1166.500,56.750],[1166.500,80.750],[1194.500,80.750],[1194.500,56.750]]
+        },
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1171.120,64.350],
+          "align": "l",
+          "width": 18.750,
+          "text": "iev0"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1306.500,56.750],[1306.500,80.750],[1338.500,80.750],[1338.500,56.750]]
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.77778",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD PORT=\"i\"><FONT POINT-SIZE=\"12.0\" COLOR=\"black\">i<\/FONT><\/TD>\n    <TD ALIGN=\"CENTER\" ROWSPAN=\"2\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">send<BR\/>(SendToNetwork)<\/FONT><\/TD>\n    <TD PORT=\"oev0\"><FONT POINT-SIZE=\"12.0\" COLOR=\"black\">oev0<\/FONT><\/TD>\n  <\/TR>\n<TR>\n<TD PORT=\"iev0\"><FONT POINT-SIZE=\"12.0\" COLOR=\"black\">iev0<\/FONT><\/TD>\n\n \n<TD><\/TD><\/TR>\n\n<\/TABLE>",
+      "pos": "1252.5,80.75",
+      "shape": "plaintext",
+      "width": "2.6111"
+    },
+    {
+      "_gvid": 7,
+      "name": "to_f32",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[493.620,72.000],[493.620,113.500],[557.620,113.500],[557.620,72.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[493.620,72.000],[493.620,113.500],[557.620,113.500],[557.620,72.000]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [507.250,95.200],
+          "align": "l",
+          "width": 36.750,
+          "text": "to_f32"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [498.620,79.450],
+          "align": "l",
+          "width": 54.000,
+          "text": "(Convert)"
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.6875",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD ALIGN=\"CENTER\" PORT=\"i\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">to_f32<BR\/>(Convert)<\/FONT><\/TD>\n  <\/TR>\n<\/TABLE>",
+      "pos": "525.62,92.75",
+      "shape": "plaintext",
+      "width": "1.1111"
+    },
+    {
+      "_gvid": 8,
+      "name": "classify",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[1554.500,37.000],[1554.500,78.500],[1650.000,78.500],[1650.000,37.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1554.500,37.000],[1554.500,78.500],[1650.000,78.500],[1650.000,37.000]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1581.250,60.200],
+          "align": "l",
+          "width": 42.000,
+          "text": "classify"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1559.500,44.450],
+          "align": "l",
+          "width": 85.500,
+          "text": "(KWSClassify)"
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.6875",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD ALIGN=\"CENTER\" PORT=\"i\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">classify<BR\/>(KWSClassify)<\/FONT><\/TD>\n  <\/TR>\n<\/TABLE>",
+      "pos": "1602.2,57.75",
+      "shape": "plaintext",
+      "width": "1.5486"
+    },
+    {
+      "_gvid": 9,
+      "name": "display",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[1703.000,37.000],[1703.000,78.500],[1795.500,78.500],[1795.500,37.000]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1703.000,37.000],[1703.000,78.500],[1795.500,78.500],[1795.500,37.000]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1729.380,60.200],
+          "align": "l",
+          "width": 39.750,
+          "text": "display"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1708.000,44.450],
+          "align": "l",
+          "width": 82.500,
+          "text": "(KWSDisplay)"
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.6875",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD ALIGN=\"CENTER\" PORT=\"i\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">display<BR\/>(KWSDisplay)<\/FONT><\/TD>\n  <\/TR>\n<\/TABLE>",
+      "pos": "1749.2,57.75",
+      "shape": "plaintext",
+      "width": "1.5069"
+    },
+    {
+      "_gvid": 10,
+      "name": "kws",
+      "_ldraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#fffffe00"
+        },
+        {
+          "op": "P",
+          "points": [[1391.500,45.750],[1391.500,93.750],[1501.500,93.750],[1501.500,45.750]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1391.500,69.750],[1391.500,93.750],[1419.500,93.750],[1419.500,69.750]]
+        },
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1396.120,77.350],
+          "align": "l",
+          "width": 18.750,
+          "text": "iev0"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1419.500,45.750],[1419.500,93.750],[1469.500,93.750],[1469.500,45.750]]
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1433.250,72.200],
+          "align": "l",
+          "width": 22.500,
+          "text": "kws"
+        },
+        {
+          "op": "F",
+          "size": 14.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1424.250,56.450],
+          "align": "l",
+          "width": 40.500,
+          "text": "(KWS)"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1469.500,69.750],[1469.500,93.750],[1501.500,93.750],[1501.500,69.750]]
+        },
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1474.250,77.350],
+          "align": "l",
+          "width": 22.500,
+          "text": "oev0"
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1391.500,45.750],[1391.500,69.750],[1419.500,69.750],[1419.500,45.750]]
+        },
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "p",
+          "points": [[1469.500,45.750],[1469.500,69.750],[1501.500,69.750],[1501.500,45.750]]
+        },
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1474.250,53.350],
+          "align": "l",
+          "width": 22.500,
+          "text": "oev1"
+        }
+      ],
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "height": "0.77778",
+      "label": "\n<TABLE color=\"black\" bgcolor=\"none\" BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\" CELLPADDING=\"4\">\n  <TR>\n    <TD PORT=\"iev0\"><FONT POINT-SIZE=\"12.0\" COLOR=\"black\">iev0<\/FONT><\/TD>\n    <TD ALIGN=\"CENTER\" ROWSPAN=\"2\"><FONT COLOR=\"black\" POINT-SIZE=\"14.0\">kws<BR\/>(KWS)<\/FONT><\/TD>\n    <TD PORT=\"oev0\"><FONT POINT-SIZE=\"12.0\" COLOR=\"black\">oev0<\/FONT><\/TD>\n  <\/TR>\n<TR>\n \n<TD><\/TD>\n<TD PORT=\"oev1\"><FONT POINT-SIZE=\"12.0\" COLOR=\"black\">oev1<\/FONT><\/TD>\n<\/TR>\n\n<\/TABLE>",
+      "pos": "1446.5,69.75",
+      "shape": "plaintext",
+      "width": "1.75"
+    }
+  ],
+  "edges": [
+    {
+      "_gvid": 0,
+      "tail": 0,
+      "head": 2,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[149.680,54.750],[178.020,54.750],[211.270,54.750],[241.990,54.750]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[241.990,56.500],[246.990,54.750],[241.990,53.000]]
+        }
+      ],
+      "_hldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [224.500,37.350],
+          "align": "l",
+          "width": 18.000,
+          "text": "320"
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [176.000,57.600],
+          "align": "l",
+          "width": 48.000,
+          "text": "sq15(320)"
+        }
+      ],
+      "_tldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [155.680,37.350],
+          "align": "l",
+          "width": 18.000,
+          "text": "320"
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "head_lp": "233.5,41.625",
+      "headlabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >320<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "headport": "i",
+      "label": "sq15(320)",
+      "lp": "200,61.875",
+      "pos": "e,248.5,54.75 149.68,54.75 178.02,54.75 211.27,54.75 241.99,54.75",
+      "style": "solid",
+      "tail_lp": "164.68,41.625",
+      "taillabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >320<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "tailport": "i"
+    },
+    {
+      "_gvid": 3,
+      "tail": 2,
+      "head": 7,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[398.500,54.750],[429.620,54.750],[463.300,65.490],[488.020,75.550]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[487.100,77.060],[492.390,77.370],[488.440,73.830]]
+        }
+      ],
+      "_hldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [469.780,60.550],
+          "align": "l",
+          "width": 18.000,
+          "text": "320"
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [423.000,70.600],
+          "align": "l",
+          "width": 43.500,
+          "text": "q15(320)"
+        }
+      ],
+      "_tldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [404.500,63.600],
+          "align": "l",
+          "width": 18.000,
+          "text": "320"
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "head_lp": "478.78,64.824",
+      "headlabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >320<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "headport": "i",
+      "label": "q15(320)",
+      "lp": "444.75,74.875",
+      "pos": "e,493.78,77.949 398.5,54.75 429.62,54.75 463.3,65.489 488.02,75.549",
+      "style": "solid",
+      "tail_lp": "413.5,67.875",
+      "taillabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >320<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "tailport": "l"
+    },
+    {
+      "_gvid": 7,
+      "tail": 7,
+      "head": 1,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[557.390,92.750],[581.740,92.750],[616.300,92.750],[644.880,92.750]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[644.740,94.500],[649.740,92.750],[644.740,91.000]]
+        }
+      ],
+      "_hldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [627.250,75.350],
+          "align": "l",
+          "width": 18.000,
+          "text": "320"
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [584.750,95.600],
+          "align": "l",
+          "width": 40.500,
+          "text": "f32(320)"
+        }
+      ],
+      "_tldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [563.390,75.350],
+          "align": "l",
+          "width": 18.000,
+          "text": "320"
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "head_lp": "636.25,79.625",
+      "headlabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >320<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "headport": "i",
+      "label": "f32(320)",
+      "lp": "605,99.875",
+      "pos": "e,651.25,92.75 557.39,92.75 581.74,92.75 616.3,92.75 644.88,92.75",
+      "style": "solid",
+      "tail_lp": "572.39,79.625",
+      "taillabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >320<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "tailport": "i"
+    },
+    {
+      "_gvid": 1,
+      "tail": 1,
+      "head": 3,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[743.460,92.750],[770.620,92.750],[804.740,92.750],[829.840,92.750]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[829.830,94.500],[834.830,92.750],[829.830,91.000]]
+        }
+      ],
+      "_hldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [812.340,75.350],
+          "align": "l",
+          "width": 18.000,
+          "text": "640"
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [769.750,95.600],
+          "align": "l",
+          "width": 40.500,
+          "text": "f32(640)"
+        }
+      ],
+      "_tldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [749.460,75.350],
+          "align": "l",
+          "width": 18.000,
+          "text": "640"
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "head_lp": "821.34,79.625",
+      "headlabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >640<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "headport": "i",
+      "label": "f32(640)",
+      "lp": "790,99.875",
+      "pos": "e,836.34,92.75 743.46,92.75 770.62,92.75 804.74,92.75 829.84,92.75",
+      "style": "solid",
+      "tail_lp": "758.46,79.625",
+      "taillabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >640<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "tailport": "i"
+    },
+    {
+      "_gvid": 4,
+      "tail": 3,
+      "head": 4,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[894.880,92.750],[917.080,92.750],[948.580,92.750],[975.220,92.750]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[975.020,94.500],[980.020,92.750],[975.020,91.000]]
+        }
+      ],
+      "_hldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [963.530,75.350],
+          "align": "l",
+          "width": 12.000,
+          "text": "10"
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [921.000,95.600],
+          "align": "l",
+          "width": 34.500,
+          "text": "f32(10)"
+        }
+      ],
+      "_tldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [900.880,75.350],
+          "align": "l",
+          "width": 12.000,
+          "text": "10"
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "head_lp": "969.53,79.625",
+      "headlabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >10<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "headport": "i",
+      "label": "f32(10)",
+      "lp": "938.25,99.875",
+      "pos": "e,981.53,92.75 894.88,92.75 917.08,92.75 948.58,92.75 975.22,92.75",
+      "style": "solid",
+      "tail_lp": "906.88,79.625",
+      "taillabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >10<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "tailport": "i"
+    },
+    {
+      "_gvid": 5,
+      "tail": 4,
+      "head": 6,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[1073.710,92.750],[1098.510,92.750],[1130.060,92.750],[1158.990,92.750]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[1158.990,94.500],[1163.990,92.750],[1158.990,91.000]]
+        }
+      ],
+      "_hldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [1141.500,75.350],
+          "align": "l",
+          "width": 18.000,
+          "text": "490"
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [1100.000,95.600],
+          "align": "l",
+          "width": 40.500,
+          "text": "f32(490)"
+        }
+      ],
+      "_tldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [1079.710,75.350],
+          "align": "l",
+          "width": 18.000,
+          "text": "490"
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "head_lp": "1150.5,79.625",
+      "headlabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >490<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "headport": "i",
+      "label": "f32(490)",
+      "lp": "1120.2,99.875",
+      "pos": "e,1165.5,92.75 1073.7,92.75 1098.5,92.75 1130.1,92.75 1159,92.75",
+      "style": "solid",
+      "tail_lp": "1088.7,79.625",
+      "taillabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >490<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "tailport": "i"
+    },
+    {
+      "_gvid": 2,
+      "tail": 2,
+      "head": 5,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[398.500,30.750],[427.880,30.750],[461.070,29.110],[486.020,27.540]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[486.120,29.290],[490.990,27.220],[485.890,25.790]]
+        }
+      ],
+      "_hldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [468.500,9.720],
+          "align": "l",
+          "width": 18.000,
+          "text": "320"
+        }
+      ],
+      "_ldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "T",
+          "pt": [423.000,33.600],
+          "align": "l",
+          "width": 43.500,
+          "text": "q15(320)"
+        }
+      ],
+      "_tldraw_": 
+      [
+        {
+          "op": "F",
+          "size": 12.000,
+          "face": "Times-Roman"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#0000ff"
+        },
+        {
+          "op": "T",
+          "pt": [404.500,13.350],
+          "align": "l",
+          "width": 18.000,
+          "text": "320"
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "head_lp": "477.5,13.996",
+      "headlabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >320<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "headport": "i",
+      "label": "q15(320)",
+      "lp": "444.75,37.875",
+      "pos": "e,492.5,27.121 398.5,30.75 427.88,30.75 461.07,29.106 486.02,27.538",
+      "style": "solid",
+      "tail_lp": "413.5,17.625",
+      "taillabel": "<TABLE BORDER=\"0\" CELLPADDING=\"4\"><TR><TD><FONT COLOR=\"blue\" POINT-SIZE=\"12.0\" >320<\/FONT>\n<\/TD><\/TR><\/TABLE>",
+      "tailport": "r"
+    },
+    {
+      "_gvid": 6,
+      "tail": 6,
+      "head": 10,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "dashed"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[1339.500,92.750],[1360.510,92.750],[1366.280,83.720],[1384.440,82.020]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[1384.070,83.790],[1388.990,81.820],[1383.910,80.290]]
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "headport": "iev0",
+      "label": "",
+      "pos": "e,1390.5,81.75 1339.5,92.75 1360.5,92.75 1366.3,83.716 1384.4,82.022",
+      "style": "dashed",
+      "tailport": "oev0"
+    },
+    {
+      "_gvid": 9,
+      "tail": 10,
+      "head": 6,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "dashed"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[1485.500,94.750],[1485.500,140.090],[1425.300,111.300],[1383.500,93.750],[1362.060,84.750],[1367.960,65.710],[1346.500,56.750],[1280.420,29.140],[1186.210,-15.330],[1180.750,49.570]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[1179.010,49.170],[1180.560,54.240],[1182.510,49.310]]
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "headport": "iev0",
+      "label": "",
+      "pos": "e,1180.5,55.75 1485.5,94.75 1485.5,140.09 1425.3,111.3 1383.5,93.75 1362.1,84.745 1368,65.714 1346.5,56.75 1280.4,29.144 1186.2,-15.329 1180.7,49.571",
+      "style": "dashed",
+      "tailport": "oev0"
+    },
+    {
+      "_gvid": 10,
+      "tail": 10,
+      "head": 8,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "dashed"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[1502.500,57.750],[1517.350,57.750],[1533.460,57.750],[1548.270,57.750]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[1548.020,59.500],[1553.020,57.750],[1548.020,56.000]]
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "headport": "i",
+      "label": "",
+      "pos": "e,1554.5,57.75 1502.5,57.75 1517.4,57.75 1533.5,57.75 1548.3,57.75",
+      "style": "dashed",
+      "tailport": "oev1"
+    },
+    {
+      "_gvid": 8,
+      "tail": 8,
+      "head": 9,
+      "_draw_": 
+      [
+        {
+          "op": "S",
+          "style": "dashed"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "b",
+          "points": [[1649.930,57.750],[1664.850,57.750],[1681.450,57.750],[1696.700,57.750]]
+        }
+      ],
+      "_hdraw_": 
+      [
+        {
+          "op": "S",
+          "style": "solid"
+        },
+        {
+          "op": "c",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "C",
+          "grad": "none",
+          "color": "#000000"
+        },
+        {
+          "op": "P",
+          "points": [[1696.630,59.500],[1701.630,57.750],[1696.630,56.000]]
+        }
+      ],
+      "arrowsize": "0.5",
+      "color": "black",
+      "fontcolor": "black",
+      "fontname": "Times-Roman",
+      "fontsize": "12.0",
+      "headport": "i",
+      "label": "",
+      "pos": "e,1703.1,57.75 1649.9,57.75 1664.8,57.75 1681.5,57.75 1696.7,57.75",
+      "style": "dashed",
+      "tailport": "i"
+    }
+  ]
+}

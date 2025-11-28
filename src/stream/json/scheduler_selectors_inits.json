@@ -1,0 +1,18 @@
+{
+  "ZephyrAudioSource<sq15,320>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "NullSink<q15_t,320>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "StereoToMono<q15_t,320,q15_t,320,q15_t,320>": {
+    "isTemplate": true,
+    "selectors": []
+  }
+}

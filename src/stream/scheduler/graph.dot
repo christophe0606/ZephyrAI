@@ -1,0 +1,89 @@
+
+
+
+
+
+
+digraph structs {
+    bgcolor = "white"
+    node [shape=plaintext,color="black",fontcolor="black",fontname="Times-Roman"]
+    rankdir=LR
+    edge [arrowsize="0.5",color="black",fontcolor="black",fontname="Times-Roman"]
+
+
+audioSource [label=<
+<TABLE color="black" bgcolor="none" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR>
+    <TD ALIGN="CENTER" PORT="i"><FONT COLOR="black" POINT-SIZE="14.0">audioSource<BR/>(ZephyrAudioSource)</FONT></TD>
+  </TR>
+</TABLE>>];
+
+
+deinterleave [label=<
+<TABLE color="black" bgcolor="none" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR>
+    <TD PORT="i"><FONT POINT-SIZE="12.0" COLOR="black">i</FONT></TD>
+    <TD ALIGN="CENTER" ROWSPAN="2"><FONT COLOR="black" POINT-SIZE="14.0">deinterleave<BR/>(DeinterleaveStereo)</FONT></TD>
+    <TD PORT="l"><FONT POINT-SIZE="12.0" COLOR="black">l</FONT></TD>
+  </TR>
+<TR>
+ 
+<TD></TD>
+<TD PORT="r"><FONT POINT-SIZE="12.0" COLOR="black">r</FONT></TD>
+</TR>
+
+</TABLE>>];
+
+nullSink [label=<
+<TABLE color="black" bgcolor="none" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR>
+    <TD ALIGN="CENTER" PORT="i"><FONT COLOR="black" POINT-SIZE="14.0">nullSink<BR/>(NullSink)</FONT></TD>
+  </TR>
+</TABLE>>];
+
+
+stereoToMono [label=<
+<TABLE color="black" bgcolor="none" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR>
+    <TD PORT="l"><FONT POINT-SIZE="12.0" COLOR="black">l</FONT></TD>
+    <TD ALIGN="CENTER" ROWSPAN="2"><FONT COLOR="black" POINT-SIZE="14.0">stereoToMono<BR/>(StereoToMono)</FONT></TD>
+    <TD PORT="o"><FONT POINT-SIZE="12.0" COLOR="black">o</FONT></TD>
+  </TR>
+<TR>
+<TD PORT="r"><FONT POINT-SIZE="12.0" COLOR="black">r</FONT></TD>
+
+ 
+<TD></TD></TR>
+
+</TABLE>>];
+
+
+
+audioSource:i -> deinterleave:i [style="solid",color="black",fontsize="12.0",fontcolor="black",label=<sq15(320)>
+,headlabel=<<TABLE BORDER="0" CELLPADDING="4"><TR><TD><FONT COLOR="blue" POINT-SIZE="12.0" >320</FONT>
+</TD></TR></TABLE>>
+,taillabel=<<TABLE BORDER="0" CELLPADDING="4"><TR><TD><FONT COLOR="blue" POINT-SIZE="12.0" >320</FONT>
+</TD></TR></TABLE>>]
+
+deinterleave:l -> stereoToMono:l [style="solid",color="black",fontsize="12.0",fontcolor="black",label=<q15(320)>
+,headlabel=<<TABLE BORDER="0" CELLPADDING="4"><TR><TD><FONT COLOR="blue" POINT-SIZE="12.0" >320</FONT>
+</TD></TR></TABLE>>
+,taillabel=<<TABLE BORDER="0" CELLPADDING="4"><TR><TD><FONT COLOR="blue" POINT-SIZE="12.0" >320</FONT>
+</TD></TR></TABLE>>]
+
+deinterleave:r -> stereoToMono:r [style="solid",color="black",fontsize="12.0",fontcolor="black",label=<q15(320)>
+,headlabel=<<TABLE BORDER="0" CELLPADDING="4"><TR><TD><FONT COLOR="blue" POINT-SIZE="12.0" >320</FONT>
+</TD></TR></TABLE>>
+,taillabel=<<TABLE BORDER="0" CELLPADDING="4"><TR><TD><FONT COLOR="blue" POINT-SIZE="12.0" >320</FONT>
+</TD></TR></TABLE>>]
+
+stereoToMono:o -> nullSink:i [style="solid",color="black",fontsize="12.0",fontcolor="black",label=<q15(320)>
+,headlabel=<<TABLE BORDER="0" CELLPADDING="4"><TR><TD><FONT COLOR="blue" POINT-SIZE="12.0" >320</FONT>
+</TD></TR></TABLE>>
+,taillabel=<<TABLE BORDER="0" CELLPADDING="4"><TR><TD><FONT COLOR="blue" POINT-SIZE="12.0" >320</FONT>
+</TD></TR></TABLE>>]
+
+
+
+
+}

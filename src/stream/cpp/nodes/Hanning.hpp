@@ -1,0 +1,56 @@
+#pragma once
+
+#include "cg_enums.h"
+#include "custom.hpp"
+#include "StreamNode.hpp"
+#include "GenericNodes.hpp"
+#include "arm_math_types.h"
+#include "dsp/basic_math_functions.h"
+#include "dsp/window_functions.h"
+#include <cstring>
+
+
+using namespace arm_cmsis_stream;
+
+template <typename IN, int inputSize, typename OUT, int outputSize>
+class Hanning;
+
+template <int inputSamples>
+class Hanning<float32_t, inputSamples, float32_t, inputSamples> : public GenericNode<float32_t, inputSamples, float32_t, inputSamples>
+{
+  public:
+    Hanning(FIFOBase<float32_t> &src, FIFOBase<float32_t> &dst)
+        : GenericNode<float32_t, inputSamples, float32_t, inputSamples>(src, dst)
+    {
+        window = new float32_t[inputSamples];
+        arm_hanning_f32(window, inputSamples);
+    };
+
+    ~Hanning()
+    {
+        delete[] window;
+    }
+
+    int prepareForRunning() final
+    {
+        if ((this->willOverflow()) || (this->willUnderflow()))
+        {
+            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
+        }
+
+        return (0);
+    };
+
+    int run() final
+    {
+        float32_t *in = this->getReadBuffer();
+        float32_t *out = this->getWriteBuffer();
+
+        arm_mult_f32(in, window, out, inputSamples);
+
+        return (CG_SUCCESS);
+    };
+
+  protected:
+    float32_t *window;
+};

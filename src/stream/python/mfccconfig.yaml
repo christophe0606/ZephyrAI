@@ -1,0 +1,25 @@
+dct:
+  kws_f32: 
+    melFilters: 40 
+    dctOutputs: 10
+    type: "f32"
+
+  
+melfilter:
+  kws_f32: 
+    fftlength: 1024 
+    fmin: 20 
+    fmax: 4000 
+    samplingRate : 16000 
+    melFilters: 40 
+    type: "f32"
+
+  
+window:
+  kws_f32:
+    frameLength: 640
+    type: "f32"  
+    win: "hanning"
+
+ 
+
