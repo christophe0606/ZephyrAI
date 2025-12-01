@@ -232,6 +232,7 @@ int init_scheduler()
 
 
 /* Subscribe nodes for the event system*/
+    nodes.debugSource->subscribe(0,*nodes.nullSink,0);
 
     initError = CG_SUCCESS;
     initError = nodes.debugSource->init();

@@ -149,9 +149,16 @@ class DebugSource : public GenericSource<OUT, outputSamples>
         else {
             static_assert(false, "Unsupported type");
         }
+        ev.sendSync(0, Event(CG_EVENT_DATA_READY));
 
         return (CG_SUCCESS);
     };
+
+    void subscribe(int outputPort, StreamNode &dst, int dstPort) final override
+    {
+        if (outputPort == 0)
+           ev.subscribe(dst, dstPort);
+    }
 
   protected:
     float32_t floatSignal[outputSamples];
@@ -162,4 +169,6 @@ class DebugSource : public GenericSource<OUT, outputSamples>
     float32_t phaseAmp = 0.0f;
     float32_t deltaPhaseAmp = 0.0f;
     bool master_;
+
+    EventOutput ev;
 };

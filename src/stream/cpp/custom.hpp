@@ -165,7 +165,6 @@ class ZephyrLock
         cgStaticError = CG_BUFFER_OVERFLOW;                                                                                \
         goto errorHandling;                                                                                                \
     }                                                                                                                      \
-    printf("%d\n",ID);                                                                                                     \
 }                                                                                                                          
 
 

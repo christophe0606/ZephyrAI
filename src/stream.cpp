@@ -13,6 +13,7 @@
 extern "C" {
 #include "stream.h"
 #include "scheduler.h"
+
 }
 
 struct k_mem_slab cg_eventPool;
@@ -53,6 +54,14 @@ static struct k_thread interrupt_thread;
 static K_THREAD_STACK_DEFINE(interrupt_thread_stack, STACK_SIZE);
 static K_THREAD_STACK_DEFINE(event_thread_stack, STACK_SIZE);
 static K_THREAD_STACK_DEFINE(stream_thread_stack, STACK_SIZE);
+
+#define SRAM0_HEAP_SIZE 200000
+
+__aligned(8)
+__attribute__((section(".alif_sram0")))
+static uint8_t sram0_heap_area[SRAM0_HEAP_SIZE];
+
+static struct k_heap sram0_heap;
 
 using namespace arm_cmsis_stream;
 
@@ -111,12 +120,15 @@ err_main:
 
 int init_stream()
 {
+    /* Init sram0 heap */
+    k_heap_init(&sram0_heap, sram0_heap_area, SRAM0_HEAP_SIZE);
+    
     /* Init memory slabs */
     event_pool_buffer = nullptr;
     buf_pool_buffer = nullptr;
     mutex_pool_buffer = nullptr;
 
-    event_pool_buffer = k_malloc(NB_MAX_EVENTS * (sizeof(ListValue) + 16));
+    event_pool_buffer = k_heap_alloc(&sram0_heap, NB_MAX_EVENTS * (sizeof(ListValue) + 16),K_NO_WAIT);
     int err = k_mem_slab_init(&cg_eventPool, event_pool_buffer, sizeof(ListValue) + 16,NB_MAX_EVENTS);
     if (err != 0)
     {
@@ -124,7 +136,7 @@ int init_stream()
         return(err);
     }
 
-    buf_pool_buffer = k_malloc(NB_MAX_BUFS * (sizeof(Tensor<double>) + 16));
+    buf_pool_buffer = k_heap_alloc(&sram0_heap, NB_MAX_BUFS * (sizeof(Tensor<double>) + 16),K_NO_WAIT);
     err = k_mem_slab_init(&cg_bufPool, buf_pool_buffer, sizeof(Tensor<double>) + 16,NB_MAX_BUFS);
     if (err != 0)
     {
@@ -132,7 +144,7 @@ int init_stream()
         return(err);
     }
 
-    mutex_pool_buffer = k_malloc(NB_MAX_BUFS * (sizeof(CG_MUTEX) + 16));
+    mutex_pool_buffer = k_heap_alloc(&sram0_heap, NB_MAX_BUFS * (sizeof(CG_MUTEX) + 16),K_NO_WAIT);
     err = k_mem_slab_init(&cg_mutexPool, mutex_pool_buffer, sizeof(CG_MUTEX) + 16,NB_MAX_BUFS);
     if (err != 0)
     {
@@ -178,10 +190,5 @@ int init_stream()
 
 void deinit_stream()
 {
-   if (event_pool_buffer)
-      k_free(event_pool_buffer);
-   if (buf_pool_buffer)
-      k_free(buf_pool_buffer);
-   if (mutex_pool_buffer)
-      k_free(mutex_pool_buffer);
+   
 }

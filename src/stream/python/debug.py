@@ -39,6 +39,8 @@ the_graph.connect(deinterleave.l,convert.l)
 the_graph.connect(deinterleave.r,convert.r)
 the_graph.connect(convert.o,nullSink.i)
 
+the_graph.connect(src["oev0"],nullSink["iev0"])
+
 
 #
 conf = Configuration()

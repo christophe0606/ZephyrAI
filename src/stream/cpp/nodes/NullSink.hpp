@@ -46,5 +46,25 @@ class NullSink: public GenericSink<OUT, outputSamples>
         return (CG_SUCCESS);
     };
 
+    void processValue(uint32_t v)
+    {
+       DEBUG_PRINT("NullSink received value: %u\n", v);
+    }
+
+    void processEvent(int dstPort, Event &&evt) final override
+    {
+        if (dstPort == 0)
+        {
+            if (evt.event_id == kValue)
+            {
+                if (evt.wellFormed<uint32_t>())
+                {
+                    evt.apply<uint32_t>(&NullSink::processValue, *this);
+                }
+            }
+        }
+    };
+
+
   
 };
