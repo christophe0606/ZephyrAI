@@ -3,7 +3,10 @@
 
 #include "dsp/basic_math_functions.h"
 
-#include "custom.hpp"
+#include <zephyr/logging/log.h>
+LOG_MODULE_REGISTER(stream_module);
+
+#include "stream_types.hpp"
 #include "EventQueue.hpp"
 #include "StreamNode.hpp"
 #include "cstream_node.h"
@@ -15,6 +18,8 @@ extern "C" {
 #include "scheduler.h"
 
 }
+
+
 
 struct k_mem_slab cg_eventPool;
 struct k_mem_slab cg_bufPool;
@@ -68,14 +73,14 @@ using namespace arm_cmsis_stream;
 // Translate interrupt events into CMSIS Stream events
 void interrupt_thread_function(void *, void *, void *)
 {
-    DEBUG_PRINT("Started interrupt thread\n");
+    LOG_DBG("Started interrupt thread\n");
     // There no interrupt event (yet) to transmit to the
     // CMSIS Stream graph. So this thread is empty for now.
 }
 
 void event_thread_function(void *, void *, void *)
 {
-    DEBUG_PRINT("Started event thread\n");
+    LOG_DBG("Started event thread\n");
 
     
 
@@ -93,27 +98,27 @@ void stream_thread_function(void *, void *, void *)
 {
     uint32_t nb_iter;
     int error;
-    DEBUG_PRINT("Stream thread started\n");
+    LOG_DBG("Stream thread started\n");
 
     // Init nodes and starts audio stream
     error = init_scheduler();
     if (error != CG_SUCCESS)
     {
-        ERROR_PRINT("Error: Failure during scheduler initialization.\n");
+        LOG_ERR("Error: Failure during scheduler initialization.\n");
         goto err_main;
     }
     
 
-    DEBUG_PRINT("Starting scheduler\n");
+    LOG_DBG("Starting scheduler\n");
     nb_iter = scheduler(&error);
     if (error != 0)
     {
-        ERROR_PRINT("Scheduler error %d\n", error);
+        LOG_ERR("Scheduler error %d\n", error);
     }
-    DEBUG_PRINT("Scheduler done after %d iterations\n", nb_iter);
+    LOG_DBG("Scheduler done after %d iterations\n", nb_iter);
 
 err_main:
-    DEBUG_PRINT("End stream thread\n");
+    LOG_DBG("End stream thread\n");
     free_scheduler();
 
 }
@@ -132,7 +137,7 @@ int init_stream()
     int err = k_mem_slab_init(&cg_eventPool, event_pool_buffer, sizeof(ListValue) + 16,NB_MAX_EVENTS);
     if (err != 0)
     {
-        ERROR_PRINT("Failed to init event pool slab\n");
+        LOG_ERR("Failed to init event pool slab\n");
         return(err);
     }
 
@@ -140,7 +145,7 @@ int init_stream()
     err = k_mem_slab_init(&cg_bufPool, buf_pool_buffer, sizeof(Tensor<double>) + 16,NB_MAX_BUFS);
     if (err != 0)
     {
-        ERROR_PRINT("Failed to init buf pool slab\n");
+        LOG_ERR("Failed to init buf pool slab\n");
         return(err);
     }
 
@@ -148,7 +153,7 @@ int init_stream()
     err = k_mem_slab_init(&cg_mutexPool, mutex_pool_buffer, sizeof(CG_MUTEX) + 16,NB_MAX_BUFS);
     if (err != 0)
     {
-        ERROR_PRINT("Failed to init mutex pool slab\n");
+        LOG_ERR("Failed to init mutex pool slab\n");
         return(err);
     }
 
@@ -161,7 +166,7 @@ int init_stream()
     arm_cmsis_stream::EventQueue::cg_eventQueue = new (std::nothrow) MyQueue(6, 5, 4);
     if (arm_cmsis_stream::EventQueue::cg_eventQueue == nullptr)
     {
-        ERROR_PRINT("Can't create CMSIS Event Queue\n");
+        LOG_ERR("Can't create CMSIS Event Queue\n");
         return(ENOMEM);
     }
 

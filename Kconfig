@@ -1,0 +1,9 @@
+config SAMPLE_RATE
+	int "Sampling rate"
+	default 16000
+
+config NB_BINS
+    int "Number of frequency bins"
+    default 128
+
+source "Kconfig.zephyr"

@@ -24,8 +24,11 @@
  * limitations under the License.
  */
 
+ #include <zephyr/logging/log.h>
+LOG_MODULE_REGISTER(cgqueue_module);
+
 #include "config.h"
-#include "custom.hpp"
+#include "stream_types.hpp"
 #include "cg_queue.hpp"
 #include <cstdint>
 #include <variant>
@@ -71,7 +74,7 @@ bool MyQueue::push(arm_cmsis_stream::Message &&event)
         }
         if (nb_elems[p] < MY_QUEUE_MAX_ELEMS)
         {
-            // DEBUG_PRINT("Push event %d\n", event.event.event_id);
+            // LOG_DBG("Push event %d\n", event.event.event_id);
             uint32_t timestamp = CG_GET_TIME_STAMP();
             event.timestamp = timestamp;
             queue[p][write[p]++] = std::move(event);
@@ -85,7 +88,7 @@ bool MyQueue::push(arm_cmsis_stream::Message &&event)
         }
         else
         {
-            ERROR_PRINT("Event queue overflow for priority %d\n", p);
+            LOG_ERR("Event queue overflow for priority %d\n", p);
         }
     }
     CG_EXIT_CRITICAL_SECTION(queue_mutex, error);

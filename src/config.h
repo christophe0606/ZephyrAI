@@ -3,27 +3,12 @@
 
 
 
-#define NB_BINS 128
-
-#define SAMPLE_RATE 16000
-
-#include <stdio.h>
-#include <stdint.h>
-
-#if 1
 #define DEBUG_PRINT(fmt, ...) \
-    fprintf(stderr, "[DEBUG] " fmt, ##__VA_ARGS__)
-#else 
+    LOG_DBG(fmt, ##__VA_ARGS__)
+ 
 
-#define DEBUG_PRINT(fmt, ...)
-#endif 
-
-#if 1
 #define ERROR_PRINT(fmt, ...) \
-    fprintf(stderr, "[ERROR] " fmt, ##__VA_ARGS__)
-#else
-#define ERROR_PRINT(fmt, ...)
-#endif 
+    LOG_ERR(fmt, ##__VA_ARGS__)
 
 
 #endif
