@@ -14,4 +14,20 @@ config I2S_NUM_BUFFERS
 	int "Number of I2S slab buffers to allocate"
 	default 4
 
+config ACTIVATION_BUF_SECTION
+	string "Linker section where activation buffer (tensor arena) is placed"
+	default ".bss.activation_buf"
+
+config ACTIVATION_BUF_SZ
+	hex "Tensor arena size"
+	default 0x20000
+
+config MODEL_SECTION
+	string "Linker section where ML model is placed"
+	default ".rodata.tflm_model"
+
+config ETHOS_U_AXI0_ONLY
+	bool "Only use AXI0 port on the Ethos"
+	default false
+
 source "Kconfig.zephyr"
