@@ -40,7 +40,7 @@ nullSink [label=<
   <TR>
     <TD PORT="i"><FONT POINT-SIZE="12.0" COLOR="black">i</FONT></TD>
     <TD ALIGN="CENTER" ROWSPAN="2"><FONT COLOR="black" POINT-SIZE="14.0">nullSink<BR/>(NullSink)</FONT></TD>
-    <TD></TD>
+    <TD PORT="oev0"><FONT POINT-SIZE="12.0" COLOR="black">oev0</FONT></TD>
   </TR>
 <TR>
 <TD PORT="iev0"><FONT POINT-SIZE="12.0" COLOR="black">iev0</FONT></TD>
@@ -64,6 +64,13 @@ stereoToMono [label=<
  
 <TD></TD></TR>
 
+</TABLE>>];
+
+display [label=<
+<TABLE color="black" bgcolor="none" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
+  <TR>
+    <TD ALIGN="CENTER" PORT="i"><FONT COLOR="black" POINT-SIZE="14.0">display<BR/>(DebugDisplay)</FONT></TD>
+  </TR>
 </TABLE>>];
 
 
@@ -94,5 +101,8 @@ stereoToMono:o -> nullSink:i [style="solid",color="black",fontsize="12.0",fontco
 
 
 
+nullSink:oev0 -> display:i [style="dashed",color="black",fontsize="12.0",fontcolor="black",label=<>
+
+]
 
 }

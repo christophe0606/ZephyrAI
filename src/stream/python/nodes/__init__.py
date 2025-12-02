@@ -13,3 +13,4 @@ from .SendToNetwork import *
 from .TFLite import *
 from .SpeexPreprocess import *
 from .StereoToMono import *
+from .ZephyrLCD import *

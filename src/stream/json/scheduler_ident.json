@@ -2,5 +2,6 @@
   "audio": 0,
   "deinterleave": 1,
   "nullSink": 2,
-  "stereoToMono": 3
+  "stereoToMono": 3,
+  "display": 4
 }

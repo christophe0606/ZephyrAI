@@ -17,11 +17,12 @@ extern "C"
 
 
 /* Node identifiers */
-#define NB_IDENTIFIED_NODES 4
-#define AUDIO_ID 0
-#define DEINTERLEAVE_ID 1
-#define NULLSINK_ID 2
-#define STEREOTOMONO_ID 3
+#define STREAMNB_IDENTIFIED_NODES 5
+#define STREAMAUDIO_ID 0
+#define STREAMDEINTERLEAVE_ID 1
+#define STREAMNULLSINK_ID 2
+#define STREAMSTEREOTOMONO_ID 3
+#define STREAMDISPLAY_ID 4
 
 
 extern CStreamNode* get_scheduler_node(int32_t nodeID);

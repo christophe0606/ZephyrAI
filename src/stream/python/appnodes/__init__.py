@@ -5,3 +5,4 @@ from .KWS import *
 from .KWSClassify import *
 from .MFCC import *
 from .SlidingBuffer import *
+from .DebugDisplay import *

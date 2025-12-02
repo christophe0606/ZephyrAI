@@ -42,6 +42,8 @@ class NullSink: public GenericSink<OUT, outputSamples>
     {
         OUT *input = this->getReadBuffer();
         (void)input; // Suppress unused variable warning
+
+        ev.sendAsync(cg_event_priority::kNormalPriority, kDo);
         
         return (CG_SUCCESS);
     };
@@ -65,6 +67,13 @@ class NullSink: public GenericSink<OUT, outputSamples>
         }
     };
 
+    void subscribe(int outputPort, StreamNode &dst, int dstPort) final override
+    {
+        if (outputPort == 0)
+           ev.subscribe(dst, dstPort);
+    }
 
+protected:
+   EventOutput ev;
   
 };

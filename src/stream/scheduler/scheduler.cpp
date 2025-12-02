@@ -104,6 +104,7 @@ Internal ID identification for the nodes
 #define DEINTERLEAVE_INTERNAL_ID 1
 #define NULLSINK_INTERNAL_ID 2
 #define STEREOTOMONO_INTERNAL_ID 3
+#define DISPLAY_INTERNAL_ID 4
 
 
 
@@ -112,7 +113,7 @@ Internal ID identification for the nodes
 Node identification
 
 ************/
-static CStreamNode identifiedNodes[NB_IDENTIFIED_NODES]={0};
+static CStreamNode identifiedNodes[STREAMNB_IDENTIFIED_NODES]={0};
 
 CG_BEFORE_FIFO_BUFFERS
 /***********
@@ -127,15 +128,15 @@ FIFO buffers
 
 #define BUFFERSIZE0 640
 CG_BEFORE_BUFFER
-uint8_t buf0[BUFFERSIZE0]={0};
+uint8_t streambuf0[BUFFERSIZE0]={0};
 
 #define BUFFERSIZE1 640
 CG_BEFORE_BUFFER
-uint8_t buf1[BUFFERSIZE1]={0};
+uint8_t streambuf1[BUFFERSIZE1]={0};
 
 #define BUFFERSIZE2 1280
 CG_BEFORE_BUFFER
-uint8_t buf2[BUFFERSIZE2]={0};
+uint8_t streambuf2[BUFFERSIZE2]={0};
 
 
 typedef struct {
@@ -150,6 +151,7 @@ typedef struct {
     DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320> *deinterleave;
     NullSink<q15_t,320> *nullSink;
     StereoToMono<q15_t,320,q15_t,320,q15_t,320> *stereoToMono;
+    DebugDisplay *display;
 } nodes_t;
 
 
@@ -159,7 +161,7 @@ static nodes_t nodes={0};
 
 CStreamNode* get_scheduler_node(int32_t nodeID)
 {
-    if (nodeID >= NB_IDENTIFIED_NODES)
+    if (nodeID >= STREAMNB_IDENTIFIED_NODES)
     {
         return(nullptr);
     }
@@ -174,22 +176,22 @@ int init_scheduler()
 {
 
     CG_BEFORE_FIFO_INIT;
-    fifos.fifo0 = new (std::nothrow) FIFO<sq15,FIFOSIZE0,1,0>(buf2);
+    fifos.fifo0 = new (std::nothrow) FIFO<sq15,FIFOSIZE0,1,0>(streambuf2);
     if (fifos.fifo0==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo1 = new (std::nothrow) FIFO<q15_t,FIFOSIZE1,1,0>(buf0);
+    fifos.fifo1 = new (std::nothrow) FIFO<q15_t,FIFOSIZE1,1,0>(streambuf0);
     if (fifos.fifo1==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo2 = new (std::nothrow) FIFO<q15_t,FIFOSIZE2,1,0>(buf1);
+    fifos.fifo2 = new (std::nothrow) FIFO<q15_t,FIFOSIZE2,1,0>(streambuf1);
     if (fifos.fifo2==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo3 = new (std::nothrow) FIFO<q15_t,FIFOSIZE3,1,0>(buf2);
+    fifos.fifo3 = new (std::nothrow) FIFO<q15_t,FIFOSIZE3,1,0>(streambuf2);
     if (fifos.fifo3==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -203,35 +205,44 @@ int init_scheduler()
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[AUDIO_ID]=createStreamNode(*nodes.audio);
-    nodes.audio->setID(AUDIO_ID);
+    identifiedNodes[STREAMAUDIO_ID]=createStreamNode(*nodes.audio);
+    nodes.audio->setID(STREAMAUDIO_ID);
 
     nodes.deinterleave = new (std::nothrow) DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>(*(fifos.fifo0),*(fifos.fifo1),*(fifos.fifo2));
     if (nodes.deinterleave==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[DEINTERLEAVE_ID]=createStreamNode(*nodes.deinterleave);
-    nodes.deinterleave->setID(DEINTERLEAVE_ID);
+    identifiedNodes[STREAMDEINTERLEAVE_ID]=createStreamNode(*nodes.deinterleave);
+    nodes.deinterleave->setID(STREAMDEINTERLEAVE_ID);
 
     nodes.nullSink = new (std::nothrow) NullSink<q15_t,320>(*(fifos.fifo3));
     if (nodes.nullSink==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[NULLSINK_ID]=createStreamNode(*nodes.nullSink);
-    nodes.nullSink->setID(NULLSINK_ID);
+    identifiedNodes[STREAMNULLSINK_ID]=createStreamNode(*nodes.nullSink);
+    nodes.nullSink->setID(STREAMNULLSINK_ID);
 
     nodes.stereoToMono = new (std::nothrow) StereoToMono<q15_t,320,q15_t,320,q15_t,320>(*(fifos.fifo1),*(fifos.fifo2),*(fifos.fifo3));
     if (nodes.stereoToMono==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STEREOTOMONO_ID]=createStreamNode(*nodes.stereoToMono);
-    nodes.stereoToMono->setID(STEREOTOMONO_ID);
+    identifiedNodes[STREAMSTEREOTOMONO_ID]=createStreamNode(*nodes.stereoToMono);
+    nodes.stereoToMono->setID(STREAMSTEREOTOMONO_ID);
+
+    nodes.display = new (std::nothrow) DebugDisplay;
+    if (nodes.display==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    identifiedNodes[STREAMDISPLAY_ID]=createStreamNode(*nodes.display);
+    nodes.display->setID(STREAMDISPLAY_ID);
 
 
 /* Subscribe nodes for the event system*/
+    nodes.nullSink->subscribe(0,*nodes.display,0);
 
     initError = CG_SUCCESS;
     initError = nodes.audio->init();
@@ -247,6 +258,10 @@ int init_scheduler()
         return(initError);
     
     initError = nodes.stereoToMono->init();
+    if (initError != CG_SUCCESS)
+        return(initError);
+    
+    initError = nodes.display->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
@@ -291,6 +306,10 @@ void free_scheduler()
     if (nodes.stereoToMono!=NULL)
     {
         delete nodes.stereoToMono;
+    }
+    if (nodes.display!=NULL)
+    {
+        delete nodes.display;
     }
 }
 

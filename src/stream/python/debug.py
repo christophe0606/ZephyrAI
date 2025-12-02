@@ -33,7 +33,7 @@ deinterleave = DeinterleaveStereo("deinterleave",Q15_STEREO,NB)
 convert = StereoToMono("stereoToMono",Q15_SCALAR,NB)
 
 nullSink = NullSink("nullSink",Q15_SCALAR,NB)
-
+lcd = DebugDisplay("display")
 
 the_graph.connect(src.o,deinterleave.i)
 the_graph.connect(deinterleave.l,convert.l)
@@ -41,7 +41,7 @@ the_graph.connect(deinterleave.r,convert.r)
 the_graph.connect(convert.o,nullSink.i)
 
 #the_graph.connect(src["oev0"],nullSink["iev0"])
-
+the_graph.connect(nullSink["oev0"],lcd["iev0"])
 
 #
 conf = Configuration()
@@ -51,6 +51,10 @@ conf.horizontal=True
 conf.nodeIdentification = True
 conf.schedName = "scheduler"
 conf.memoryOptimization = True
+# Alif code is defining some variables as buf0, buf1 and not static
+# They conflict with the buf0, buf1 defined by stream
+# So a prefix is added 
+conf.prefix = "stream"
 
 scheduling = the_graph.computeSchedule(config=conf)
 

@@ -8,6 +8,7 @@ class NullSink(GenericSink):
         # Stereo output
         self.addInput("i",theType,outLength)
         self.addEventInput()
+        self.addEventOutput()
 
     @property
     def typeName(self):

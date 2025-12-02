@@ -1,4 +1,4 @@
-west build -p always -b alif_e7_dk_rtss_he . -DCONFIG_DEBUG=y
+west build -p auto -b alif_e7_dk_rtss_he . -DCONFIG_DEBUG=y
 
 REM west build -p auto -b alif_e7_dk_rtss_he . ^
 REM  -DCONFIG_DEBUG=y -DZEPHYR_TOOLCHAIN_VARIANT="llvm" ^
