@@ -1,5 +1,5 @@
 {
-  "debugSource": 0,
+  "audio": 0,
   "deinterleave": 1,
   "nullSink": 2,
   "stereoToMono": 3

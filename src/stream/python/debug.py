@@ -27,7 +27,8 @@ NN_FEATURES = 49
 MFCC_OVERLAP = NN_FEATURES-1
 
 # Use CMSIS VStream to connect to microphones
-src = ZephyrDebugAudioSource("debugSource",NB)
+#src = ZephyrDebugAudioSource("debugSource",NB)
+src = ZephyrAudioSource("audio",NB)
 deinterleave = DeinterleaveStereo("deinterleave",Q15_STEREO,NB)
 convert = StereoToMono("stereoToMono",Q15_SCALAR,NB)
 
@@ -39,7 +40,7 @@ the_graph.connect(deinterleave.l,convert.l)
 the_graph.connect(deinterleave.r,convert.r)
 the_graph.connect(convert.o,nullSink.i)
 
-the_graph.connect(src["oev0"],nullSink["iev0"])
+#the_graph.connect(src["oev0"],nullSink["iev0"])
 
 
 #

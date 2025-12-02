@@ -18,7 +18,7 @@ extern "C"
 
 /* Node identifiers */
 #define NB_IDENTIFIED_NODES 4
-#define DEBUGSOURCE_ID 0
+#define AUDIO_ID 0
 #define DEINTERLEAVE_ID 1
 #define NULLSINK_ID 2
 #define STEREOTOMONO_ID 3

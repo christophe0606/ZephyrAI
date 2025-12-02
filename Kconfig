@@ -6,4 +6,12 @@ config NB_BINS
     int "Number of frequency bins"
     default 128
 
+config I2S_SAMPLES
+	int "Number of samples per slab buffer"
+	default 320
+
+config I2S_NUM_BUFFERS
+	int "Number of I2S slab buffers to allocate"
+	default 4
+
 source "Kconfig.zephyr"
