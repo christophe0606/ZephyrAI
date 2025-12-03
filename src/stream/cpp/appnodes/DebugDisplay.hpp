@@ -6,6 +6,7 @@ class DebugDisplay : public ZephyrLCD
 
 {
     static constexpr uint16_t redColor = 0x01F << 11;
+    static constexpr uint16_t refresh = 40; // ms
 
       public:
 	DebugDisplay() : ZephyrLCD()
@@ -14,6 +15,7 @@ class DebugDisplay : public ZephyrLCD
 
 	cg_status init() final override
 	{
+        last_ms_ = k_cyc_to_ms_near32(CG_GET_TIME_STAMP());
 		cg_status err = ZephyrLCD::init();
         if (err != CG_SUCCESS) {
             return err;
@@ -71,7 +73,20 @@ class DebugDisplay : public ZephyrLCD
         }
 
         /* draw something */
-        fillRectangle(10, 10, 100, 50, redColor); // Red rectangle
+        uint32_t current_ms = k_cyc_to_ms_near32(CG_GET_TIME_STAMP());
+        float delta = 1.0f - float(current_ms - last_ms_)/period_ms_;
+        if (delta < 0.0f)
+        {
+            delta = 0.0f;
+            last_ms_ = current_ms;
+        }
+        uint16_t color = uint16_t(0x1F * delta);
+        if (color > 0x1F)
+        {
+            color = 0x1F;
+        }
+        color = color << 11; // Red channel
+        fillRectangle(10, 10, 100, 50, color); // Red rectangle
         
         
     }
@@ -83,7 +98,7 @@ class DebugDisplay : public ZephyrLCD
         (void)canRender;
         // Ask for a new frame to be rendered
         Event evt(kDo, kNormalPriority);
-        evt.setTTL(40);
+        evt.setTTL(refresh);
         EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));
     }
 
@@ -97,4 +112,8 @@ class DebugDisplay : public ZephyrLCD
 
         
     }
+protected:
+   int period_ms_ = 1000;
+   float alpha = 1.0f;
+   uint32_t last_ms_=0;
 };

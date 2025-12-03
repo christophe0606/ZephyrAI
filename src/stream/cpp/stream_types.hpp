@@ -1,7 +1,7 @@
 #pragma once 
 
 #include "arm_mve.h"
-
+#include "arm_math_types.h"
 
 extern "C"
 {

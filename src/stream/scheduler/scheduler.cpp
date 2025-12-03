@@ -104,6 +104,7 @@ Internal ID identification for the nodes
 #define DEINTERLEAVE_INTERNAL_ID 1
 #define NULLSINK_INTERNAL_ID 2
 #define STEREOTOMONO_INTERNAL_ID 3
+#define DISPLAY_INTERNAL_ID 4
 
 
 
@@ -150,6 +151,7 @@ typedef struct {
     DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320> *deinterleave;
     NullSink<q15_t,320> *nullSink;
     StereoToMono<q15_t,320,q15_t,320,q15_t,320> *stereoToMono;
+    DebugDisplay *display;
 } nodes_t;
 
 
@@ -230,8 +232,17 @@ int init_scheduler()
     identifiedNodes[STREAMSTEREOTOMONO_ID]=createStreamNode(*nodes.stereoToMono);
     nodes.stereoToMono->setID(STREAMSTEREOTOMONO_ID);
 
+    nodes.display = new (std::nothrow) DebugDisplay;
+    if (nodes.display==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    identifiedNodes[STREAMDISPLAY_ID]=createStreamNode(*nodes.display);
+    nodes.display->setID(STREAMDISPLAY_ID);
+
 
 /* Subscribe nodes for the event system*/
+    nodes.nullSink->subscribe(0,*nodes.display,0);
 
     initError = CG_SUCCESS;
     initError = nodes.audio->init();
@@ -247,6 +258,10 @@ int init_scheduler()
         return(initError);
     
     initError = nodes.stereoToMono->init();
+    if (initError != CG_SUCCESS)
+        return(initError);
+    
+    initError = nodes.display->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
@@ -291,6 +306,10 @@ void free_scheduler()
     if (nodes.stereoToMono!=NULL)
     {
         delete nodes.stereoToMono;
+    }
+    if (nodes.display!=NULL)
+    {
+        delete nodes.display;
     }
 }
 

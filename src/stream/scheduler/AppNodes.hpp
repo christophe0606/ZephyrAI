@@ -1,4 +1,5 @@
-#include "nodes/ZephyrAudioSource.hpp"
-#include "nodes/StereoToMono.hpp"
-#include "nodes/NullSink.hpp"
 #include "nodes/DeinterleaveStereo.hpp"
+#include "nodes/StereoToMono.hpp"
+#include "appnodes/DebugDisplay.hpp"
+#include "nodes/NullSink.hpp"
+#include "nodes/ZephyrAudioSource.hpp"
