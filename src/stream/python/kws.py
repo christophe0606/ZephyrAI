@@ -3,6 +3,7 @@ from cmsis_stream.cg.scheduler.graphviz import Style
 
 from nodes import *
 from appnodes import *
+import subprocess
 
     
 the_graph = Graph()
@@ -26,7 +27,7 @@ NN_FEATURES = 49
 MFCC_OVERLAP = NN_FEATURES-1
 
 # Use CMSIS VStream to connect to microphones
-src = VStreamAudioSource("audioSource",NB)
+src = ZephyrAudioSource("audioSource",NB)
 
 deinterleave = DeinterleaveStereo("deinterleave",Q15_STEREO,NB)
 to_f32 = Convert("to_f32",Q15_SCALAR,F32_SCALAR,NB)
@@ -73,10 +74,10 @@ scheduling = the_graph.computeSchedule(config=conf)
 print("Schedule length = %d" % scheduling.scheduleLength)
 print("Memory usage %d bytes" % scheduling.memory)
 
-scheduling.ccode("../scheduler",conf)
-scheduling.genJsonIdentification("../json",conf)
-scheduling.genJsonSelectors("../json",conf)
-scheduling.genJsonSelectorsInit("../json",conf)
+scheduling.ccode("src/stream/scheduler",conf)
+scheduling.genJsonIdentification("src/stream./json",conf)
+scheduling.genJsonSelectors("src/stream./json",conf)
+scheduling.genJsonSelectorsInit("src/stream/json",conf)
 
 def maybeFolder(x):
     if hasattr(x, "folder"):
@@ -84,7 +85,7 @@ def maybeFolder(x):
     # Standard ndoes from cmsis stream package have no folders
     return ""
 
-with open("../scheduler/AppNodes.hpp","w") as f:
+with open("src/stream/scheduler/AppNodes.hpp","w") as f:
     #print(scheduling.allNodes)
     s = set([(maybeFolder(x),x.typeName) for x in scheduling.allNodes])
     for folder,n in s:
@@ -108,5 +109,7 @@ class MyStyle(Style):
 
 myStyle = MyStyle()
 
-with open("../scheduler/graph.dot","w") as f:
+with open("src/stream/scheduler/graph.dot","w") as f:
     scheduling.graphviz(f)
+
+subprocess.run(["dot","-Tpng","src/stream/scheduler/graph.dot","-o","src/stream/scheduler/kws.png"])

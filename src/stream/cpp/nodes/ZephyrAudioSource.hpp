@@ -83,6 +83,8 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 			return (CG_INIT_FAILURE);
 		}
 
+		
+
 		return (CG_SUCCESS);
 	}
 
@@ -99,6 +101,7 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 	{
 		size_t size;
 		if (!started_) {
+			LOG_DBG("Starting RX");
 			int rc = i2s_trigger(i2s_mic, I2S_DIR_RX, I2S_TRIGGER_START);
 
 			if (rc < 0) {
@@ -109,15 +112,25 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 		}
 
 		sq15 *out = this->getWriteBuffer();
+		LOG_DBG("Setting outputbuffer to zero");
 		memset(out, 0, outputSamples * sizeof(sq15));
-		int err = i2s_buf_read(i2s_mic, out, &size);
+		LOG_DBG("Trying to read I2S data");
+		int err=0;
+		void *buffer = NULL;
+		//err = i2s_buf_read(i2s_mic, out, &size);
+		err = i2s_read(i2s_mic, &buffer, &size);
+
+		
 
 		if (err != 0) {
 			LOG_ERR("i2s_buf_read failed: %d", err);
+			k_mem_slab_free(&mem_slab, buffer);
             stop_audio();
 			return (CG_BUFFER_UNDERFLOW);
 		}
 
+		memcpy(out, buffer, size);
+		k_mem_slab_free(&mem_slab, buffer);
 		return (CG_SUCCESS);
 	};
 

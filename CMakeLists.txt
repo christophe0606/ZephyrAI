@@ -9,7 +9,11 @@ target_sources(app PRIVATE src/main.c
   src/stream.cpp
   src/stream/scheduler/scheduler.cpp
   src/stream/cpp/cg_queue.cpp
+  src/stream/kws_img.c 
+  src/stream/cpp/kws_mfcc.c
 )
 
 target_include_directories(app PUBLIC src src/stream/scheduler 
   src/stream/cpp)
+
+target_compile_definitions(app PRIVATE ACTIVATION_BUF_SZ=CONFIG_ACTIVATION_BUF_SZ)

@@ -1,46 +1,16 @@
 #pragma once
 
-#include "EventQueue.hpp"
-#include "RTE_Components.h"
-#include "config.h"
-#include "m-profile/armv7m_cachel1.h"
-#include <arm_mve.h>
-#include <cstddef>
-#include <cstdint>
-#include <utility>
-#include <variant>
-
-#include CMSIS_device_header
-
-#include <atomic>
-
-#include "GenericNodes.hpp"
-#include "StreamNode.hpp"
-#include "arm_math_types.h"
-#include "cg_enums.h"
-#include "custom.hpp"
-
-extern "C"
-{
-#include "Driver_CDC200.h"
-#include "cmsis_os2.h"
-#include "cmsis_vstream.h"
-#include "config.h"
-#include "kws_img.h"
-}
-
-#include "nodes/VStreamVideoSink.hpp"
+#include "nodes/ZephyrLCD.hpp"
 
 using namespace arm_cmsis_stream;
 
-class KWSDisplay : public VStreamVideoSink
+class KWSDisplay : public ZephyrLCD
 {
     
     static constexpr uint32_t duration = 2;
 
   public:
-    KWSDisplay()
-        : VStreamVideoSink()
+    KWSDisplay(): ZephyrLCD()
     {
     }
 
@@ -48,14 +18,14 @@ class KWSDisplay : public VStreamVideoSink
     {
         drawFrame();
 
-        return VStreamVideoSink::init();
+        return ZephyrLCD::init();
     }
 
     virtual ~KWSDisplay() {};
 
     uint32_t getTime()
     {
-        return (1000*osKernelGetTickCount()) / osKernelGetTickFreq();
+        return k_cyc_to_ms_near32(CG_GET_TIME_STAMP());
     }
 
     void drawImage(uint16_t *renderingFrame, const uint8_t *img, const uint32_t w, const uint32_t h)

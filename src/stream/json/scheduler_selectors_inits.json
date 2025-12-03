@@ -14,9 +14,5 @@
   "StereoToMono<q15_t,320,q15_t,320,q15_t,320>": {
     "isTemplate": true,
     "selectors": []
-  },
-  "DebugDisplay": {
-    "isTemplate": false,
-    "selectors": []
   }
 }

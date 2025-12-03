@@ -1,6 +1,6 @@
 # A solution is a collection of related projects that share same base configuration.
 solution:
-  created-for: CMSIS-Toolbox@2.10.0
+  created-for: CMSIS-Toolbox@2.12.0
   cdefault: # use CMSIS-Toolbox default Compiler options
 
   # Compilers that can be selected
@@ -22,9 +22,7 @@ solution:
         - set:
           images:
             # Update path to point to the correct ELF file for your project.
-            - image: "build\\zephyr\\zephyr.elf"
-            - project-context: Zephyr.Debug
-              load: none
+            - image: "build/zephyr/zephyr.elf"
           debugger:
             name: ULINKplus@pyOCD
             port: 3333

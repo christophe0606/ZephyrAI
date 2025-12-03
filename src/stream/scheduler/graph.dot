@@ -66,13 +66,6 @@ stereoToMono [label=<
 
 </TABLE>>];
 
-display [label=<
-<TABLE color="black" bgcolor="none" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
-  <TR>
-    <TD ALIGN="CENTER" PORT="i"><FONT COLOR="black" POINT-SIZE="14.0">display<BR/>(DebugDisplay)</FONT></TD>
-  </TR>
-</TABLE>>];
-
 
 
 audio:i -> deinterleave:i [style="solid",color="black",fontsize="12.0",fontcolor="black",label=<sq15(320)>
@@ -101,8 +94,5 @@ stereoToMono:o -> nullSink:i [style="solid",color="black",fontsize="12.0",fontco
 
 
 
-nullSink:oev0 -> display:i [style="dashed",color="black",fontsize="12.0",fontcolor="black",label=<>
-
-]
 
 }

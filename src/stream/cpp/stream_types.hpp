@@ -124,7 +124,7 @@ class ZephyrLock
 #include "rtos_events.hpp"
 
 // Because memory optimization is enabled
-#define CG_BEFORE_BUFFER __ALIGNED(16)
+#define CG_BEFORE_BUFFER __aligned(16)
 
 #define CG_BEFORE_SCHEDULE \
   uint32_t errorFlags = 0;
@@ -139,7 +139,8 @@ class ZephyrLock
         cgStaticError = CG_BUFFER_OVERFLOW;                                                                                \
         goto errorHandling;                                                                                                \
     }                                                                                                                      \
-}                                                                                                                          
+    LOG_DBG("Node %d executing\n", ID);                                                                                     \
+}                                                                                                                        
 
 
 #define CG_TIME_STAMP_TYPE uint32_t

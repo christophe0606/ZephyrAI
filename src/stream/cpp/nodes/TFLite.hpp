@@ -1,12 +1,11 @@
 #pragma once
 
+#include "custom.hpp"
 #include "GenericNodes.hpp"
 #include "StreamNode.hpp"
 #include "arm_math_types.h"
 #include "cg_enums.h"
 #include "config.h"
-#include "custom.hpp"
-#include "node_globals.hpp"
 
 #include "tensorflow/lite/c/common.h"
 #include "tensorflow/lite/micro/kernels/micro_ops.h"

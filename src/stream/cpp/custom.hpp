@@ -28,7 +28,7 @@
 #define CUSTOM_H_
 
 #include <zephyr/logging/log.h>
-LOG_MODULE_REGISTER(stream_scheduler_module);
+LOG_MODULE_REGISTER(streamsched);
 
 #include "stream_types.hpp"
 

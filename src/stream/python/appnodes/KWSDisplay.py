@@ -2,9 +2,9 @@ from cmsis_stream.cg.scheduler import GenericSink
 
 from nodes import *
 
-class KWSDisplay(VStreamVideoSink):
+class KWSDisplay(ZephyrLCD):
     def __init__(self,name):
-        VStreamVideoSink.__init__(self,name)
+        ZephyrLCD.__init__(self,name)
         self.addEventInput(1)
 
 

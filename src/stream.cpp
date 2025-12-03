@@ -4,7 +4,7 @@
 #include "dsp/basic_math_functions.h"
 
 #include <zephyr/logging/log.h>
-LOG_MODULE_REGISTER(stream_module);
+LOG_MODULE_REGISTER(stream);
 
 #include "stream_types.hpp"
 #include "EventQueue.hpp"
@@ -51,14 +51,13 @@ static struct k_thread interrupt_thread;
 
 #define NB_MAX_EVENTS 20
 #define NB_MAX_BUFS 20
-#define STACK_SIZE 4096
 
 #define AUDIO_THREAD_PRIORITY 0
 #define NORMAL_PRIORITY 5
 
-static K_THREAD_STACK_DEFINE(interrupt_thread_stack, STACK_SIZE);
-static K_THREAD_STACK_DEFINE(event_thread_stack, STACK_SIZE);
-static K_THREAD_STACK_DEFINE(stream_thread_stack, STACK_SIZE);
+static K_THREAD_STACK_DEFINE(interrupt_thread_stack, 1024);
+static K_THREAD_STACK_DEFINE(event_thread_stack, 1024);
+static K_THREAD_STACK_DEFINE(stream_thread_stack, 4096);
 
 #define SRAM0_HEAP_SIZE 200000
 
@@ -178,17 +177,25 @@ int init_stream()
                                  NULL, NULL, NULL,
                                  NORMAL_PRIORITY, 0, K_NO_WAIT);
 
+    k_thread_name_set(&interrupt_thread, "interrupt_to_evt");
+
+
     cg_eventThread = k_thread_create(&event_thread, event_thread_stack,
                                  K_THREAD_STACK_SIZEOF(event_thread_stack),
                                  event_thread_function,
                                  NULL, NULL, NULL,
                                  NORMAL_PRIORITY, K_FP_REGS, K_NO_WAIT);
 
+    k_thread_name_set(&event_thread, "event_thread");
+
+
     tid_stream = k_thread_create(&stream_thread, stream_thread_stack,
                                  K_THREAD_STACK_SIZEOF(stream_thread_stack),
                                  stream_thread_function,
                                  NULL, NULL, NULL,
                                  NORMAL_PRIORITY, K_FP_REGS, K_NO_WAIT);
+
+    k_thread_name_set(&stream_thread, "stream_thread");
 
     return(0);
 }

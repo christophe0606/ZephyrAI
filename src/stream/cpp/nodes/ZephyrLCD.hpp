@@ -10,6 +10,8 @@ extern "C"
    #include "dbuf_display/display.h"
 }
 
+#define DISPLAY_IMAGE_SIZE (DISPLAY_FRAME_WIDTH * DISPLAY_FRAME_HEIGHT * sizeof(uint16_t))
+
 using namespace arm_cmsis_stream;
 
 class ZephyrLCD : public StreamNode
