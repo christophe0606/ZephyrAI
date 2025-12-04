@@ -2,10 +2,10 @@ from cmsis_stream.cg.scheduler import GenericSink
 
 from nodes import *
 
-class AppDisplay(VStreamVideoSink):
+class AppDisplay(ZephyrLCD):
     def __init__(self,name):
-        VStreamVideoSink.__init__(self,name)
-        self.addEventInput(3)
+        ZephyrLCD.__init__(self,name)
+        self.addEventInput(2)
 
 
     @property

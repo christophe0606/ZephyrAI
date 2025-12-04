@@ -9,39 +9,63 @@ import subprocess
 the_graph = Graph()
 
 SAMPLING_FREQ_HZ = 16000
-AUDIO_PACKET_DURATION = 20 # ms 
-OVERLAP_DURATION = 20 
-WINDOWS_DURATION = 40 
+AUDIO_PACKET_DURATION = 16 # ms (256 samples)
+OVERLAP_DURATION = 16 
+WINDOWS_DURATION = 32 
 
 NB_AUDIO_SAMPLES = int(1e-3 * AUDIO_PACKET_DURATION * SAMPLING_FREQ_HZ)
 NB_OVERLAP_SAMPLES = int(1e-3 * OVERLAP_DURATION * SAMPLING_FREQ_HZ)
 NB_WINDOW_SAMPLES = int(1e-3 * WINDOWS_DURATION * SAMPLING_FREQ_HZ)
 
+FFT_SIZE = NB_WINDOW_SAMPLES # 512
 
 NB = NB_AUDIO_SAMPLES
-MFCC_FEATURES = 10
-NN_FEATURES = 49
 
-# Every new "audio" block of 20ms a new full tensor input is generated
-# If it is too often, the overlap can be decreased
-MFCC_OVERLAP = NN_FEATURES-1
+print(f"NB_AUDIO_SAMPLES={NB_AUDIO_SAMPLES}")
+print(f"NB_OVERLAP_SAMPLES={NB_OVERLAP_SAMPLES}")
+print(f"NB_WINDOW_SAMPLES={NB_WINDOW_SAMPLES}")
 
 # Use CMSIS VStream to connect to microphones
 #src = ZephyrDebugAudioSource("debugSource",NB)
 src = ZephyrAudioSource("audio",NB)
-deinterleave = DeinterleaveStereo("deinterleave",Q15_STEREO,NB)
-convert = StereoToMono("stereoToMono",Q15_SCALAR,NB)
+to_f32 = Convert("to_f32",Q15_STEREO,F32_STEREO,NB)
+deinterleave = DeinterleaveStereo("deinterleave",F32_STEREO,NB)
 
-nullSink = NullSink("nullSink",Q15_SCALAR,NB)
-lcd = DebugDisplay("display")
 
-the_graph.connect(src.o,deinterleave.i)
-the_graph.connect(deinterleave.l,convert.l)
-the_graph.connect(deinterleave.r,convert.r)
-the_graph.connect(convert.o,nullSink.i)
+audioWinLeft=SlidingBuffer("audioWinLeft",CType(F32),NB_WINDOW_SAMPLES,NB_OVERLAP_SAMPLES)
+audioWinRight=SlidingBuffer("audioWinRight",CType(F32),NB_WINDOW_SAMPLES,NB_OVERLAP_SAMPLES)
 
-#the_graph.connect(src["oev0"],nullSink["iev0"])
-the_graph.connect(nullSink["oev0"],lcd["iev0"])
+win_left = Hanning("winLeft",NB_WINDOW_SAMPLES)
+win_right= Hanning("winRight",NB_WINDOW_SAMPLES)
+
+to_complex_left = RealToComplex("toComplexLeft",F32,NB_WINDOW_SAMPLES)
+to_complex_right= RealToComplex("toComplexRight",F32,NB_WINDOW_SAMPLES)
+fft_left = CFFT("fftLeft",F32_COMPLEX,FFT_SIZE)
+fft_right = CFFT("fftRight",F32_COMPLEX,FFT_SIZE)
+
+spectrogram_left = Spectrogram("spectrogramLeft",FFT_SIZE)
+spectrogram_right= Spectrogram("spectrogramRight",FFT_SIZE)
+
+display = AppDisplay("display")
+
+the_graph.connect(src.o,to_f32.i)
+the_graph.connect(to_f32.o,deinterleave.i)
+the_graph.connect(deinterleave.l,audioWinLeft.i)
+the_graph.connect(deinterleave.r,audioWinRight.i)
+
+the_graph.connect(audioWinLeft.o,win_left.i)
+the_graph.connect(audioWinRight.o,win_right.i)
+
+the_graph.connect(win_left.o,to_complex_left.i)
+the_graph.connect(win_right.o,to_complex_right.i)
+
+the_graph.connect(to_complex_left.o,fft_left.i)
+the_graph.connect(to_complex_right.o,fft_right.i)
+the_graph.connect(fft_left.o,spectrogram_left.i)
+the_graph.connect(fft_right.o,spectrogram_right.i)
+
+the_graph.connect(spectrogram_left["oev0"],display["iev0"])
+the_graph.connect(spectrogram_right["oev0"],display["iev1"])
 
 #
 conf = Configuration()

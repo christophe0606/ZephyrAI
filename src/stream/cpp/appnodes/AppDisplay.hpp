@@ -1,38 +1,17 @@
 #pragma once
 
-#include "RTE_Components.h"
-#include "config.h"
-#include "m-profile/armv7m_cachel1.h"
+
 #include <utility>
 #include <variant>
 
-#include CMSIS_device_header
-
-#include <atomic>
-
-#include "GenericNodes.hpp"
-#include "StreamNode.hpp"
-#include "arm_math_types.h"
-#include "cg_enums.h"
-#include "custom.hpp"
-
-extern "C"
-{
-#include "Driver_CDC200.h"
-#include "cmsis_os2.h"
-#include "cmsis_vstream.h"
-#include "config.h"
-}
-
-#include "nodes/VStreamVideoSink.hpp"
+#include "nodes/ZephyrLCD.hpp"
 
 using namespace arm_cmsis_stream;
 
-class AppDisplay : public VStreamVideoSink
+class AppDisplay : public ZephyrLCD
 {
   public:
-    AppDisplay()
-        : VStreamVideoSink()
+    AppDisplay() : ZephyrLCD()
     {
     }
 
@@ -40,7 +19,7 @@ class AppDisplay : public VStreamVideoSink
     {
         drawFrame();
 
-        return VStreamVideoSink::init();
+        return ZephyrLCD::init();
     }
 
     virtual ~AppDisplay() {};
@@ -50,9 +29,9 @@ class AppDisplay : public VStreamVideoSink
     static constexpr int PADDING_TOP = 10;
     static constexpr int PADDING_BOTTOM = 10;
     static constexpr int HORIZONTAL_SEPARATION = 10;
-    static constexpr int boxWidth = (DISPLAY_FRAME_WIDTH - PADDING_LEFT - PADDING_RIGHT - HORIZONTAL_SEPARATION) / 2;
-    static constexpr int boxHeight = DISPLAY_FRAME_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
-    static constexpr int delta = (int)(boxHeight / (float)(NB_BINS - 1));
+    static constexpr int boxWidth = (DISPLAY_WIDTH - PADDING_LEFT - PADDING_RIGHT - HORIZONTAL_SEPARATION) / 2;
+    static constexpr int boxHeight = DISPLAY_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
+    static constexpr int delta = (int)(boxHeight / (float)(CONFIG_NB_BINS - 1));
     static constexpr uint16_t redColor = 0x01F << 11;
     static constexpr uint16_t greenColor = 0x03F << 5;
     static constexpr uint16_t orangeColor = redColor | (0x00F << 5);
@@ -70,13 +49,13 @@ class AppDisplay : public VStreamVideoSink
             height += y;
             y = 0;
         }
-        if (width + x > DISPLAY_FRAME_WIDTH)
+        if (width + x > DISPLAY_WIDTH)
         {
-            width = DISPLAY_FRAME_WIDTH - x;
+            width = DISPLAY_WIDTH - x;
         }
-        if (height + y > DISPLAY_FRAME_HEIGHT)
+        if (height + y > DISPLAY_HEIGHT)
         {
-            height = DISPLAY_FRAME_HEIGHT - y;
+            height = DISPLAY_HEIGHT - y;
         }
         if (width <= 0)
             return;
@@ -88,7 +67,7 @@ class AppDisplay : public VStreamVideoSink
             {
                 int px = x + j;
                 int py = y + i;
-                renderingFrame[py * DISPLAY_FRAME_WIDTH + px] = color;
+                renderingFrame[py * DISPLAY_WIDTH + px] = color;
             }
         }
     }
@@ -112,14 +91,14 @@ class AppDisplay : public VStreamVideoSink
             y = 0;
             drawTop = false;
         }
-        if (width + x > DISPLAY_FRAME_WIDTH)
+        if (width + x > DISPLAY_WIDTH)
         {
-            width = DISPLAY_FRAME_WIDTH - x;
+            width = DISPLAY_WIDTH - x;
             drawRight = false;
         }
-        if (height + y > DISPLAY_FRAME_HEIGHT)
+        if (height + y > DISPLAY_HEIGHT)
         {
-            height = DISPLAY_FRAME_HEIGHT - y;
+            height = DISPLAY_HEIGHT - y;
             drawBottom = false;
         }
 
@@ -133,7 +112,7 @@ class AppDisplay : public VStreamVideoSink
             {
                 int px = x + j;
                 int py = y;
-                renderingFrame[py * DISPLAY_FRAME_WIDTH + px] = color;
+                renderingFrame[py * DISPLAY_WIDTH + px] = color;
             }
         }
         if (drawBottom)
@@ -142,7 +121,7 @@ class AppDisplay : public VStreamVideoSink
             {
                 int px = x + j;
                 int py = y + height - 1;
-                renderingFrame[py * DISPLAY_FRAME_WIDTH + px] = color;
+                renderingFrame[py * DISPLAY_WIDTH + px] = color;
             }
         }
         if (drawLeft)
@@ -151,7 +130,7 @@ class AppDisplay : public VStreamVideoSink
             {
                 int px = x;
                 int py = y + i;
-                renderingFrame[py * DISPLAY_FRAME_WIDTH + px] = color;
+                renderingFrame[py * DISPLAY_WIDTH + px] = color;
             }
         }
         if (drawRight)
@@ -160,7 +139,7 @@ class AppDisplay : public VStreamVideoSink
             {
                 int px = x + width - 1;
                 int py = y + i;
-                renderingFrame[py * DISPLAY_FRAME_WIDTH + px] = color;
+                renderingFrame[py * DISPLAY_WIDTH + px] = color;
             }
         }
     }
@@ -171,12 +150,12 @@ class AppDisplay : public VStreamVideoSink
         s.lock_shared(lockError, [this, pos](const Tensor<float> &tensor)
         {
            
-                if (tensor.dims[0] == NB_BINS)
+                if (tensor.dims[0] == CONFIG_NB_BINS)
                 {
                     const float *buf = tensor.buffer();
                     float p = 0;
 
-                    for (int i = 0; i < NB_BINS; i++)
+                    for (int i = 0; i < CONFIG_NB_BINS; i++)
                     {
                         p = i * delta;
            
@@ -210,28 +189,7 @@ class AppDisplay : public VStreamVideoSink
         strokeRectangle(PADDING_LEFT, PADDING_TOP, boxWidth, boxHeight, 0x00);
         strokeRectangle(PADDING_LEFT + boxWidth + HORIZONTAL_SEPARATION, PADDING_TOP, boxWidth, boxHeight, 0x00);
 
-        if (currentCameraFrame)
-        {
-#if 1
-            bool lockError;
-            currentCameraFrame.lock_shared(lockError, [renderingFrame, this](const Tensor<uint16_t> &tensor)
-                                           {
-            
-               
-             const uint16_t *buf = tensor.buffer();
-             
-                    const int wpad = (DISPLAY_FRAME_WIDTH - tensor.dims[1]) / 2;
-                    const int hpad = (DISPLAY_FRAME_HEIGHT - tensor.dims[0]) / 2;
-                    for (int h = 0; h < tensor.dims[0]; h++)
-                    {
-                        for (int w = 0; w < tensor.dims[1]; w++)
-                        {
-                            renderingFrame[wpad+w + (DISPLAY_FRAME_HEIGHT-h-hpad) * DISPLAY_FRAME_WIDTH] = buf[(w) + (h) * tensor.dims[1]];
-                        }
-                    } });
-
-#endif
-        }
+    
     }
 
     void processEvent(int dstPort, Event &&evt) final override
@@ -240,15 +198,7 @@ class AppDisplay : public VStreamVideoSink
         // New camera frame or spectrogram
         if (evt.event_id == kValue)
         {
-            // New camera frame
-            if (dstPort == 2)
-            {
-                if (evt.wellFormed<TensorPtr<uint16_t>>())
-                {
-                    evt.apply<TensorPtr<uint16_t>>(&AppDisplay::processCameraFrame, *this);
-                    return;
-                }
-            }
+           
 
             // New left spectrogram
             if (dstPort == 0)
@@ -273,16 +223,7 @@ class AppDisplay : public VStreamVideoSink
     }
 
   protected:
-    void processCameraFrame(TensorPtr<uint16_t> &&frame)
-    {
-        currentCameraFrame = std::move(frame);
 
-        // Render new frame each time a camera frame is received
-        bool canRender = this->renderNewFrame();
-
-        // Release the frame so that camera get new one
-        currentCameraFrame.reset();
-    }
 
     void processLeftSpectrogram(TensorPtr<float> &&frame)
     {
@@ -294,7 +235,6 @@ class AppDisplay : public VStreamVideoSink
         rightSpectrogram = std::move(frame);
     }
 
-    TensorPtr<uint16_t> currentCameraFrame;
     TensorPtr<float> leftSpectrogram;
     TensorPtr<float> rightSpectrogram;
 };

@@ -7,3 +7,4 @@ from .MFCC import *
 from .SlidingBuffer import *
 from .DebugDisplay import *
 from .KWSDisplay import *
+from .AppDisplay import *

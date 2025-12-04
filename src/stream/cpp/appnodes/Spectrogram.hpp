@@ -55,19 +55,19 @@ class Spectrogram<cf32, inputSamples>
 
         // arm_scale_f32(mag, 1.0f / magSamples, mag, magSamples);
 
-        float di = 1.0 * NB_BINS / ((float)magSamples);
+        float di = 1.0f * CONFIG_NB_BINS / ((float)magSamples);
         // float scale = 1.0f * FFT_SIZE / 2 / NB_BIN;
         float k = 0;
         memset(bins, 0, sizeof(bins));
 
         for (int i = 0; i < magSamples; i++)
         {
-            if (k < NB_BINS)
+            if (k < CONFIG_NB_BINS)
                 bins[(int)k] += mag[i];
             k += di;
         }
 
-        for (int i = 0; i < NB_BINS; i++)
+        for (int i = 0; i < CONFIG_NB_BINS; i++)
         {
             //   bins[i] *= scale;
             if (bins[i] > 1.0f)
@@ -76,7 +76,7 @@ class Spectrogram<cf32, inputSamples>
                 bins[i] = 0.0f;
         }
 #if 1
-        UniquePtr<float> tensorData(NB_BINS);
+        UniquePtr<float> tensorData(CONFIG_NB_BINS);
         memcpy(tensorData.get(), bins, sizeof(bins));
 
         // Spectrogram frames have lower priority than video frames and may be delayed
@@ -85,7 +85,7 @@ class Spectrogram<cf32, inputSamples>
         // live for 40 ms only (refresh rate is 32 ms per audio packet).
         // So old spectrogram events are discarded by the event queue and not sent to the display
         // node.
-        TensorPtr<float> t = TensorPtr<float>::create_with(NB_BINS,std::move(tensorData));
+        TensorPtr<float> t = TensorPtr<float>::create_with(CONFIG_NB_BINS,std::move(tensorData));
         bool status = ev0.sendAsyncWithTTL(kNormalPriority, kValue, 40, std::move(t)); // Send the event to the subscribed nodes
 
         if (!status)
@@ -107,6 +107,6 @@ class Spectrogram<cf32, inputSamples>
 
   protected:
     float32_t *mag;
-    float32_t bins[NB_BINS];
+    float32_t bins[CONFIG_NB_BINS];
     EventOutput ev0;
 };

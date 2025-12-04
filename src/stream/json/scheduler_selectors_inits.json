@@ -1,21 +1,37 @@
 {
-  "ZephyrAudioSource<sq15,320>": {
+  "ZephyrAudioSource<sq15,256>": {
     "isTemplate": true,
     "selectors": []
   },
-  "DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>": {
+  "SlidingBuffer<float,512,256>": {
     "isTemplate": true,
     "selectors": []
   },
-  "NullSink<q15_t,320>": {
+  "DeinterleaveStereo<sf32,256,float,256,float,256>": {
     "isTemplate": true,
     "selectors": []
   },
-  "StereoToMono<q15_t,320,q15_t,320,q15_t,320>": {
+  "CFFT<cf32,512,cf32,512>": {
     "isTemplate": true,
     "selectors": []
   },
-  "DebugDisplay": {
+  "Spectrogram<cf32,512>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "RealToComplex<float,512,cf32,512>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "Convert<sq15,256,sf32,256>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "Hanning<float,512,float,512>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "AppDisplay": {
     "isTemplate": false,
     "selectors": []
   }
