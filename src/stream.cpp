@@ -52,7 +52,7 @@ static struct k_thread interrupt_thread;
 #define NB_MAX_EVENTS 20
 #define NB_MAX_BUFS 20
 
-#define AUDIO_THREAD_PRIORITY 0
+#define AUDIO_THREAD_PRIORITY (0)
 #define NORMAL_PRIORITY 5
 
 static K_THREAD_STACK_DEFINE(interrupt_thread_stack, 1024);
@@ -72,14 +72,14 @@ using namespace arm_cmsis_stream;
 // Translate interrupt events into CMSIS Stream events
 void interrupt_thread_function(void *, void *, void *)
 {
-    LOG_DBG("Started interrupt thread\n");
+    LOG_INF("Started interrupt thread\n");
     // There no interrupt event (yet) to transmit to the
     // CMSIS Stream graph. So this thread is empty for now.
 }
 
 void event_thread_function(void *, void *, void *)
 {
-    LOG_DBG("Started event thread\n");
+    LOG_INF("Started event thread\n");
 
     
 
@@ -97,7 +97,7 @@ void stream_thread_function(void *, void *, void *)
 {
     uint32_t nb_iter;
     int error;
-    LOG_DBG("Stream thread started\n");
+    LOG_INF("Stream thread started\n");
 
     // Init nodes and starts audio stream
     error = init_scheduler();
@@ -108,16 +108,16 @@ void stream_thread_function(void *, void *, void *)
     }
     
 
-    LOG_DBG("Starting scheduler\n");
+    LOG_INF("Starting scheduler\n");
     nb_iter = scheduler(&error);
     if (error != 0)
     {
         LOG_ERR("Scheduler error %d\n", error);
     }
-    LOG_DBG("Scheduler done after %d iterations\n", nb_iter);
+    LOG_INF("Scheduler done after %d iterations\n", nb_iter);
 
 err_main:
-    LOG_DBG("End stream thread\n");
+    LOG_INF("End stream thread\n");
     free_scheduler();
 
 }
@@ -193,9 +193,11 @@ int init_stream()
                                  K_THREAD_STACK_SIZEOF(stream_thread_stack),
                                  stream_thread_function,
                                  NULL, NULL, NULL,
-                                 NORMAL_PRIORITY, K_FP_REGS, K_NO_WAIT);
+                                 AUDIO_THREAD_PRIORITY, K_FP_REGS, K_NO_WAIT);
 
     k_thread_name_set(&stream_thread, "stream_thread");
+
+    printf("Stream initialized\n");
 
     return(0);
 }

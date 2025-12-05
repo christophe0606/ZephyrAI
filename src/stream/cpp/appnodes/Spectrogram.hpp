@@ -86,12 +86,14 @@ class Spectrogram<cf32, inputSamples>
         // So old spectrogram events are discarded by the event queue and not sent to the display
         // node.
         TensorPtr<float> t = TensorPtr<float>::create_with(CONFIG_NB_BINS,std::move(tensorData));
+        
         bool status = ev0.sendAsyncWithTTL(kNormalPriority, kValue, 40, std::move(t)); // Send the event to the subscribed nodes
 
         if (!status)
         {
             ERROR_PRINT("Failed to send spectrogram event\n");
         }
+        
 
 #else
         ev0.sendSync(kNormalPriority, kValue, 1.0); // Send the event to the subscribed nodes

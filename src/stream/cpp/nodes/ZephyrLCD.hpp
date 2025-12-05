@@ -34,7 +34,7 @@ class ZephyrLCD : public StreamNode
             return CG_INIT_FAILURE;
         }
 
-		drawFrame();
+		this->drawFrame();
 		display_next_frame();
 
 		return CG_SUCCESS;

@@ -46,26 +46,41 @@ fft_right = CFFT("fftRight",F32_COMPLEX,FFT_SIZE)
 spectrogram_left = Spectrogram("spectrogramLeft",FFT_SIZE)
 spectrogram_right= Spectrogram("spectrogramRight",FFT_SIZE)
 
+DISABLE_LEFT = False
+DISABLE_RIGHT = True
+
+nullSinkLeft = NullSink("nullSinkLeft",F32_COMPLEX,NB)
+nullSinkRight = NullSink("nullSinkRight",F32_SCALAR,NB)
+nullAll = NullSink("nullAll",Q15_STEREO,NB)
+
 display = AppDisplay("display")
+#display = DebugDisplay("display")
 
-the_graph.connect(src.o,to_f32.i)
-the_graph.connect(to_f32.o,deinterleave.i)
-the_graph.connect(deinterleave.l,audioWinLeft.i)
-the_graph.connect(deinterleave.r,audioWinRight.i)
 
-the_graph.connect(audioWinLeft.o,win_left.i)
-the_graph.connect(audioWinRight.o,win_right.i)
-
-the_graph.connect(win_left.o,to_complex_left.i)
-the_graph.connect(win_right.o,to_complex_right.i)
-
-the_graph.connect(to_complex_left.o,fft_left.i)
-the_graph.connect(to_complex_right.o,fft_right.i)
-the_graph.connect(fft_left.o,spectrogram_left.i)
-the_graph.connect(fft_right.o,spectrogram_right.i)
-
-the_graph.connect(spectrogram_left["oev0"],display["iev0"])
-the_graph.connect(spectrogram_right["oev0"],display["iev1"])
+if DISABLE_LEFT and DISABLE_RIGHT:
+    the_graph.connect(src.o,nullAll.i)
+else:
+    the_graph.connect(src.o,to_f32.i)
+    the_graph.connect(to_f32.o,deinterleave.i)
+    if DISABLE_LEFT:
+        the_graph.connect(deinterleave.l,nullSinkLeft.i)
+    else:
+        the_graph.connect(deinterleave.l,audioWinLeft.i)
+        the_graph.connect(audioWinLeft.o,win_left.i)
+        the_graph.connect(win_left.o,to_complex_left.i)
+        the_graph.connect(to_complex_left.o,fft_left.i)
+        the_graph.connect(fft_left.o,spectrogram_left.i)
+        the_graph.connect(spectrogram_left["oev0"],display["iev0"])
+    
+    if DISABLE_RIGHT:
+        the_graph.connect(deinterleave.r,nullSinkRight.i)
+    else:
+        the_graph.connect(deinterleave.r,audioWinRight.i)
+        the_graph.connect(audioWinRight.o,win_right.i)
+        the_graph.connect(win_right.o,to_complex_right.i)
+        the_graph.connect(to_complex_right.o,fft_right.i)
+        the_graph.connect(fft_right.o,spectrogram_right.i)
+        the_graph.connect(spectrogram_right["oev0"],display["iev1"])
 
 #
 conf = Configuration()

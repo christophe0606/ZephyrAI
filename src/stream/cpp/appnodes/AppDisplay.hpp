@@ -1,40 +1,37 @@
 #pragma once
 
-
-#include <utility>
-#include <variant>
-
 #include "nodes/ZephyrLCD.hpp"
 
 using namespace arm_cmsis_stream;
 
 class AppDisplay : public ZephyrLCD
+
 {
-  public:
-    AppDisplay() : ZephyrLCD()
-    {
-    }
-
-    cg_status init() final override
-    {
-        drawFrame();
-
-        return ZephyrLCD::init();
-    }
-
-    virtual ~AppDisplay() {};
-
-    static constexpr int PADDING_LEFT = 10;
-    static constexpr int PADDING_RIGHT = 10;
-    static constexpr int PADDING_TOP = 10;
-    static constexpr int PADDING_BOTTOM = 10;
-    static constexpr int HORIZONTAL_SEPARATION = 10;
-    static constexpr int boxWidth = (DISPLAY_WIDTH - PADDING_LEFT - PADDING_RIGHT - HORIZONTAL_SEPARATION) / 2;
-    static constexpr int boxHeight = DISPLAY_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
-    static constexpr int delta = (int)(boxHeight / (float)(CONFIG_NB_BINS - 1));
     static constexpr uint16_t redColor = 0x01F << 11;
-    static constexpr uint16_t greenColor = 0x03F << 5;
-    static constexpr uint16_t orangeColor = redColor | (0x00F << 5);
+    static constexpr uint16_t refresh = 40; // ms
+
+      public:
+	AppDisplay() : ZephyrLCD()
+	{
+	}
+
+	cg_status init() final override
+	{
+        last_ms_ = k_cyc_to_ms_near32(CG_GET_TIME_STAMP());
+		cg_status err = ZephyrLCD::init();
+        if (err != CG_SUCCESS) {
+            return err;
+        }
+
+        //Event evt(kDo, kNormalPriority);
+        //evt.setTTL(refresh);
+        //EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));
+  
+		return CG_SUCCESS;
+	}
+
+	virtual ~AppDisplay() {};
+	
 
     void fillRectangle(int x, int y, int width, int height, uint16_t color)
     {
@@ -71,170 +68,63 @@ class AppDisplay : public ZephyrLCD
             }
         }
     }
-
-    void strokeRectangle(int x, int y, int width, int height, uint16_t color)
-    {
-        uint16_t *renderingFrame = (uint16_t *)this->renderingFrame();
-        bool drawTop = true;
-        bool drawBottom = true;
-        bool drawLeft = true;
-        bool drawRight = true;
-        if (x < 0)
-        {
-            width += x;
-            x = 0;
-            drawLeft = false;
-        }
-        if (y < 0)
-        {
-            height += y;
-            y = 0;
-            drawTop = false;
-        }
-        if (width + x > DISPLAY_WIDTH)
-        {
-            width = DISPLAY_WIDTH - x;
-            drawRight = false;
-        }
-        if (height + y > DISPLAY_HEIGHT)
-        {
-            height = DISPLAY_HEIGHT - y;
-            drawBottom = false;
-        }
-
-        if (width <= 0)
-            return;
-        if (height <= 0)
-            return;
-        if (drawTop)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                int px = x + j;
-                int py = y;
-                renderingFrame[py * DISPLAY_WIDTH + px] = color;
-            }
-        }
-        if (drawBottom)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                int px = x + j;
-                int py = y + height - 1;
-                renderingFrame[py * DISPLAY_WIDTH + px] = color;
-            }
-        }
-        if (drawLeft)
-        {
-            for (int i = 0; i < height; i++)
-            {
-                int px = x;
-                int py = y + i;
-                renderingFrame[py * DISPLAY_WIDTH + px] = color;
-            }
-        }
-        if (drawRight)
-        {
-            for (int i = 0; i < height; i++)
-            {
-                int px = x + width - 1;
-                int py = y + i;
-                renderingFrame[py * DISPLAY_WIDTH + px] = color;
-            }
-        }
-    }
-
-    void drawSpectrogram(int pos, const TensorPtr<float> &s)
-    {
-        bool lockError;
-        s.lock_shared(lockError, [this, pos](const Tensor<float> &tensor)
-        {
-           
-                if (tensor.dims[0] == CONFIG_NB_BINS)
-                {
-                    const float *buf = tensor.buffer();
-                    float p = 0;
-
-                    for (int i = 0; i < CONFIG_NB_BINS; i++)
-                    {
-                        p = i * delta;
-           
-                        float v = buf[i];
-                        if (v > 1.0f)
-                            v = 1.0f;
-                        if (v < 0.0f)
-                            v = 0.0f;
-                        fillRectangle(pos,
-                                      (int)(PADDING_TOP + p),
-                                      (int)(boxWidth * v),
-                                      delta,
-                                      greenColor);
-                }   
-            } 
-        });
-    }
+   
 
     void drawFrame() final override
     {
-
         uint16_t *renderingFrame = (uint16_t *)this->renderingFrame();
-        memset(renderingFrame, 0x00, DISPLAY_IMAGE_SIZE);
+        if (renderingFrame == nullptr)
+        {
+            LOG_ERR("Failed to get rendering frame");
+            return;
+        }
 
-        // fillRectangle(0,0,CAMERA_FRAME_WIDTH,CAMERA_FRAME_HEIGHT,0x03F << 5);
-        // Draw spectrograms
+        /* draw something */
+        uint32_t current_ms = k_cyc_to_ms_near32(CG_GET_TIME_STAMP());
+        float delta = 1.0f - float(current_ms - last_ms_)/period_ms_;
+        if (delta < 0.0f)
+        {
+            delta = 0.0f;
+            last_ms_ = current_ms;
+        }
+        uint16_t color = uint16_t(0x1F * delta);
+        if (color > 0x1F)
+        {
+            color = 0x1F;
+        }
+        color = color << 5; // green channel
+        fillRectangle(10, 10, 100, 50, color); // Green rectangle
+        
+        
+    }
 
-        drawSpectrogram(PADDING_LEFT, leftSpectrogram);
-        drawSpectrogram(PADDING_LEFT + boxWidth + HORIZONTAL_SEPARATION, rightSpectrogram);
-
-        strokeRectangle(PADDING_LEFT, PADDING_TOP, boxWidth, boxHeight, 0x00);
-        strokeRectangle(PADDING_LEFT + boxWidth + HORIZONTAL_SEPARATION, PADDING_TOP, boxWidth, boxHeight, 0x00);
-
-    
+    void genNewFrame()
+    {
+        // generate a new frame
+        bool canRender = this->renderNewFrame();
+        (void)canRender;
+        // Ask for a new frame to be rendered
+        //Event evt(kDo, kNormalPriority);
+        //evt.setTTL(refresh);
+        //EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));
     }
 
     void processEvent(int dstPort, Event &&evt) final override
     {
-
-        // New camera frame or spectrogram
+        //LOG_INF("Debug Display: event %d\n", evt.event_id);
+        //if (evt.event_id == kDo)
+        //{
+        //    genNewFrame();
+        //}
         if (evt.event_id == kValue)
         {
-           
-
-            // New left spectrogram
-            if (dstPort == 0)
-            {
-                if (evt.wellFormed<TensorPtr<float>>())
-                {
-                    evt.apply<TensorPtr<float>>(&AppDisplay::processLeftSpectrogram, *this);
-                    return;
-                }
-            }
-
-            // New right spectrogram
-            if (dstPort == 1)
-            {
-                if (evt.wellFormed<TensorPtr<float>>())
-                {
-                    evt.apply<TensorPtr<float>>(&AppDisplay::processRightSpectrogram, *this);
-                    return;
-                }
-            }
+            genNewFrame();
         }
+
+        
     }
-
-  protected:
-
-
-    void processLeftSpectrogram(TensorPtr<float> &&frame)
-    {
-        leftSpectrogram = std::move(frame);
-    }
-
-    void processRightSpectrogram(TensorPtr<float> &&frame)
-    {
-        rightSpectrogram = std::move(frame);
-    }
-
-    TensorPtr<float> leftSpectrogram;
-    TensorPtr<float> rightSpectrogram;
+protected:
+   int period_ms_ = 1000;
+   float alpha = 1.0f;
+   uint32_t last_ms_=0;
 };

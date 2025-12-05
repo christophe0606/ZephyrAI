@@ -119,7 +119,6 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 		void *buffer = NULL;
 		//err = i2s_buf_read(i2s_mic, out, &size);
 		err = i2s_read(i2s_mic, &buffer, &size);
-
 		
 
 		if (err != 0) {

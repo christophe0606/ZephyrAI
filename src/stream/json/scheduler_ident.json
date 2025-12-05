@@ -1,16 +1,12 @@
 {
   "audio": 0,
   "audioWinLeft": 1,
-  "audioWinRight": 2,
-  "deinterleave": 3,
-  "fftLeft": 4,
-  "fftRight": 5,
-  "spectrogramLeft": 6,
-  "spectrogramRight": 7,
-  "toComplexLeft": 8,
-  "toComplexRight": 9,
-  "to_f32": 10,
-  "winLeft": 11,
-  "winRight": 12,
-  "display": 13
+  "deinterleave": 2,
+  "fftLeft": 3,
+  "nullSinkRight": 4,
+  "spectrogramLeft": 5,
+  "toComplexLeft": 6,
+  "to_f32": 7,
+  "winLeft": 8,
+  "display": 9
 }
