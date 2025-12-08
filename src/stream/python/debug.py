@@ -28,6 +28,7 @@ print(f"NB_WINDOW_SAMPLES={NB_WINDOW_SAMPLES}")
 # Use CMSIS VStream to connect to microphones
 #src = ZephyrDebugAudioSource("debugSource",NB)
 src = ZephyrAudioSource("audio",NB)
+gain = Gain("gain",Q15_STEREO,NB,10)
 to_f32 = Convert("to_f32",Q15_STEREO,F32_STEREO,NB)
 deinterleave = DeinterleaveStereo("deinterleave",F32_STEREO,NB)
 
@@ -47,7 +48,7 @@ spectrogram_left = Spectrogram("spectrogramLeft",FFT_SIZE)
 spectrogram_right= Spectrogram("spectrogramRight",FFT_SIZE)
 
 DISABLE_LEFT = False
-DISABLE_RIGHT = True
+DISABLE_RIGHT = False
 
 nullSinkLeft = NullSink("nullSinkLeft",F32_COMPLEX,NB)
 nullSinkRight = NullSink("nullSinkRight",F32_SCALAR,NB)
@@ -60,7 +61,8 @@ display = AppDisplay("display")
 if DISABLE_LEFT and DISABLE_RIGHT:
     the_graph.connect(src.o,nullAll.i)
 else:
-    the_graph.connect(src.o,to_f32.i)
+    the_graph.connect(src.o,gain.i)
+    the_graph.connect(gain.o,to_f32.i)
     the_graph.connect(to_f32.o,deinterleave.i)
     if DISABLE_LEFT:
         the_graph.connect(deinterleave.l,nullSinkLeft.i)

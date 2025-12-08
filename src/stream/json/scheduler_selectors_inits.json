@@ -15,7 +15,7 @@
     "isTemplate": true,
     "selectors": []
   },
-  "NullSink<float,256>": {
+  "Gain<sq15,256,sq15,256>": {
     "isTemplate": true,
     "selectors": []
   },

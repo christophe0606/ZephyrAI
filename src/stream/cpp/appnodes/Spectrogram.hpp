@@ -50,10 +50,11 @@ class Spectrogram<cf32, inputSamples>
         const int magSamples = inputSamples >> 1;
         cf32 *in = this->getReadBuffer();
 
+        //arm_scale_f32((float32_t*)in, 4.0f, (float32_t*)in, inputSamples);
+
         // We keep half of the complex FFT spectrum
         arm_cmplx_mag_f32((float32_t *)in, mag, magSamples);
 
-        // arm_scale_f32(mag, 1.0f / magSamples, mag, magSamples);
 
         float di = 1.0f * CONFIG_NB_BINS / ((float)magSamples);
         // float scale = 1.0f * FFT_SIZE / 2 / NB_BIN;
@@ -75,7 +76,9 @@ class Spectrogram<cf32, inputSamples>
             if (bins[i] < 0.0f)
                 bins[i] = 0.0f;
         }
-#if 1
+
+        
+
         UniquePtr<float> tensorData(CONFIG_NB_BINS);
         memcpy(tensorData.get(), bins, sizeof(bins));
 
@@ -95,9 +98,7 @@ class Spectrogram<cf32, inputSamples>
         }
         
 
-#else
-        ev0.sendSync(kNormalPriority, kValue, 1.0); // Send the event to the subscribed nodes
-#endif
+
 
         return (CG_SUCCESS);
     };

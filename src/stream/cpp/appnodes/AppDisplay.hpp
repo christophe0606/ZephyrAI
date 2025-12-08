@@ -1,14 +1,26 @@
 #pragma once
 
 #include "nodes/ZephyrLCD.hpp"
+#include "appnodes/ImgUtils.hpp"
 
 using namespace arm_cmsis_stream;
 
 class AppDisplay : public ZephyrLCD
 
 {
-    static constexpr uint16_t redColor = 0x01F << 11;
     static constexpr uint16_t refresh = 40; // ms
+
+    static constexpr int PADDING_LEFT = 10;
+    static constexpr int PADDING_RIGHT = 10;
+    static constexpr int PADDING_TOP = 10;
+    static constexpr int PADDING_BOTTOM = 10;
+    static constexpr int HORIZONTAL_SEPARATION = 10;
+    static constexpr int boxWidth = (DISPLAY_WIDTH - PADDING_LEFT - PADDING_RIGHT - HORIZONTAL_SEPARATION) / 2;
+    static constexpr int boxHeight = DISPLAY_HEIGHT - PADDING_TOP - PADDING_BOTTOM;
+    static constexpr int delta = (int)(boxHeight / (float)(CONFIG_NB_BINS - 1));
+    static constexpr uint16_t redColor = 0x01F << 11;
+    static constexpr uint16_t greenColor = 0x03F << 5;
+    static constexpr uint16_t orangeColor = redColor | (0x00F << 5);
 
       public:
 	AppDisplay() : ZephyrLCD()
@@ -33,42 +45,36 @@ class AppDisplay : public ZephyrLCD
 	virtual ~AppDisplay() {};
 	
 
-    void fillRectangle(int x, int y, int width, int height, uint16_t color)
+    
+    void drawSpectrogram(uint16_t *renderingFrame,int pos, const TensorPtr<float> &s)
     {
-        uint16_t *renderingFrame = (uint16_t *)this->renderingFrame();
-        if (x < 0)
+        bool lockError;
+        s.lock_shared(lockError, [this, pos,renderingFrame](const Tensor<float> &tensor)
         {
-            width += x;
-            x = 0;
-        }
-        if (y < 0)
-        {
-            height += y;
-            y = 0;
-        }
-        if (width + x > DISPLAY_WIDTH)
-        {
-            width = DISPLAY_WIDTH - x;
-        }
-        if (height + y > DISPLAY_HEIGHT)
-        {
-            height = DISPLAY_HEIGHT - y;
-        }
-        if (width <= 0)
-            return;
-        if (height <= 0)
-            return;
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                int px = x + j;
-                int py = y + i;
-                renderingFrame[py * DISPLAY_WIDTH + px] = color;
-            }
-        }
+           
+                if (tensor.dims[0] == CONFIG_NB_BINS)
+                {
+                    const float *buf = tensor.buffer();
+                    float p = 0;
+
+                    for (int i = 0; i < CONFIG_NB_BINS; i++)
+                    {
+                        p = i * delta;
+           
+                        float v = buf[i];
+                        if (v > 1.0f)
+                            v = 1.0f;
+                        if (v < 0.0f)
+                            v = 0.0f;
+                        fillRectangle(renderingFrame, pos,
+                                      (int)(PADDING_TOP + p),
+                                      (int)(boxWidth * v),
+                                      delta,
+                                      greenColor);
+                }   
+            } 
+        });
     }
-   
 
     void drawFrame() final override
     {
@@ -78,6 +84,13 @@ class AppDisplay : public ZephyrLCD
             LOG_ERR("Failed to get rendering frame");
             return;
         }
+
+        memset(renderingFrame, 0x00, DISPLAY_IMAGE_SIZE);
+
+
+        drawSpectrogram(renderingFrame,PADDING_LEFT, leftSpectrogram);
+        drawSpectrogram(renderingFrame,PADDING_LEFT + boxWidth + HORIZONTAL_SEPARATION, rightSpectrogram);
+
 
         /* draw something */
         uint32_t current_ms = k_cyc_to_ms_near32(CG_GET_TIME_STAMP());
@@ -93,9 +106,14 @@ class AppDisplay : public ZephyrLCD
             color = 0x1F;
         }
         color = color << 5; // green channel
-        fillRectangle(10, 10, 100, 50, color); // Green rectangle
-        
-        
+        // For debugging.
+        #if 0
+        if (color != 0)
+           fillRectangle(renderingFrame,10, 10, 100, 50, color); // Green rectangle
+        #endif
+        strokeRectangle(renderingFrame,PADDING_LEFT, PADDING_TOP, boxWidth, boxHeight, 0xFFFF);
+        strokeRectangle(renderingFrame,PADDING_LEFT + boxWidth + HORIZONTAL_SEPARATION, PADDING_TOP, boxWidth, boxHeight, 0xFFFF);
+
     }
 
     void genNewFrame()
@@ -111,20 +129,42 @@ class AppDisplay : public ZephyrLCD
 
     void processEvent(int dstPort, Event &&evt) final override
     {
-        //LOG_INF("Debug Display: event %d\n", evt.event_id);
-        //if (evt.event_id == kDo)
-        //{
-        //    genNewFrame();
-        //}
         if (evt.event_id == kValue)
         {
+            if (dstPort == 0)
+            {
+                if (evt.wellFormed<TensorPtr<float>>())
+                {
+                    evt.apply<TensorPtr<float>>(&AppDisplay::processLeftSpectrogram, *this);
+                }
+            }
+
+            if (dstPort == 1)
+            {
+                if (evt.wellFormed<TensorPtr<float>>())
+                {
+                    evt.apply<TensorPtr<float>>(&AppDisplay::processRightSpectrogram, *this);
+                }
+            }
             genNewFrame();
         }
 
         
     }
 protected:
+void processLeftSpectrogram(TensorPtr<float> &&frame)
+    {
+        leftSpectrogram = std::move(frame);
+    }
+
+    void processRightSpectrogram(TensorPtr<float> &&frame)
+    {
+        rightSpectrogram = std::move(frame);
+    }
+
    int period_ms_ = 1000;
    float alpha = 1.0f;
    uint32_t last_ms_=0;
+   TensorPtr<float> leftSpectrogram;
+   TensorPtr<float> rightSpectrogram;
 };
