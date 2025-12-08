@@ -132,7 +132,6 @@ class Gain<sq15, inputSamples, sq15, inputSamples>
 		}
 		gain_ = (q15_t)(gain * 32768.0f);
 
-        printf("Gain sq15: gain=%d shift=%d\n",gain_,shift_);
 	};
 
 	int prepareForRunning() final

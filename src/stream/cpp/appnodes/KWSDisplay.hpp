@@ -16,8 +16,6 @@ class KWSDisplay : public ZephyrLCD
 
     cg_status init() final override
     {
-        drawFrame();
-
         return ZephyrLCD::init();
     }
 
