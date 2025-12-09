@@ -3,6 +3,8 @@
 #include "StreamNode.hpp"
 #include "dsp/basic_math_functions.h"
 
+#include <string>
+
 extern "C"
 {
 #include "arm_vec_math.h"
@@ -16,7 +18,7 @@ class KWSClassify : public StreamNode
 {
     static constexpr size_t nbLabels = 12;
     static constexpr size_t historySize = 4;
-    static constexpr char *const labelsVec[nbLabels] = {
+    static constexpr const char *labelsVec[nbLabels] = {
         "down",
         "go",
         "left",
@@ -95,15 +97,19 @@ class KWSClassify : public StreamNode
 
     void sendLabel(int c)
     {
-        if ((c >=0) && (c < nbLabels-2))
+        if (c < 0)
+            return;
+
+        uint32_t label_idx = static_cast<uint32_t>(c);
+        if  (label_idx < nbLabels-2)
         {
-          const char *a = labelsVec[c];
-          if (c != lastRec)
+          const char *a = labelsVec[label_idx];
+          if (label_idx != lastRec)
           {
             printf("KWS Classify: %s\n", a);
           }
-          lastRec = c;
-          ev0.sendSync(kNormalPriority, kValue, (uint32_t)c); // Send the event to the subscribed nodes
+          lastRec = label_idx;
+          ev0.sendSync(kNormalPriority, kValue, (uint32_t)label_idx); // Send the event to the subscribed nodes
         }
     }
 
@@ -175,7 +181,7 @@ class KWSClassify : public StreamNode
     }
 
   protected:
-    int lastRec{-1};
+    uint32_t lastRec{11};
     float buf[nbLabels];
     std::vector<std::vector<float>> history;
     EventOutput ev0;

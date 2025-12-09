@@ -2,6 +2,11 @@
 
 #include "nodes/ZephyrLCD.hpp"
 
+extern "C"
+{
+#include "kws_img.h"
+}
+
 using namespace arm_cmsis_stream;
 
 class KWSDisplay : public ZephyrLCD
@@ -30,16 +35,16 @@ class KWSDisplay : public ZephyrLCD
     {
         if (img == nullptr)
             return;
-        const uint32_t wpad = (DISPLAY_FRAME_WIDTH - w) / 2;
-        const uint32_t hpad = (DISPLAY_FRAME_HEIGHT - h) / 2;
+        const uint32_t wpad = (DISPLAY_WIDTH - w) / 2;
+        const uint32_t hpad = (DISPLAY_HEIGHT - h) / 2;
         const uint8_t a = alpha >> 7;
-        for (int i = 0; i < h; i++)
+        for (uint32_t i = 0; i < h; i++)
         {
             int j = 0;
             uint8_t *pSrc = (uint8_t *)&img[i * w];
-            uint16_t *pDst = (uint16_t *)&renderingFrame[(hpad + i) * DISPLAY_FRAME_WIDTH + wpad];
+            uint16_t *pDst = (uint16_t *)&renderingFrame[(hpad + i) * DISPLAY_WIDTH + wpad];
             
-            for (; j <= (w-16); j+=16)
+            for (; j <= (int)(w-16); j+=16)
             {
                 uint8x16_t src = vld1q_u8(pSrc);
                 pSrc += 16;
@@ -65,7 +70,7 @@ class KWSDisplay : public ZephyrLCD
                 
             }
             
-            for (; j < w; j++)
+            for (; j < (int)w; j++)
             {
                 uint8_t o = *pSrc++;
                 uint16_t v = (uint16_t)__USAT(((uint32_t)o * (uint32_t)a) >> 8, 8);
@@ -99,6 +104,7 @@ class KWSDisplay : public ZephyrLCD
             alpha = 0x7FFF;
             displayLast = true;
             bool canRender = this->renderNewFrame();
+            (void)canRender;
             // Ask for new frame
             Event evt(kDo, kNormalPriority);
             EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));
@@ -127,6 +133,7 @@ class KWSDisplay : public ZephyrLCD
             }
             // generate a new frame
             bool canRender = this->renderNewFrame();
+            (void)canRender;
             Event evt(kDo, kNormalPriority);
             evt.setTTL(40);
             EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));

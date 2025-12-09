@@ -12,3 +12,4 @@ Ethos driver init order must be changed in `zephyr\drivers\misc\ethos_u\ethos_u.
 Otherwise a `malloc` may occur before the heap has been initialized and the demo is crashing at startup.
 
 
+Using `APPLICATION` level is not the right way (and deprecated) but I don't want to have to change the driver too much.

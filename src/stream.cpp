@@ -56,7 +56,7 @@ static struct k_thread interrupt_thread;
 #define NORMAL_PRIORITY 5
 
 static K_THREAD_STACK_DEFINE(interrupt_thread_stack, 1024);
-static K_THREAD_STACK_DEFINE(event_thread_stack, 1024);
+static K_THREAD_STACK_DEFINE(event_thread_stack, 4096);
 static K_THREAD_STACK_DEFINE(stream_thread_stack, 4096);
 
 #define SRAM0_HEAP_SIZE 200000

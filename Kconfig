@@ -22,4 +22,8 @@ config ACTIVATION_BUF_SZ
 	hex "Tensor arena size"
 	default 0x20000
 
+config MODEL_SECTION
+	string "Linker section where ML model is placed"
+	default ".rodata.tflm_model"
+
 source "Kconfig.zephyr"

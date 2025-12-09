@@ -139,7 +139,7 @@ class ZephyrLock
         cgStaticError = CG_BUFFER_OVERFLOW;                                                                                \
         goto errorHandling;                                                                                                \
     }                                                                                                                      \
-}                                                                                                                        
+}                                                                                                                    
 
 
 #define CG_TIME_STAMP_TYPE uint32_t

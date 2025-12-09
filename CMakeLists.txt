@@ -11,9 +11,15 @@ target_sources(app PRIVATE src/main.c
   src/stream/cpp/cg_queue.cpp
   src/stream/kws_img.c 
   src/stream/cpp/kws_mfcc.c
+  src/networks/kws_micronet_m_vela_H128.tflite.cpp
+  src/networks/network.cpp
+  src/stream/kws_img.c
 )
 
 target_include_directories(app PUBLIC src src/stream/scheduler 
-  src/stream/cpp)
+  src/stream
+  src/stream/cpp
+  src/networks
+  )
 
 target_compile_definitions(app PRIVATE ACTIVATION_BUF_SZ=CONFIG_ACTIVATION_BUF_SZ)

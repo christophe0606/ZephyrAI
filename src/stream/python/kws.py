@@ -28,6 +28,7 @@ MFCC_OVERLAP = NN_FEATURES-1
 
 # Use CMSIS VStream to connect to microphones
 src = ZephyrAudioSource("audioSource",NB)
+gain = Gain("gain",Q15_STEREO,NB,10)
 
 deinterleave = DeinterleaveStereo("deinterleave",Q15_STEREO,NB)
 to_f32 = Convert("to_f32",Q15_SCALAR,F32_SCALAR,NB)
@@ -46,6 +47,9 @@ classify = KWSClassify("classify")
 
 nullRight = NullSink("nullRight",Q15_SCALAR,NB)
 
+
+#the_graph.connect(src.o,gain.i)
+#the_graph.connect(gain.o,deinterleave.i)
 
 the_graph.connect(src.o,deinterleave.i)
 the_graph.connect(deinterleave.l,to_f32.i)
@@ -68,6 +72,11 @@ conf.horizontal=True
 conf.nodeIdentification = True
 conf.schedName = "scheduler"
 conf.memoryOptimization = True
+# Alif code is defining some variables as buf0, buf1 and not static
+# They conflict with the buf0, buf1 defined by stream
+# So a prefix is added 
+conf.prefix = "stream"
+
 
 scheduling = the_graph.computeSchedule(config=conf)
 

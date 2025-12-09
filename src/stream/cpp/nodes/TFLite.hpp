@@ -17,7 +17,16 @@
 #include <inttypes.h>
 #include <variant>
 
+#define BYTE_ALIGNMENT              16
+#define ALIGNMENT_REQ               aligned(BYTE_ALIGNMENT)
+#define ACTIVATION_BUF_SECTION      section(CONFIG_ACTIVATION_BUF_SECTION)
+#define MAKE_ATTRIBUTE(x)           __attribute__((ALIGNMENT_REQ, x))
+#define ACTIVATION_BUF_ATTRIBUTE    MAKE_ATTRIBUTE(ACTIVATION_BUF_SECTION)
+
+static uint8_t tensorArena[ACTIVATION_BUF_SZ] ACTIVATION_BUF_ATTRIBUTE;
+
 using namespace arm_cmsis_stream;
+
 
 class TFLite : public StreamNode
 {
@@ -181,7 +190,7 @@ class TFLite : public StreamNode
                     offset = quantParams->zero_point->data[0];
                 }
             }
-            else if (t->params.scale != 0.0)
+            else if (t->params.scale != 0.0f)
             {
                 /* Legacy tensorflow quantisation parameters */
                 scale = t->params.scale;
@@ -192,9 +201,9 @@ class TFLite : public StreamNode
 
     void sendTensor(int dstPort, TfLiteTensor *t)
     {
-        if (dstPort >= this->GetNumOutputs())
+        if ((uint32_t)dstPort >= this->GetNumOutputs())
             return;
-        size_t bytes = t->bytes;
+        //size_t bytes = t->bytes;
         size_t elements = 1;
         cg_tensor_dims_t dims;
         for (int i = 0; i < t->dims->size; i++)
@@ -256,7 +265,7 @@ class TFLite : public StreamNode
     {
         uint32_t nb = this->GetNumInputs();
         // If all inputs have been received
-        if (inputReceived == ((1 << nb) - 1))
+        if ((int)inputReceived == ((1 << nb) - 1))
         {
             DEBUG_PRINT("Inference\n");
             inputReceived = 0;
@@ -285,7 +294,7 @@ class TFLite : public StreamNode
     void convertReceivedF32Tensor(int dstPort, TensorPtr<T> &&input)
     {
 
-        if (dstPort >= this->GetNumInputs())
+        if ((size_t)dstPort >= this->GetNumInputs())
             return;
 
         TfLiteTensor *inputTensor = this->m_input.at(dstPort);
@@ -352,7 +361,7 @@ class TFLite : public StreamNode
     void convertReceivedInt8Tensor(int dstPort, TensorPtr<T> &&input)
     {
 
-        if (dstPort >= this->GetNumInputs())
+        if ((size_t)dstPort >= this->GetNumInputs())
             return;
 
         
@@ -413,7 +422,7 @@ class TFLite : public StreamNode
 
     void subscribe(int outputPort, StreamNode &dst, int dstPort) final override
     {
-        if (outputPort >= (1+this->GetNumOutputs()))
+        if ((uint32_t)outputPort >= (1+this->GetNumOutputs()))
             return;
         if (outputPort < 0)
             return;
