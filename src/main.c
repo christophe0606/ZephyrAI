@@ -13,12 +13,15 @@
 int main(void)
 {   
 	printf("Hello World with CPP! \n");
+
+
 	int err = init_stream();
 	if (err != 0)
 	{
 		printf("Error initializing stream\n");
 		return -1;
 	}
-	deinit_stream();
+	
 	return 0;
+
 }

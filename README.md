@@ -13,3 +13,11 @@ Otherwise a `malloc` may occur before the heap has been initialized and the demo
 
 
 Using `APPLICATION` level is not the right way (and deprecated) but I don't want to have to change the driver too much.
+
+
+Zephyr cmakefile for cmsis-dsp module must be changed
+(since Alif version not using the latest Zephyr yet).
+
+`  zephyr_library_compile_definitions(ZEPHYR_INCLUDE_TOOLCHAIN_STDINT_H_)
+` must be added before the `zephyr_library_compile_definitions_ifdef`
+to be able to compile with Helium.

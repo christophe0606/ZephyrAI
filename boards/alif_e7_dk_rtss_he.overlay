@@ -61,3 +61,8 @@
 	bus-speed = <100000000>;
 	status = "okay";
 };
+
+&i2s3
+{
+    status = "okay";
+};
