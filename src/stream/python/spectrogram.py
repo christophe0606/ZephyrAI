@@ -140,4 +140,4 @@ myStyle = MyStyle()
 with open("src/stream/scheduler/graph.dot","w") as f:
     scheduling.graphviz(f)
 
-subprocess.run(["dot","-Tpng","src/stream/scheduler/graph.dot","-o","src/stream/scheduler/kws.png"])
+subprocess.run(["dot","-Tpng","src/stream/scheduler/graph.dot","-o","src/stream/scheduler/graph.png"])

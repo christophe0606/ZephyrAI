@@ -3,6 +3,8 @@ from cmsis_stream.cg.scheduler import Graph,Configuration
 from nodes import *
 from appnodes import *
 
+print("Not yet implemented for this platform")
+exit(0)
     
 the_graph = Graph()
 
