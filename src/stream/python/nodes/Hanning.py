@@ -1,11 +1,15 @@
 from cmsis_stream.cg.scheduler import GenericNode
 from .NodeTypes import *
 
+def _is_power_of_two(n: int) -> bool:
+    """Return True if n is a positive power of 2, otherwise False."""
+    return n > 0 and (n & (n - 1)) == 0
 
 class Hanning(GenericNode):
-    def __init__(self,name,outLength):
+    def __init__(self,name,inLength,outLength):
         GenericNode.__init__(self,name)
-        self.addInput("i",F32_SCALAR,outLength)
+        assert _is_power_of_two(outLength), "Output length must be a power of two"
+        self.addInput("i",F32_SCALAR,inLength)
         self.addOutput("o",F32_SCALAR,outLength)
 
     @property

@@ -90,9 +90,9 @@ using namespace arm_cmsis_stream;
 Description of the scheduling. 
 
 */
-static uint8_t schedule[8]=
+static uint8_t schedule[14]=
 { 
-0,2,5,7,1,3,4,6,
+0,6,11,3,1,12,9,4,7,2,13,10,5,8,
 };
 
 /*
@@ -100,17 +100,21 @@ static uint8_t schedule[8]=
 Internal ID identification for the nodes
 
 */
-#define AUDIOSOURCE_INTERNAL_ID 0
-#define AUDIOWIN_INTERNAL_ID 1
-#define DEINTERLEAVE_INTERNAL_ID 2
-#define MFCC_INTERNAL_ID 3
-#define MFCCWIN_INTERNAL_ID 4
-#define NULLRIGHT_INTERNAL_ID 5
-#define SEND_INTERNAL_ID 6
-#define TO_F32_INTERNAL_ID 7
-#define CLASSIFY_INTERNAL_ID 8
-#define DISPLAY_INTERNAL_ID 9
-#define KWS_INTERNAL_ID 10
+#define AUDIO_INTERNAL_ID 0
+#define AUDIOWINLEFT_INTERNAL_ID 1
+#define AUDIOWINRIGHT_INTERNAL_ID 2
+#define DEINTERLEAVE_INTERNAL_ID 3
+#define FFTLEFT_INTERNAL_ID 4
+#define FFTRIGHT_INTERNAL_ID 5
+#define GAIN_INTERNAL_ID 6
+#define SPECTROGRAMLEFT_INTERNAL_ID 7
+#define SPECTROGRAMRIGHT_INTERNAL_ID 8
+#define TOCOMPLEXLEFT_INTERNAL_ID 9
+#define TOCOMPLEXRIGHT_INTERNAL_ID 10
+#define TO_F32_INTERNAL_ID 11
+#define WINLEFT_INTERNAL_ID 12
+#define WINRIGHT_INTERNAL_ID 13
+#define DISPLAY_INTERNAL_ID 14
 
 
 
@@ -130,46 +134,62 @@ FIFO buffers
 #define FIFOSIZE0 320
 #define FIFOSIZE1 320
 #define FIFOSIZE2 320
-#define FIFOSIZE3 640
-#define FIFOSIZE4 10
-#define FIFOSIZE5 490
-#define FIFOSIZE6 320
+#define FIFOSIZE3 320
+#define FIFOSIZE4 640
+#define FIFOSIZE5 1024
+#define FIFOSIZE6 1024
+#define FIFOSIZE7 1024
+#define FIFOSIZE8 320
+#define FIFOSIZE9 640
+#define FIFOSIZE10 1024
+#define FIFOSIZE11 1024
+#define FIFOSIZE12 1024
 
-#define BUFFERSIZE0 2560
+#define BUFFERSIZE0 8192
 CG_BEFORE_BUFFER
 uint8_t streambuf0[BUFFERSIZE0]={0};
 
-#define BUFFERSIZE1 1280
+#define BUFFERSIZE1 8192
 CG_BEFORE_BUFFER
 uint8_t streambuf1[BUFFERSIZE1]={0};
 
-#define BUFFERSIZE2 640
+#define BUFFERSIZE2 8192
 CG_BEFORE_BUFFER
 uint8_t streambuf2[BUFFERSIZE2]={0};
 
 
 typedef struct {
 FIFO<sq15,FIFOSIZE0,1,0> *fifo0;
-FIFO<q15_t,FIFOSIZE1,1,0> *fifo1;
-FIFO<float,FIFOSIZE2,1,0> *fifo2;
+FIFO<sq15,FIFOSIZE1,1,0> *fifo1;
+FIFO<sf32,FIFOSIZE2,1,0> *fifo2;
 FIFO<float,FIFOSIZE3,1,0> *fifo3;
 FIFO<float,FIFOSIZE4,1,0> *fifo4;
 FIFO<float,FIFOSIZE5,1,0> *fifo5;
-FIFO<q15_t,FIFOSIZE6,1,0> *fifo6;
+FIFO<cf32,FIFOSIZE6,1,0> *fifo6;
+FIFO<cf32,FIFOSIZE7,1,0> *fifo7;
+FIFO<float,FIFOSIZE8,1,0> *fifo8;
+FIFO<float,FIFOSIZE9,1,0> *fifo9;
+FIFO<float,FIFOSIZE10,1,0> *fifo10;
+FIFO<cf32,FIFOSIZE11,1,0> *fifo11;
+FIFO<cf32,FIFOSIZE12,1,0> *fifo12;
 } fifos_t;
 
 typedef struct {
-    ZephyrAudioSource<sq15,320> *audioSource;
-    SlidingBuffer<float,640,320> *audioWin;
-    DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320> *deinterleave;
-    MFCC<float,640,float,10> *mfcc;
-    SlidingBuffer<float,490,480> *mfccWin;
-    NullSink<q15_t,320> *nullRight;
-    SendToNetwork<float,490> *send;
-    Convert<q15_t,320,float,320> *to_f32;
-    KWSClassify *classify;
-    KWSDisplay *display;
-    KWS *kws;
+    ZephyrAudioSource<sq15,320> *audio;
+    SlidingBuffer<float,640,320> *audioWinLeft;
+    SlidingBuffer<float,640,320> *audioWinRight;
+    DeinterleaveStereo<sf32,320,float,320,float,320> *deinterleave;
+    CFFT<cf32,1024,cf32,1024> *fftLeft;
+    CFFT<cf32,1024,cf32,1024> *fftRight;
+    Gain<sq15,320,sq15,320> *gain;
+    Spectrogram<cf32,1024> *spectrogramLeft;
+    Spectrogram<cf32,1024> *spectrogramRight;
+    RealToComplex<float,1024,cf32,1024> *toComplexLeft;
+    RealToComplex<float,1024,cf32,1024> *toComplexRight;
+    Convert<sq15,320,sf32,320> *to_f32;
+    Hanning<float,640,float,1024> *winLeft;
+    Hanning<float,640,float,1024> *winRight;
+    AppDisplay *display;
 } nodes_t;
 
 
@@ -199,17 +219,17 @@ int init_scheduler()
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo1 = new (std::nothrow) FIFO<q15_t,FIFOSIZE1,1,0>(streambuf0);
+    fifos.fifo1 = new (std::nothrow) FIFO<sq15,FIFOSIZE1,1,0>(streambuf0);
     if (fifos.fifo1==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo2 = new (std::nothrow) FIFO<float,FIFOSIZE2,1,0>(streambuf1);
+    fifos.fifo2 = new (std::nothrow) FIFO<sf32,FIFOSIZE2,1,0>(streambuf1);
     if (fifos.fifo2==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo3 = new (std::nothrow) FIFO<float,FIFOSIZE3,1,0>(streambuf0);
+    fifos.fifo3 = new (std::nothrow) FIFO<float,FIFOSIZE3,1,0>(streambuf2);
     if (fifos.fifo3==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -219,13 +239,43 @@ int init_scheduler()
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo5 = new (std::nothrow) FIFO<float,FIFOSIZE5,1,0>(streambuf0);
+    fifos.fifo5 = new (std::nothrow) FIFO<float,FIFOSIZE5,1,0>(streambuf2);
     if (fifos.fifo5==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo6 = new (std::nothrow) FIFO<q15_t,FIFOSIZE6,1,0>(streambuf2);
+    fifos.fifo6 = new (std::nothrow) FIFO<cf32,FIFOSIZE6,1,0>(streambuf1);
     if (fifos.fifo6==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    fifos.fifo7 = new (std::nothrow) FIFO<cf32,FIFOSIZE7,1,0>(streambuf2);
+    if (fifos.fifo7==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    fifos.fifo8 = new (std::nothrow) FIFO<float,FIFOSIZE8,1,0>(streambuf0);
+    if (fifos.fifo8==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    fifos.fifo9 = new (std::nothrow) FIFO<float,FIFOSIZE9,1,0>(streambuf1);
+    if (fifos.fifo9==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    fifos.fifo10 = new (std::nothrow) FIFO<float,FIFOSIZE10,1,0>(streambuf0);
+    if (fifos.fifo10==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    fifos.fifo11 = new (std::nothrow) FIFO<cf32,FIFOSIZE11,1,0>(streambuf1);
+    if (fifos.fifo11==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    fifos.fifo12 = new (std::nothrow) FIFO<cf32,FIFOSIZE12,1,0>(streambuf0);
+    if (fifos.fifo12==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
@@ -233,23 +283,31 @@ int init_scheduler()
     CG_BEFORE_NODE_INIT;
     cg_status initError;
 
-    nodes.audioSource = new (std::nothrow) ZephyrAudioSource<sq15,320>(*(fifos.fifo0));
-    if (nodes.audioSource==NULL)
+    nodes.audio = new (std::nothrow) ZephyrAudioSource<sq15,320>(*(fifos.fifo0));
+    if (nodes.audio==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMAUDIOSOURCE_ID]=createStreamNode(*nodes.audioSource);
-    nodes.audioSource->setID(STREAMAUDIOSOURCE_ID);
+    identifiedNodes[STREAMAUDIO_ID]=createStreamNode(*nodes.audio);
+    nodes.audio->setID(STREAMAUDIO_ID);
 
-    nodes.audioWin = new (std::nothrow) SlidingBuffer<float,640,320>(*(fifos.fifo2),*(fifos.fifo3));
-    if (nodes.audioWin==NULL)
+    nodes.audioWinLeft = new (std::nothrow) SlidingBuffer<float,640,320>(*(fifos.fifo3),*(fifos.fifo4));
+    if (nodes.audioWinLeft==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMAUDIOWIN_ID]=createStreamNode(*nodes.audioWin);
-    nodes.audioWin->setID(STREAMAUDIOWIN_ID);
+    identifiedNodes[STREAMAUDIOWINLEFT_ID]=createStreamNode(*nodes.audioWinLeft);
+    nodes.audioWinLeft->setID(STREAMAUDIOWINLEFT_ID);
 
-    nodes.deinterleave = new (std::nothrow) DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>(*(fifos.fifo0),*(fifos.fifo1),*(fifos.fifo6));
+    nodes.audioWinRight = new (std::nothrow) SlidingBuffer<float,640,320>(*(fifos.fifo8),*(fifos.fifo9));
+    if (nodes.audioWinRight==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    identifiedNodes[STREAMAUDIOWINRIGHT_ID]=createStreamNode(*nodes.audioWinRight);
+    nodes.audioWinRight->setID(STREAMAUDIOWINRIGHT_ID);
+
+    nodes.deinterleave = new (std::nothrow) DeinterleaveStereo<sf32,320,float,320,float,320>(*(fifos.fifo2),*(fifos.fifo3),*(fifos.fifo8));
     if (nodes.deinterleave==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -257,39 +315,63 @@ int init_scheduler()
     identifiedNodes[STREAMDEINTERLEAVE_ID]=createStreamNode(*nodes.deinterleave);
     nodes.deinterleave->setID(STREAMDEINTERLEAVE_ID);
 
-    nodes.mfcc = new (std::nothrow) MFCC<float,640,float,10>(*(fifos.fifo3),*(fifos.fifo4));
-    if (nodes.mfcc==NULL)
+    nodes.fftLeft = new (std::nothrow) CFFT<cf32,1024,cf32,1024>(*(fifos.fifo6),*(fifos.fifo7));
+    if (nodes.fftLeft==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMMFCC_ID]=createStreamNode(*nodes.mfcc);
-    nodes.mfcc->setID(STREAMMFCC_ID);
+    identifiedNodes[STREAMFFTLEFT_ID]=createStreamNode(*nodes.fftLeft);
+    nodes.fftLeft->setID(STREAMFFTLEFT_ID);
 
-    nodes.mfccWin = new (std::nothrow) SlidingBuffer<float,490,480>(*(fifos.fifo4),*(fifos.fifo5));
-    if (nodes.mfccWin==NULL)
+    nodes.fftRight = new (std::nothrow) CFFT<cf32,1024,cf32,1024>(*(fifos.fifo11),*(fifos.fifo12));
+    if (nodes.fftRight==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMMFCCWIN_ID]=createStreamNode(*nodes.mfccWin);
-    nodes.mfccWin->setID(STREAMMFCCWIN_ID);
+    identifiedNodes[STREAMFFTRIGHT_ID]=createStreamNode(*nodes.fftRight);
+    nodes.fftRight->setID(STREAMFFTRIGHT_ID);
 
-    nodes.nullRight = new (std::nothrow) NullSink<q15_t,320>(*(fifos.fifo6));
-    if (nodes.nullRight==NULL)
+    nodes.gain = new (std::nothrow) Gain<sq15,320,sq15,320>(*(fifos.fifo0),*(fifos.fifo1),4);
+    if (nodes.gain==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMNULLRIGHT_ID]=createStreamNode(*nodes.nullRight);
-    nodes.nullRight->setID(STREAMNULLRIGHT_ID);
+    identifiedNodes[STREAMGAIN_ID]=createStreamNode(*nodes.gain);
+    nodes.gain->setID(STREAMGAIN_ID);
 
-    nodes.send = new (std::nothrow) SendToNetwork<float,490>(*(fifos.fifo5));
-    if (nodes.send==NULL)
+    nodes.spectrogramLeft = new (std::nothrow) Spectrogram<cf32,1024>(*(fifos.fifo7));
+    if (nodes.spectrogramLeft==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMSEND_ID]=createStreamNode(*nodes.send);
-    nodes.send->setID(STREAMSEND_ID);
+    identifiedNodes[STREAMSPECTROGRAMLEFT_ID]=createStreamNode(*nodes.spectrogramLeft);
+    nodes.spectrogramLeft->setID(STREAMSPECTROGRAMLEFT_ID);
 
-    nodes.to_f32 = new (std::nothrow) Convert<q15_t,320,float,320>(*(fifos.fifo1),*(fifos.fifo2));
+    nodes.spectrogramRight = new (std::nothrow) Spectrogram<cf32,1024>(*(fifos.fifo12));
+    if (nodes.spectrogramRight==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    identifiedNodes[STREAMSPECTROGRAMRIGHT_ID]=createStreamNode(*nodes.spectrogramRight);
+    nodes.spectrogramRight->setID(STREAMSPECTROGRAMRIGHT_ID);
+
+    nodes.toComplexLeft = new (std::nothrow) RealToComplex<float,1024,cf32,1024>(*(fifos.fifo5),*(fifos.fifo6));
+    if (nodes.toComplexLeft==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    identifiedNodes[STREAMTOCOMPLEXLEFT_ID]=createStreamNode(*nodes.toComplexLeft);
+    nodes.toComplexLeft->setID(STREAMTOCOMPLEXLEFT_ID);
+
+    nodes.toComplexRight = new (std::nothrow) RealToComplex<float,1024,cf32,1024>(*(fifos.fifo10),*(fifos.fifo11));
+    if (nodes.toComplexRight==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    identifiedNodes[STREAMTOCOMPLEXRIGHT_ID]=createStreamNode(*nodes.toComplexRight);
+    nodes.toComplexRight->setID(STREAMTOCOMPLEXRIGHT_ID);
+
+    nodes.to_f32 = new (std::nothrow) Convert<sq15,320,sf32,320>(*(fifos.fifo1),*(fifos.fifo2));
     if (nodes.to_f32==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -297,15 +379,23 @@ int init_scheduler()
     identifiedNodes[STREAMTO_F32_ID]=createStreamNode(*nodes.to_f32);
     nodes.to_f32->setID(STREAMTO_F32_ID);
 
-    nodes.classify = new (std::nothrow) KWSClassify;
-    if (nodes.classify==NULL)
+    nodes.winLeft = new (std::nothrow) Hanning<float,640,float,1024>(*(fifos.fifo4),*(fifos.fifo5));
+    if (nodes.winLeft==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMCLASSIFY_ID]=createStreamNode(*nodes.classify);
-    nodes.classify->setID(STREAMCLASSIFY_ID);
+    identifiedNodes[STREAMWINLEFT_ID]=createStreamNode(*nodes.winLeft);
+    nodes.winLeft->setID(STREAMWINLEFT_ID);
 
-    nodes.display = new (std::nothrow) KWSDisplay;
+    nodes.winRight = new (std::nothrow) Hanning<float,640,float,1024>(*(fifos.fifo9),*(fifos.fifo10));
+    if (nodes.winRight==NULL)
+    {
+        return(CG_MEMORY_ALLOCATION_FAILURE);
+    }
+    identifiedNodes[STREAMWINRIGHT_ID]=createStreamNode(*nodes.winRight);
+    nodes.winRight->setID(STREAMWINRIGHT_ID);
+
+    nodes.display = new (std::nothrow) AppDisplay;
     if (nodes.display==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -313,27 +403,21 @@ int init_scheduler()
     identifiedNodes[STREAMDISPLAY_ID]=createStreamNode(*nodes.display);
     nodes.display->setID(STREAMDISPLAY_ID);
 
-    nodes.kws = new (std::nothrow) KWS(GetModelPointer(),GetModelLen());
-    if (nodes.kws==NULL)
-    {
-        return(CG_MEMORY_ALLOCATION_FAILURE);
-    }
-    identifiedNodes[STREAMKWS_ID]=createStreamNode(*nodes.kws);
-    nodes.kws->setID(STREAMKWS_ID);
-
 
 /* Subscribe nodes for the event system*/
-    nodes.send->subscribe(0,*nodes.kws,0);
-    nodes.kws->subscribe(0,*nodes.send,0);
-    nodes.kws->subscribe(1,*nodes.classify,0);
-    nodes.classify->subscribe(0,*nodes.display,0);
+    nodes.spectrogramLeft->subscribe(0,*nodes.display,0);
+    nodes.spectrogramRight->subscribe(0,*nodes.display,1);
 
     initError = CG_SUCCESS;
-    initError = nodes.audioSource->init();
+    initError = nodes.audio->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
-    initError = nodes.audioWin->init();
+    initError = nodes.audioWinLeft->init();
+    if (initError != CG_SUCCESS)
+        return(initError);
+    
+    initError = nodes.audioWinRight->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
@@ -341,19 +425,31 @@ int init_scheduler()
     if (initError != CG_SUCCESS)
         return(initError);
     
-    initError = nodes.mfcc->init();
+    initError = nodes.fftLeft->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
-    initError = nodes.mfccWin->init();
+    initError = nodes.fftRight->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
-    initError = nodes.nullRight->init();
+    initError = nodes.gain->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
-    initError = nodes.send->init();
+    initError = nodes.spectrogramLeft->init();
+    if (initError != CG_SUCCESS)
+        return(initError);
+    
+    initError = nodes.spectrogramRight->init();
+    if (initError != CG_SUCCESS)
+        return(initError);
+    
+    initError = nodes.toComplexLeft->init();
+    if (initError != CG_SUCCESS)
+        return(initError);
+    
+    initError = nodes.toComplexRight->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
@@ -361,15 +457,15 @@ int init_scheduler()
     if (initError != CG_SUCCESS)
         return(initError);
     
-    initError = nodes.classify->init();
+    initError = nodes.winLeft->init();
+    if (initError != CG_SUCCESS)
+        return(initError);
+    
+    initError = nodes.winRight->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
     initError = nodes.display->init();
-    if (initError != CG_SUCCESS)
-        return(initError);
-    
-    initError = nodes.kws->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
@@ -410,50 +506,90 @@ void free_scheduler()
     {
        delete fifos.fifo6;
     }
-
-    if (nodes.audioSource!=NULL)
+    if (fifos.fifo7!=NULL)
     {
-        delete nodes.audioSource;
+       delete fifos.fifo7;
     }
-    if (nodes.audioWin!=NULL)
+    if (fifos.fifo8!=NULL)
     {
-        delete nodes.audioWin;
+       delete fifos.fifo8;
+    }
+    if (fifos.fifo9!=NULL)
+    {
+       delete fifos.fifo9;
+    }
+    if (fifos.fifo10!=NULL)
+    {
+       delete fifos.fifo10;
+    }
+    if (fifos.fifo11!=NULL)
+    {
+       delete fifos.fifo11;
+    }
+    if (fifos.fifo12!=NULL)
+    {
+       delete fifos.fifo12;
+    }
+
+    if (nodes.audio!=NULL)
+    {
+        delete nodes.audio;
+    }
+    if (nodes.audioWinLeft!=NULL)
+    {
+        delete nodes.audioWinLeft;
+    }
+    if (nodes.audioWinRight!=NULL)
+    {
+        delete nodes.audioWinRight;
     }
     if (nodes.deinterleave!=NULL)
     {
         delete nodes.deinterleave;
     }
-    if (nodes.mfcc!=NULL)
+    if (nodes.fftLeft!=NULL)
     {
-        delete nodes.mfcc;
+        delete nodes.fftLeft;
     }
-    if (nodes.mfccWin!=NULL)
+    if (nodes.fftRight!=NULL)
     {
-        delete nodes.mfccWin;
+        delete nodes.fftRight;
     }
-    if (nodes.nullRight!=NULL)
+    if (nodes.gain!=NULL)
     {
-        delete nodes.nullRight;
+        delete nodes.gain;
     }
-    if (nodes.send!=NULL)
+    if (nodes.spectrogramLeft!=NULL)
     {
-        delete nodes.send;
+        delete nodes.spectrogramLeft;
+    }
+    if (nodes.spectrogramRight!=NULL)
+    {
+        delete nodes.spectrogramRight;
+    }
+    if (nodes.toComplexLeft!=NULL)
+    {
+        delete nodes.toComplexLeft;
+    }
+    if (nodes.toComplexRight!=NULL)
+    {
+        delete nodes.toComplexRight;
     }
     if (nodes.to_f32!=NULL)
     {
         delete nodes.to_f32;
     }
-    if (nodes.classify!=NULL)
+    if (nodes.winLeft!=NULL)
     {
-        delete nodes.classify;
+        delete nodes.winLeft;
+    }
+    if (nodes.winRight!=NULL)
+    {
+        delete nodes.winRight;
     }
     if (nodes.display!=NULL)
     {
         delete nodes.display;
-    }
-    if (nodes.kws!=NULL)
-    {
-        delete nodes.kws;
     }
 }
 
@@ -475,7 +611,7 @@ uint32_t scheduler(int *error)
         /* Run a schedule iteration */
         CG_BEFORE_ITERATION;
         unsigned long id=0;
-        for(; id < 8; id++)
+        for(; id < 14; id++)
         {
             CG_BEFORE_NODE_EXECUTION(schedule[id]);
             switch(schedule[id])
@@ -483,56 +619,98 @@ uint32_t scheduler(int *error)
                 case 0:
                 {
                     
-                   cgStaticError = nodes.audioSource->run();
+                   cgStaticError = nodes.audio->run();
                 }
                 break;
 
                 case 1:
                 {
                     
-                   cgStaticError = nodes.audioWin->run();
+                   cgStaticError = nodes.audioWinLeft->run();
                 }
                 break;
 
                 case 2:
                 {
                     
-                   cgStaticError = nodes.deinterleave->run();
+                   cgStaticError = nodes.audioWinRight->run();
                 }
                 break;
 
                 case 3:
                 {
                     
-                   cgStaticError = nodes.mfcc->run();
+                   cgStaticError = nodes.deinterleave->run();
                 }
                 break;
 
                 case 4:
                 {
                     
-                   cgStaticError = nodes.mfccWin->run();
+                   cgStaticError = nodes.fftLeft->run();
                 }
                 break;
 
                 case 5:
                 {
                     
-                   cgStaticError = nodes.nullRight->run();
+                   cgStaticError = nodes.fftRight->run();
                 }
                 break;
 
                 case 6:
                 {
                     
-                   cgStaticError = nodes.send->run();
+                   cgStaticError = nodes.gain->run();
                 }
                 break;
 
                 case 7:
                 {
                     
+                   cgStaticError = nodes.spectrogramLeft->run();
+                }
+                break;
+
+                case 8:
+                {
+                    
+                   cgStaticError = nodes.spectrogramRight->run();
+                }
+                break;
+
+                case 9:
+                {
+                    
+                   cgStaticError = nodes.toComplexLeft->run();
+                }
+                break;
+
+                case 10:
+                {
+                    
+                   cgStaticError = nodes.toComplexRight->run();
+                }
+                break;
+
+                case 11:
+                {
+                    
                    cgStaticError = nodes.to_f32->run();
+                }
+                break;
+
+                case 12:
+                {
+                    
+                   cgStaticError = nodes.winLeft->run();
+                }
+                break;
+
+                case 13:
+                {
+                    
+                   cgStaticError = nodes.winRight->run();
                 }
                 break;
 

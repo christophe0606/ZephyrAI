@@ -1,13 +1,17 @@
 {
-  "audioSource": 0,
-  "audioWin": 1,
-  "deinterleave": 2,
-  "mfcc": 3,
-  "mfccWin": 4,
-  "nullRight": 5,
-  "send": 6,
-  "to_f32": 7,
-  "classify": 8,
-  "display": 9,
-  "kws": 10
+  "audio": 0,
+  "audioWinLeft": 1,
+  "audioWinRight": 2,
+  "deinterleave": 3,
+  "fftLeft": 4,
+  "fftRight": 5,
+  "gain": 6,
+  "spectrogramLeft": 7,
+  "spectrogramRight": 8,
+  "toComplexLeft": 9,
+  "toComplexRight": 10,
+  "to_f32": 11,
+  "winLeft": 12,
+  "winRight": 13,
+  "display": 14
 }

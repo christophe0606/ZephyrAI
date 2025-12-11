@@ -9,15 +9,15 @@ import subprocess
 the_graph = Graph()
 
 SAMPLING_FREQ_HZ = 16000
-AUDIO_PACKET_DURATION = 16 # ms (256 samples)
-OVERLAP_DURATION = 16 
-WINDOWS_DURATION = 32 
+AUDIO_PACKET_DURATION = 20 # ms (320 samples)
+OVERLAP_DURATION = AUDIO_PACKET_DURATION 
+WINDOWS_DURATION = 2*AUDIO_PACKET_DURATION 
 
 NB_AUDIO_SAMPLES = int(1e-3 * AUDIO_PACKET_DURATION * SAMPLING_FREQ_HZ)
 NB_OVERLAP_SAMPLES = int(1e-3 * OVERLAP_DURATION * SAMPLING_FREQ_HZ)
 NB_WINDOW_SAMPLES = int(1e-3 * WINDOWS_DURATION * SAMPLING_FREQ_HZ)
 
-FFT_SIZE = NB_WINDOW_SAMPLES # 512
+FFT_SIZE = 1024 # 512
 
 NB = NB_AUDIO_SAMPLES
 
@@ -28,7 +28,7 @@ print(f"NB_WINDOW_SAMPLES={NB_WINDOW_SAMPLES}")
 # Use CMSIS VStream to connect to microphones
 #src = ZephyrDebugAudioSource("debugSource",NB)
 src = ZephyrAudioSource("audio",NB)
-gain = Gain("gain",Q15_STEREO,NB,10)
+gain = Gain("gain",Q15_STEREO,NB,4)
 to_f32 = Convert("to_f32",Q15_STEREO,F32_STEREO,NB)
 deinterleave = DeinterleaveStereo("deinterleave",F32_STEREO,NB)
 
@@ -36,11 +36,11 @@ deinterleave = DeinterleaveStereo("deinterleave",F32_STEREO,NB)
 audioWinLeft=SlidingBuffer("audioWinLeft",CType(F32),NB_WINDOW_SAMPLES,NB_OVERLAP_SAMPLES)
 audioWinRight=SlidingBuffer("audioWinRight",CType(F32),NB_WINDOW_SAMPLES,NB_OVERLAP_SAMPLES)
 
-win_left = Hanning("winLeft",NB_WINDOW_SAMPLES)
-win_right= Hanning("winRight",NB_WINDOW_SAMPLES)
+win_left = Hanning("winLeft",NB_WINDOW_SAMPLES,FFT_SIZE)
+win_right= Hanning("winRight",NB_WINDOW_SAMPLES,FFT_SIZE)
 
-to_complex_left = RealToComplex("toComplexLeft",F32,NB_WINDOW_SAMPLES)
-to_complex_right= RealToComplex("toComplexRight",F32,NB_WINDOW_SAMPLES)
+to_complex_left = RealToComplex("toComplexLeft",F32,FFT_SIZE)
+to_complex_right= RealToComplex("toComplexRight",F32,FFT_SIZE)
 fft_left = CFFT("fftLeft",F32_COMPLEX,FFT_SIZE)
 fft_right = CFFT("fftRight",F32_COMPLEX,FFT_SIZE)
 
