@@ -9,7 +9,7 @@ from generate import generate
 
 the_graph = Graph()
 
-src = ZephyrDebugVideoSource("video")
+src = ZephyrVideoSource("video")
 gain = CameraFrame("lcd")
 
 the_graph.connect(src["oev0"],gain["iev0"])

@@ -17,3 +17,4 @@ from .ZephyrLCD import *
 from .Gain import *
 from .ZephyrDebugVideoSource import *
 from .CameraFrame import *
+from .ZephyrVideoSource import *

@@ -119,7 +119,7 @@ FIFO buffers
 
 typedef struct {
     CameraFrame *lcd;
-    ZephyrDebugVideoSource *video;
+    ZephyrVideoSource *video;
 } nodes_t;
 
 
@@ -155,7 +155,7 @@ int init_scheduler()
     identifiedNodes[STREAMLCD_ID]=createStreamNode(*nodes.lcd);
     nodes.lcd->setID(STREAMLCD_ID);
 
-    nodes.video = new (std::nothrow) ZephyrDebugVideoSource;
+    nodes.video = new (std::nothrow) ZephyrVideoSource;
     if (nodes.video==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);

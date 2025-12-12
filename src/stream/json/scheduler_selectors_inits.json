@@ -3,7 +3,7 @@
     "isTemplate": false,
     "selectors": []
   },
-  "ZephyrDebugVideoSource": {
+  "ZephyrVideoSource": {
     "isTemplate": false,
     "selectors": []
   }

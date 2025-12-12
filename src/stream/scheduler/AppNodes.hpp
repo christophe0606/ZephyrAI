@@ -1,2 +1,2 @@
-#include "nodes/ZephyrDebugVideoSource.hpp"
+#include "nodes/ZephyrVideoSource.hpp"
 #include "appnodes/CameraFrame.hpp"
