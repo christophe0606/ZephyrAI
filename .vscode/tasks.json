@@ -186,8 +186,7 @@
         {
             "label": "CMSIS Load+Run",
             "dependsOn": [
-                "CMSIS Load",
-                "CMSIS Run"
+                "CMSIS Load"
             ],
             "dependsOrder": "sequence",
             "problemMatcher": []
