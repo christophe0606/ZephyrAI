@@ -1,0 +1,99 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "M55_HE CMSIS_DAP@pyOCD (launch)",
+            "type": "gdbtarget",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/",
+            "program": "",
+            "gdb": "arm-none-eabi-gdb",
+            "preLaunchTask": "CMSIS Load",
+            "initCommands": [
+                "monitor reset halt",
+                "tbreak main"
+            ],
+            "customResetCommands": [
+                "monitor reset halt",
+                "maintenance flush register-cache",
+                "maintenance flush dcache",
+                "tbreak main",
+                "continue"
+            ],
+            "target": {
+                "server": "pyocd",
+                "serverParameters": [
+                    "gdbserver",
+                    "--probe",
+                    "cmsisdap:",
+                    "--connect",
+                    "attach",
+                    "--persist",
+                    "--cbuild-run",
+                    "${command:cmsis-csolution.getCbuildRunFile}",
+                    "--quiet",
+                    "--log",
+                    "*.cbuild_run,*server=info"
+                ],
+                "port": "3333"
+            },
+            "cmsis": {
+                "cbuildRunFile": "${command:cmsis-csolution.getCbuildRunFile}",
+                "updateConfiguration": "auto"
+            },
+            "auxiliaryGdb": true
+        },
+        {
+            "name": "M55_HE CMSIS_DAP@pyOCD (attach)",
+            "type": "gdbtarget",
+            "request": "attach",
+            "cwd": "${workspaceFolder}/",
+            "program": "",
+            "gdb": "arm-none-eabi-gdb",
+            "initCommands": [
+                ""
+            ],
+            "customResetCommands": [
+                "monitor reset halt",
+                "maintenance flush register-cache",
+                "maintenance flush dcache",
+                "tbreak main",
+                "continue"
+            ],
+            "target": {
+                "port": "3333"
+            },
+            "cmsis": {
+                "cbuildRunFile": "${command:cmsis-csolution.getCbuildRunFile}",
+                "updateConfiguration": "auto"
+            },
+            "auxiliaryGdb": true
+        },
+        {
+            "name": "M55_HP CMSIS_DAP@pyOCD (attach)",
+            "type": "gdbtarget",
+            "request": "attach",
+            "cwd": "${workspaceFolder}/",
+            "program": "",
+            "gdb": "arm-none-eabi-gdb",
+            "initCommands": [
+                ""
+            ],
+            "customResetCommands": [
+                "monitor reset halt",
+                "maintenance flush register-cache",
+                "maintenance flush dcache",
+                "tbreak main",
+                "continue"
+            ],
+            "target": {
+                "port": "3334"
+            },
+            "cmsis": {
+                "cbuildRunFile": "${command:cmsis-csolution.getCbuildRunFile}",
+                "updateConfiguration": "auto"
+            },
+            "auxiliaryGdb": true
+        }
+    ]
+}
