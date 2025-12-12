@@ -92,6 +92,11 @@ class ZephyrLock
     int error;
 };
 
+// Needed for pure event graphs to avoid having
+// the infinite loop generated in single thread mode
+// to process events from the stream thread.
+#define CG_EVENTS_MULTI_THREAD
+
 #define CG_MUTEX ZephyrMutex
 #define CG_MUTEX_ERROR_TYPE int
 
@@ -129,17 +134,18 @@ class ZephyrLock
 #define CG_BEFORE_SCHEDULE \
   uint32_t errorFlags = 0;
 
-  // When real audio events are generated the NO_WAIT
-  // must be replaced with forever
+
 #define CG_BEFORE_NODE_EXECUTION(ID)                                                                                       \
 {                                                                                                                          \
     errorFlags = k_event_wait(&cg_streamEvent,AUDIO_SINK_UNDERFLOW_EVENT | AUDIO_SOURCE_OVERFLOW_EVENT, false, K_NO_WAIT); \
+    k_event_clear(&cg_streamEvent, AUDIO_SINK_UNDERFLOW_EVENT | AUDIO_SOURCE_OVERFLOW_EVENT);                                                                \
+                                                                                                                           \
     if (errorFlags & AUDIO_SOURCE_OVERFLOW_EVENT)                                                                          \
     {                                                                                                                      \
         cgStaticError = CG_BUFFER_OVERFLOW;                                                                                \
         goto errorHandling;                                                                                                \
     }                                                                                                                      \
-}                                                                                                                    
+}                                                                                                                 
 
 
 #define CG_TIME_STAMP_TYPE uint32_t

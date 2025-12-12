@@ -24,7 +24,8 @@
  * limitations under the License.
  */
 
- #include <zephyr/logging/log.h>
+#include <zephyr/kernel.h>
+#include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(cgqueue_module);
 
 #include "config.h"
@@ -226,6 +227,10 @@ void MyQueue::execute()
         }
         // If new event was pushed and missed with the
         // empty test
+        // In more recent version of Zephyr there is
+        // a k_event_wait_safe that clears the events
+        // in an atomic way.
         k_event_wait(&cg_eventEvent, MY_QUEUE_NEW_EVENT_FLAG, false, K_FOREVER);
+        k_event_clear(&cg_eventEvent, MY_QUEUE_NEW_EVENT_FLAG);
     }
 }

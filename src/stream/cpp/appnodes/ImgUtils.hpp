@@ -98,3 +98,15 @@ void strokeRectangle(uint16_t *renderingFrame, int x, int y, int width, int heig
 	}
 }
 
+void displayImage(uint16_t *renderingFrame, const uint16_t *buf,  int width, int height)
+{
+
+	const int wpad = (DISPLAY_WIDTH - width) / 2;
+	const int hpad = (DISPLAY_HEIGHT - height) / 2;
+	for (int h = 0; h < height; h++) {
+		for (int w = 0; w < width; w++) {
+			renderingFrame[wpad + w + (DISPLAY_HEIGHT - h - hpad) * DISPLAY_WIDTH] =
+				buf[(w) + (h)*width];
+		}
+	}
+}

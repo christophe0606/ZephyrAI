@@ -2,10 +2,14 @@ from cmsis_stream.cg.scheduler import GenericSink
 
 from nodes import *
 
-class AppDisplay(ZephyrLCD):
+class CameraFrame(GenericSink):
+    COUNT = 0
     def __init__(self,name):
-        ZephyrLCD.__init__(self,name)
-        self.addEventInput(2)
+        GenericSink.__init__(self,name)
+        CameraFrame.COUNT = CameraFrame.COUNT + 1
+        if (CameraFrame.COUNT > 1):
+            raise Exception("Only one CameraFrame node can be instantiated")
+        self.addEventInput(1)
 
 
     @property
@@ -16,4 +20,4 @@ class AppDisplay(ZephyrLCD):
     @property
     def typeName(self):
         """The name of the C++ class implementing this node"""
-        return "AppDisplay"
+        return "CameraFrame"

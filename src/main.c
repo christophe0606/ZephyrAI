@@ -12,7 +12,7 @@
 
 int main(void)
 {   
-	printf("Hello World with CPP! \n");
+	printf("Starting main\n");
 
 
 	int err = init_stream();

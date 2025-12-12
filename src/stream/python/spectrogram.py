@@ -1,10 +1,11 @@
-from cmsis_stream.cg.scheduler import Graph,Configuration,SlidingBuffer,CType,F32
+from cmsis_stream.cg.scheduler import Graph,SlidingBuffer,CType,F32
 from cmsis_stream.cg.scheduler.graphviz import Style
 
 from nodes import *
 from appnodes import *
 
-import subprocess
+from generate import generate
+
 
 the_graph = Graph()
 
@@ -54,7 +55,7 @@ nullSinkLeft = NullSink("nullSinkLeft",F32_COMPLEX,NB)
 nullSinkRight = NullSink("nullSinkRight",F32_SCALAR,NB)
 nullAll = NullSink("nullAll",Q15_STEREO,NB)
 
-display = AppDisplay("display")
+display = SpectrogramDisplay("display")
 #display = DebugDisplay("display")
 
 
@@ -84,47 +85,12 @@ else:
         the_graph.connect(fft_right.o,spectrogram_right.i)
         the_graph.connect(spectrogram_right["oev0"],display["iev1"])
 
-#
-conf = Configuration()
-conf.CMSISDSP = False
-conf.asynchronous = False
-conf.horizontal=True
-conf.nodeIdentification = True
-conf.schedName = "scheduler"
-conf.memoryOptimization = True
-# Alif code is defining some variables as buf0, buf1 and not static
-# They conflict with the buf0, buf1 defined by stream
-# So a prefix is added 
-conf.prefix = "stream"
-
-scheduling = the_graph.computeSchedule(config=conf)
-
-print("Schedule length = %d" % scheduling.scheduleLength)
-print("Memory usage %d bytes" % scheduling.memory)
-
-scheduling.ccode("src/stream/scheduler",conf)
-scheduling.genJsonIdentification("src/stream/json",conf)
-scheduling.genJsonSelectors("src/stream/json",conf)
-scheduling.genJsonSelectorsInit("src/stream/json",conf)
-
-def maybeFolder(x):
-    if hasattr(x, "folder"):
-        return x.folder + "/"
-    # Standard ndoes from cmsis stream package have no folders
-    return ""
-
-with open("src/stream/scheduler/AppNodes.hpp","w") as f:
-    #print(scheduling.allNodes)
-    s = set([(maybeFolder(x),x.typeName) for x in scheduling.allNodes])
-    for folder,n in s:
-        if folder:
-           print(f'#include "{folder}{n}.hpp"',file=f)
-
-
 class MyStyle(Style):
     
     def edge_color(self,edge):
         nb = self.fifoLength(edge) 
+        if nb is None:
+            nb = 0
         s = self.edgeSrcNode(edge)
         d = self.edgeDstNode(edge)
         
@@ -135,9 +101,4 @@ class MyStyle(Style):
                 return("orange")
             return(super().edge_color(edge))
 
-myStyle = MyStyle()
-
-with open("src/stream/scheduler/graph.dot","w") as f:
-    scheduling.graphviz(f)
-
-subprocess.run(["dot","-Tpng","src/stream/scheduler/graph.dot","-o","src/stream/scheduler/graph.png"])
+generate(the_graph,Style())

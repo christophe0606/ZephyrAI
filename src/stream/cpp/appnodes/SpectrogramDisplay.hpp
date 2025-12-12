@@ -5,7 +5,7 @@
 
 using namespace arm_cmsis_stream;
 
-class AppDisplay : public ZephyrLCD
+class SpectrogramDisplay : public ZephyrLCD
 
 {
     static constexpr uint16_t refresh = 40; // ms
@@ -23,7 +23,7 @@ class AppDisplay : public ZephyrLCD
     static constexpr uint16_t orangeColor = redColor | (0x00F << 5);
 
       public:
-	AppDisplay() : ZephyrLCD()
+	SpectrogramDisplay() : ZephyrLCD()
 	{
 	}
 
@@ -42,7 +42,7 @@ class AppDisplay : public ZephyrLCD
 		return CG_SUCCESS;
 	}
 
-	virtual ~AppDisplay() {};
+	virtual ~SpectrogramDisplay() {};
 	
 
     
@@ -135,7 +135,7 @@ class AppDisplay : public ZephyrLCD
             {
                 if (evt.wellFormed<TensorPtr<float>>())
                 {
-                    evt.apply<TensorPtr<float>>(&AppDisplay::processLeftSpectrogram, *this);
+                    evt.apply<TensorPtr<float>>(&SpectrogramDisplay::processLeftSpectrogram, *this);
                 }
             }
 
@@ -143,7 +143,7 @@ class AppDisplay : public ZephyrLCD
             {
                 if (evt.wellFormed<TensorPtr<float>>())
                 {
-                    evt.apply<TensorPtr<float>>(&AppDisplay::processRightSpectrogram, *this);
+                    evt.apply<TensorPtr<float>>(&SpectrogramDisplay::processRightSpectrogram, *this);
                 }
             }
             genNewFrame();

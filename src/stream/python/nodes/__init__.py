@@ -15,3 +15,5 @@ from .SpeexPreprocess import *
 from .StereoToMono import *
 from .ZephyrLCD import *
 from .Gain import *
+from .ZephyrDebugVideoSource import *
+from .CameraFrame import *

@@ -40,7 +40,7 @@ extern "C"
 #define MY_QUEUE_MAX_ELEMS 20
 #endif
 
-#define MY_QUEUE_NEW_EVENT_FLAG 0x1 
+#define MY_QUEUE_NEW_EVENT_FLAG (0x1) 
 
 typedef int cg_threadPriority_t;
 
