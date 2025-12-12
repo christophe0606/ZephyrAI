@@ -1,41 +1,9 @@
 {
-  "ZephyrAudioSource<sq15,320>": {
-    "isTemplate": true,
+  "CameraFrame": {
+    "isTemplate": false,
     "selectors": []
   },
-  "SlidingBuffer<float,640,320>": {
-    "isTemplate": true,
-    "selectors": []
-  },
-  "DeinterleaveStereo<sf32,320,float,320,float,320>": {
-    "isTemplate": true,
-    "selectors": []
-  },
-  "CFFT<cf32,1024,cf32,1024>": {
-    "isTemplate": true,
-    "selectors": []
-  },
-  "Gain<sq15,320,sq15,320>": {
-    "isTemplate": true,
-    "selectors": []
-  },
-  "Spectrogram<cf32,1024>": {
-    "isTemplate": true,
-    "selectors": []
-  },
-  "RealToComplex<float,1024,cf32,1024>": {
-    "isTemplate": true,
-    "selectors": []
-  },
-  "Convert<sq15,320,sf32,320>": {
-    "isTemplate": true,
-    "selectors": []
-  },
-  "Hanning<float,640,float,1024>": {
-    "isTemplate": true,
-    "selectors": []
-  },
-  "SpectrogramDisplay": {
+  "ZephyrDebugVideoSource": {
     "isTemplate": false,
     "selectors": []
   }

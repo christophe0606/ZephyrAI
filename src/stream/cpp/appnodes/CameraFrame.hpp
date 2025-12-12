@@ -37,6 +37,9 @@ class CameraFrame : public ZephyrLCD
     void drawImage(const uint16_t *renderingFrame)
     {
         bool lockError;
+        if (!image) {
+            return;
+        }
         image.lock_shared(lockError, [this,renderingFrame](const Tensor<const uint16_t> &tensor)
         {
            
@@ -86,7 +89,7 @@ class CameraFrame : public ZephyrLCD
             {
                 if (evt.wellFormed<TensorPtr<const uint16_t>>())
                 {
-                    evt.apply(&CameraFrame::processImage, *this);
+                    evt.apply<TensorPtr<const uint16_t>>(&CameraFrame::processImage, *this);
                     genNewFrame();
                 }
             }

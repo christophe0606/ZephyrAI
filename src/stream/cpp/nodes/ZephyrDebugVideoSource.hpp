@@ -26,6 +26,8 @@ class ZephyrDebugVideoSource: public StreamNode
 public:
 	ZephyrDebugVideoSource() : StreamNode() 
     {
+		dt = 1.0f / 10.0f;
+		val=0.0f;
 	}
 
 	static void release_video_frame(void *frame)
@@ -41,12 +43,24 @@ public:
 			k_mem_slab_alloc(&video_slab, (void **)&frameBuffer_, K_NO_WAIT);
 			if (frameBuffer_ != nullptr)
 			{
+				val += dt;
+				if (val >= 1.0f)
+				{
+					val -= 1.0f;
+				}
+
+				uint16_t color = static_cast<uint16_t>((1.0f - val) * 0x1F);
+				if (color > 0x1F)
+				{
+					color = 0x1F;
+				}
+				color = color << 11; // Red channel
+
 				// Fill the frame with a test pattern
 				for (int y = 0; y < DBG_VIDEO_HEIGHT; ++y)
 				{
 					for (int x = 0; x < DBG_VIDEO_WIDTH; ++x)
 					{
-						uint16_t color = 0x1F << 11; // Red
 						((uint16_t *)frameBuffer_)[y * DBG_VIDEO_WIDTH + x] = color;
 					}
 				}
@@ -76,4 +90,6 @@ public:
 
       protected:
 	EventOutput ev;
+	float dt;
+	float val;
 };
