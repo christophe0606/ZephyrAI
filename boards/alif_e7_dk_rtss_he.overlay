@@ -66,3 +66,43 @@
 {
     status = "okay";
 };
+
+&i2c1 {
+	status = "okay";
+
+	mt9m114: mt9m114@48{
+		compatible = "aptina,mt9m114";
+		reg = <0x48>;
+		status = "okay";
+
+		port {
+			mt9m114_ep_out: endpoint {
+				remote-endpoint = < &lpcam_ep_in >;
+				//remote-endpoint = < &cam_ep_in >;
+			};
+		};
+	};
+};
+
+&cam {
+	status = "disabled";
+	sensor = <&mt9m114>;
+	port {
+		/* Parallel Bus endpoint. */
+		cam_ep_in: endpoint {
+			//remote-endpoint = <&mt9m114_ep_out>;
+		};
+	};
+};
+
+&lpcam {
+	status = "okay";
+	sensor = <&mt9m114>;
+	lp-cam;
+	port {
+		lpcam_ep_in: endpoint {
+			remote-endpoint = <&mt9m114_ep_out>;
+		};
+	};
+};
+

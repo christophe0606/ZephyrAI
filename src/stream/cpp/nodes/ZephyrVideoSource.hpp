@@ -17,7 +17,10 @@ using namespace arm_cmsis_stream;
 #define DBG_VIDEO_HEIGHT 50
 #define DBG_VIDEO_FRAME_SIZE (DBG_VIDEO_WIDTH * DBG_VIDEO_HEIGHT * 2) // RGB565
 
-K_MEM_SLAB_DEFINE_STATIC(video_slab, DBG_VIDEO_FRAME_SIZE, 2, 4);
+K_MEM_SLAB_DEFINE_STATIC(video_slab,
+	DBG_VIDEO_FRAME_SIZE, 
+	2, 
+	4);
 
 
 // RGB565

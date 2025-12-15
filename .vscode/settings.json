@@ -13,5 +13,5 @@
         "utility": "cpp",
         "xiosbase": "cpp"
     },
-    "cmsis-csolution.autoDebugLaunch": true
+    "cmsis-csolution.autoDebugLaunch": false
 }
