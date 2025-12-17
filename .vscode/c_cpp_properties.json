@@ -2,7 +2,7 @@
     "configurations": [
         {
             "name": "Zephyr",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            "compileCommands": "${workspaceFolder}/out/Zephyr_M55_HE/AppKit-E7/Debug/compile_commands.json"
         }
     ],
     "version": 4

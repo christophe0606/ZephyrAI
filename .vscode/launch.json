@@ -6,7 +6,7 @@
             "type": "gdbtarget",
             "request": "launch",
             "cwd": "${workspaceFolder}/",
-            "program": "",
+            "program": "out/Zephyr_M55_HE/AppKit-E7/Debug/zephyr/zephyr.elf",
             "gdb": "arm-none-eabi-gdb",
             "preLaunchTask": "CMSIS Load",
             "initCommands": [
@@ -48,7 +48,7 @@
             "type": "gdbtarget",
             "request": "attach",
             "cwd": "${workspaceFolder}/",
-            "program": "",
+            "program": "out/Zephyr_M55_HE/AppKit-E7/Debug/zephyr/zephyr.elf",
             "gdb": "arm-none-eabi-gdb",
             "initCommands": [
                 ""
