@@ -1,5 +1,9 @@
 # Zephyr AI / Multimedia projects using CMSIS Stream
 
+Commit  1e1d38883a59e121592c1f23f3d4185453587cbe of
+https://github.com/alifsemi/sdk-alif is used
+
+
 ## Issues
 
 Ethos driver init order must be changed in `zephyr\drivers\misc\ethos_u\ethos_u.c` and replaced with:
