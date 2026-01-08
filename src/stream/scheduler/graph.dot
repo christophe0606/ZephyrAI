@@ -101,13 +101,6 @@ classify [label=<
   </TR>
 </TABLE>>];
 
-display [label=<
-<TABLE color="black" bgcolor="none" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
-  <TR>
-    <TD ALIGN="CENTER" PORT="i"><FONT COLOR="black" POINT-SIZE="14.0">display<BR/>(KWSDisplay)</FONT></TD>
-  </TR>
-</TABLE>>];
-
 
 kws [label=<
 <TABLE color="black" bgcolor="none" BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4">
@@ -177,9 +170,6 @@ kws:oev0 -> send:iev0 [style="dashed",color="black",fontsize="12.0",fontcolor="b
 
 ]
 kws:oev1 -> classify:i [style="dashed",color="black",fontsize="12.0",fontcolor="black",label=<>
-
-]
-classify:i -> display:i [style="dashed",color="magenta",fontsize="12.0",fontcolor="black",label=<>
 
 ]
 

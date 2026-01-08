@@ -5,23 +5,20 @@
  */
 
 #include <stdio.h>
+#include <zephyr/logging/log.h>
+LOG_MODULE_REGISTER(main);
 
 #include "stream.h"
 
-
-
 int main(void)
-{   
-	printf("Starting main\n");
+{
+    LOG_INF("Starting main\n");
 
+    int err = init_stream();
+    if (err != 0) {
+        LOG_INF("Error initializing stream\n");
+        return -1;
+    }
 
-	int err = init_stream();
-	if (err != 0)
-	{
-		printf("Error initializing stream\n");
-		return -1;
-	}
-	
-	return 0;
-
+    return 0;
 }

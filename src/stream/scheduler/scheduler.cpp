@@ -109,8 +109,7 @@ Internal ID identification for the nodes
 #define SEND_INTERNAL_ID 6
 #define TO_F32_INTERNAL_ID 7
 #define CLASSIFY_INTERNAL_ID 8
-#define DISPLAY_INTERNAL_ID 9
-#define KWS_INTERNAL_ID 10
+#define KWS_INTERNAL_ID 9
 
 
 
@@ -168,7 +167,6 @@ typedef struct {
     SendToNetwork<float,490> *send;
     Convert<q15_t,320,float,320> *to_f32;
     KWSClassify *classify;
-    KWSDisplay *display;
     KWS *kws;
 } nodes_t;
 
@@ -305,14 +303,6 @@ int init_scheduler()
     identifiedNodes[STREAMCLASSIFY_ID]=createStreamNode(*nodes.classify);
     nodes.classify->setID(STREAMCLASSIFY_ID);
 
-    nodes.display = new (std::nothrow) KWSDisplay;
-    if (nodes.display==NULL)
-    {
-        return(CG_MEMORY_ALLOCATION_FAILURE);
-    }
-    identifiedNodes[STREAMDISPLAY_ID]=createStreamNode(*nodes.display);
-    nodes.display->setID(STREAMDISPLAY_ID);
-
     nodes.kws = new (std::nothrow) KWS(GetModelPointer(),GetModelLen());
     if (nodes.kws==NULL)
     {
@@ -326,7 +316,6 @@ int init_scheduler()
     nodes.send->subscribe(0,*nodes.kws,0);
     nodes.kws->subscribe(0,*nodes.send,0);
     nodes.kws->subscribe(1,*nodes.classify,0);
-    nodes.classify->subscribe(0,*nodes.display,0);
 
     initError = CG_SUCCESS;
     initError = nodes.audioSource->init();
@@ -362,10 +351,6 @@ int init_scheduler()
         return(initError);
     
     initError = nodes.classify->init();
-    if (initError != CG_SUCCESS)
-        return(initError);
-    
-    initError = nodes.display->init();
     if (initError != CG_SUCCESS)
         return(initError);
     
@@ -446,10 +431,6 @@ void free_scheduler()
     if (nodes.classify!=NULL)
     {
         delete nodes.classify;
-    }
-    if (nodes.display!=NULL)
-    {
-        delete nodes.display;
     }
     if (nodes.kws!=NULL)
     {
