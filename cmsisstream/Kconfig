@@ -42,5 +42,13 @@ config CMSISSTREAM_STREAM_THREAD_STACK_SIZE
     int "Stack size of stream thread"
     default 4096
 
+config CMSISSTREAM_POOL_SIZE 
+    int "Size allocated for the memory pools for event system"
+    default 8000
+
+config CMSISSTREAM_POOL_SECTION
+    string "Linker section where CMSIS Stream memory pool is placed"
+    default ".alif_sram0.evt_pool"
+
 endif #CMSISSTREAM
 

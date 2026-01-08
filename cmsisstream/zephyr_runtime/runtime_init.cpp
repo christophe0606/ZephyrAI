@@ -11,10 +11,10 @@ LOG_MODULE_DECLARE(streamruntime_module);
 
 #include <new>
 
-#define SRAM0_HEAP_SIZE 200000
+#define MEMORY_POOL_HEAP_SIZE CONFIG_CMSISSTREAM_POOL_SIZE 
 
 __aligned(8)
-__attribute__((section(".alif_sram0"))) static uint8_t sram0_heap_area[SRAM0_HEAP_SIZE];
+__attribute__((section(CONFIG_CMSISSTREAM_POOL_SECTION))) static uint8_t sram0_heap_area[MEMORY_POOL_HEAP_SIZE];
 
 static struct k_heap sram0_heap;
 
@@ -69,7 +69,7 @@ static void stream_thread_function(void * sched, void *params, void *)
 int init_stream_memory()
 {
 	/* Init sram0 heap */
-	k_heap_init(&sram0_heap, sram0_heap_area, SRAM0_HEAP_SIZE);
+	k_heap_init(&sram0_heap, sram0_heap_area, MEMORY_POOL_HEAP_SIZE);
 
 	/* Init memory slabs */
 	event_pool_buffer = nullptr;
