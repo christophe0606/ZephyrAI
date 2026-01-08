@@ -1,0 +1,46 @@
+config ZEPHYR_CMSISSTREAM_MODULE
+	bool
+
+menuconfig CMSISSTREAM
+	bool "CMSIS Stream Library Support"
+	help
+	  This option enables the CMSIS Stream library.
+
+if CMSISSTREAM
+
+config CMSISSTREAM_EVENT_QUEUE_LENGTH
+    int "Length of event queue"
+    default 20
+
+config CMSISSTREAM_NB_MAX_EVENTS 
+    int "Maximum number of events expected in the system at a given time"
+    default 20
+
+config CMSISSTREAM_NB_MAX_BUFS 
+    int "Maximum number of buffers expected in the system at a given time"
+    default 20
+
+config CMSISSTREAM_STREAM_THREAD_PRIORITY  
+    int "Priority of stream thread"
+    default 0
+
+config CMSISSTREAM_EVT_HIGH_PRIORITY 
+    int "Priority of high priority event thread"
+    default 4
+config CMSISSTREAM_EVT_NORMAL_PRIORITY 
+    int "Priority of normal priority event thread"
+    default 5
+config CMSISSTREAM_EVT_LOW_PRIORITY 
+    int "Priority of low priority event thread"
+    default 6
+
+config CMSISSTREAM_EVT_THREAD_STACK_SIZE 
+    int "Stack size of event thread"
+    default 4096
+
+config CMSISSTREAM_STREAM_THREAD_STACK_SIZE 
+    int "Stack size of stream thread"
+    default 4096
+
+endif #CMSISSTREAM
+

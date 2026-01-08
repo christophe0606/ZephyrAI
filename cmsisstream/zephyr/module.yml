@@ -1,0 +1,4 @@
+name: cmsisstream
+build:
+  cmake: .
+  kconfig: Kconfig

@@ -1,0 +1,15 @@
+{
+  "do": 1,
+  "pause": 2,
+  "resume": 3,
+  "getParam": 5,
+  "value": 6,
+  "stopGraph": 7,
+  "debug": 8,
+  "startNodeInitialization": 9,
+  "nodeWasInitialized": 10,
+  "nodeWillBeDestroyed": 11,
+  "nodeReadyToBeDestroyed": 12,
+  "error": 13,
+  "longRun": 14
+}

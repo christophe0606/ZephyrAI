@@ -1,25 +1,26 @@
 # SPDX-License-Identifier: Apache-2.0
-
+list(APPEND ZEPHYR_EXTRA_MODULES ${CMAKE_CURRENT_SOURCE_DIR}/cmsisstream)
 cmake_minimum_required(VERSION 3.20.0)
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(hello_world)
 
-target_sources(app PRIVATE src/main.c
-  src/stream.cpp
-  src/stream/scheduler/scheduler.cpp
-  src/stream/cpp/cg_queue.cpp
-  src/stream/kws_img.c 
-  src/stream/cpp/kws_mfcc.c
+#add_subdirectory(cmsisstream)
+
+target_sources(app PRIVATE src/main.cpp
+  src/streamgraph/scheduler/scheduler_grapha.cpp
+  src/streamgraph/kws_img.c 
+  src/streamgraph/cpp/kws_mfcc.c
   src/networks/kws_micronet_m_vela_H128.tflite.cpp
   src/networks/network.cpp
-  src/stream/kws_img.c
 )
 
-target_include_directories(app PUBLIC src src/stream/scheduler 
-  src/stream
-  src/stream/cpp
+target_include_directories(app PUBLIC src src/streamgraph/scheduler 
+  src/streamgraph
+  src/streamgraph/cpp
   src/networks
   )
 
-target_compile_definitions(app PRIVATE ACTIVATION_BUF_SZ=CONFIG_ACTIVATION_BUF_SZ)
+target_compile_definitions(app PRIVATE ARM_STREAM_CUSTOM_CONFIG
+   ACTIVATION_BUF_SZ=CONFIG_ACTIVATION_BUF_SZ)
+

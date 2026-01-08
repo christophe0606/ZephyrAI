@@ -1,0 +1,46 @@
+{
+  "ZephyrAudioSource<sq15,320>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "SlidingBuffer<float,640,320>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "MFCC<float,640,float,10>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "SlidingBuffer<float,490,480>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "NullSink<q15_t,320>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "SendToNetwork<float,490>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "Convert<q15_t,320,float,320>": {
+    "isTemplate": true,
+    "selectors": []
+  },
+  "KWSClassify": {
+    "isTemplate": false,
+    "selectors": []
+  },
+  "KWSDisplay": {
+    "isTemplate": false,
+    "selectors": []
+  },
+  "KWS": {
+    "isTemplate": false,
+    "selectors": []
+  }
+}
