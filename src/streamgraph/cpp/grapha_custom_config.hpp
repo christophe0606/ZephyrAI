@@ -48,3 +48,8 @@ LOG_MODULE_REGISTER(streamsched);
 
 
 #include "datatypes.hpp"
+
+#include "grapha_params.h"
+
+#define CG_BEFORE_NODE_INIT \
+    struct GraphaParams &params = *reinterpret_cast<struct GraphaParams *>(graphData);

@@ -299,7 +299,7 @@ int init_scheduler_grapha(void *evtQueue_,void *graphData)
     identifiedNodes[STREAMTO_F32_ID]=createStreamNode(*nodes.to_f32);
     nodes.to_f32->setID(STREAMTO_F32_ID);
 
-    nodes.classify = new (std::nothrow) KWSClassify(evtQueue,8);
+    nodes.classify = new (std::nothrow) KWSClassify(evtQueue,params.classify.historyLength);
     if (nodes.classify==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -382,7 +382,7 @@ int init_scheduler_grapha(void *evtQueue_,void *graphData)
 
 }
 
-void free_scheduler_grapha(void *graphData)
+void free_scheduler_grapha()
 {
     if (fifos.fifo0!=NULL)
     {
@@ -461,7 +461,7 @@ void free_scheduler_grapha(void *graphData)
 
 
 CG_BEFORE_SCHEDULER_FUNCTION
-uint32_t scheduler_grapha(int *error,void *graphData)
+uint32_t scheduler_grapha(int *error)
 {
     int cgStaticError=0;
     uint32_t nbSchedule=0;

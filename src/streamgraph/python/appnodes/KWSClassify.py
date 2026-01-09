@@ -7,7 +7,12 @@ class KWSClassify(GenericSink):
         GenericSink.__init__(self,name)
         self.addEventInput(1)
         self.addEventOutput(1)
-        self.addLiteralArg(8)
+        # The Python script somewhere should generate
+        # a C file initializing the params
+        # structure with initial settings.
+        # The settings would come from the instantiation of the nodes
+        # in the Python.
+        self.addVariableArg(f"params.{name}.historyLength")
 
     @property
     def folder(self):

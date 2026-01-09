@@ -14,7 +14,7 @@ def generate(graph_name,the_graph,myStyle):
     conf.schedulerCFileName = f"scheduler_{graph_name}"
     conf.memoryOptimization = True
     conf.appConfigCName = f"{graph_name}_custom_config.hpp"
-    conf.cOptionalArgs = ["void *graphData"]
+    conf.cOptionalInitArgs = ["void *graphData"]
 
     # Alif code is defining some variables as buf0, buf1 and not static
     # They conflict with the buf0, buf1 defined by stream

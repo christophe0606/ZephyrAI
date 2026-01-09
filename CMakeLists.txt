@@ -11,6 +11,7 @@ target_sources(app PRIVATE src/main.cpp
   src/streamgraph/scheduler/scheduler_grapha.cpp
   src/streamgraph/kws_img.c 
   src/streamgraph/cpp/kws_mfcc.c
+  src/streamgraph/cpp/grapha_params.c
   src/networks/kws_micronet_m_vela_H128.tflite.cpp
   src/networks/network.cpp
 )

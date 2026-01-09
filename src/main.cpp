@@ -19,7 +19,7 @@ LOG_MODULE_REGISTER(mainapp);
 
 #include "stream_runtime_init.hpp"
 
-
+#include "grapha_params.h"
 
 // Event to the interrupt thread
 struct k_event cg_interruptEvent;
@@ -84,7 +84,7 @@ int main(void)
 	
 
 	// Init nodes
-	err = init_scheduler_grapha(queue_grapha,nullptr);
+	err = init_scheduler_grapha(queue_grapha,(void*)&graphaParams);
 	if (err != CG_SUCCESS) {
 		LOG_ERR("Error: Failure during scheduler initialization for grapha.\n");
 		return (ENOMEM);
@@ -101,12 +101,16 @@ int main(void)
 
 	k_thread_name_set(&interrupt_thread, "interrupt_to_evt");
 
-	stream_start_threads(&scheduler_grapha,queue_grapha,nullptr);
+	stream_execution_context_t contexta = {
+		.dataflow_scheduler = scheduler_grapha,
+		.evtQueue = queue_grapha,
+	};
 
+	stream_start_threads(&contexta);
 
 	stream_wait_for_threads_end();
 
-	free_scheduler_grapha(nullptr);
+	free_scheduler_grapha();
 
 	delete queue_grapha;
 
