@@ -6,6 +6,9 @@ class KWSDisplay(ZephyrLCD):
     def __init__(self,name):
         ZephyrLCD.__init__(self,name)
         self.addEventInput(1)
+        # eventQueue is needed because this node can send
+        # event to itself so it needs the eventQueue
+        # to do it
         self.addVariableArg("evtQueue")
 
 

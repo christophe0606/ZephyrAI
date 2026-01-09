@@ -12,7 +12,6 @@ class ZephyrDebugAudioSource(GenericSource):
         # Stereo output
         self.addOutput("o",Q15_STEREO,outLength)
         self.addEventOutput()
-        self.addVariableArg("evtQueue")
 
     @property
     def typeName(self):

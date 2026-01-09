@@ -1,6 +1,5 @@
 #pragma once
 
-#include "arm_stream_custom_config.hpp"
 #include "EventQueue.hpp"
 #include "GenericNodes.hpp"
 #include "StreamNode.hpp"

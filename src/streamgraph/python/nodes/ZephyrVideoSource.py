@@ -11,7 +11,6 @@ class ZephyrVideoSource(GenericSource):
             raise Exception("Only one ZephyrVideoSource node can be instantiated")
         # Stereo output
         self.addEventOutput()
-        self.addVariableArg("evtQueue")
 
     @property
     def typeName(self):

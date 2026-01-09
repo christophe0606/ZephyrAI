@@ -15,7 +15,6 @@ Alif video example modified for inclusion in CMSIS Stream
 #include <new>
 
 #include "cg_enums.h"
-#include "arm_stream_custom_config.hpp"
 #include "EventQueue.hpp"
 #include "StreamNode.hpp"
 #include "GenericNodes.hpp"

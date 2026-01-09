@@ -25,7 +25,6 @@
  */
 #pragma once
 
-#include "arm_stream_custom_config.hpp"
 #include "GenericNodes.hpp"
 #include "dsp/transform_functions.h"
 #include <vector>

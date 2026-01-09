@@ -9,7 +9,7 @@ The support classes and code are covered by CMSIS-Stream license.
 
 
 #include <cstdint>
-#include "arm_stream_custom_config.hpp"
+#include "grapha_custom_config.hpp"
 #include "stream_platform_config.hpp"
 #include "cg_enums.h"
 #include "StreamNode.hpp"
@@ -193,6 +193,7 @@ CStreamNode* get_scheduler_grapha_node(int32_t nodeID)
 
 int init_scheduler_grapha(void *evtQueue_,void *graphData)
 {
+    EventQueue *evtQueue = reinterpret_cast<EventQueue *>(evtQueue_);
 
     CG_BEFORE_FIFO_INIT;
     fifos.fifo0 = new (std::nothrow) FIFO<sq15,FIFOSIZE0,1,0>(streambuf1);
@@ -381,7 +382,7 @@ int init_scheduler_grapha(void *evtQueue_,void *graphData)
 
 }
 
-void free_scheduler_grapha(void *evtQueue_,void *graphData)
+void free_scheduler_grapha(void *graphData)
 {
     if (fifos.fifo0!=NULL)
     {
@@ -460,7 +461,7 @@ void free_scheduler_grapha(void *evtQueue_,void *graphData)
 
 
 CG_BEFORE_SCHEDULER_FUNCTION
-uint32_t scheduler_grapha(int *error,void *evtQueue_,void *graphData)
+uint32_t scheduler_grapha(int *error,void *graphData)
 {
     int cgStaticError=0;
     uint32_t nbSchedule=0;

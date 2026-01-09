@@ -26,7 +26,6 @@
 
 #pragma once
 
-#include "arm_stream_custom_config.hpp"
 #include "GenericNodes.hpp"
 
 using namespace arm_cmsis_stream;

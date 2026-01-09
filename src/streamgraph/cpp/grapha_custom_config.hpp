@@ -1,7 +1,14 @@
 #pragma once 
 
-//#include "arm_mve.h"
-#include "arm_math_types.h"
+/**
+ * 
+ * This file is used to customize the dataflow loop and provide
+ * some definition  to the scheduler.cpp
+ * Generally this file defines some macros used in the
+ * scheduler dataflow loop and some datatypes used in the project.
+ * 
+ */
+
 
 extern "C"
 {
@@ -15,26 +22,6 @@ extern struct k_event cg_streamEvent;
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(streamsched);
 
-struct cf32 {
-    float real;
-    float imag;
-};
-
-struct sf32 {
-    float left;
-    float right;
-};
-
-struct cq15 {
-    int16_t real;
-    int16_t imag;
-};
-
-struct sq15 {
-    int16_t left;
-    int16_t right;
-};
-
 
 
 #include "rtos_events.hpp"
@@ -45,6 +32,8 @@ struct sq15 {
   uint32_t errorFlags = 0;
 
 
+// Example of how to inject code before each node execution in the
+// dataflow graph scheduler loop
 #define CG_BEFORE_NODE_EXECUTION(ID)                                                                                       \
 {                                                                                                                          \
     errorFlags = k_event_wait(&cg_streamEvent,AUDIO_SINK_UNDERFLOW_EVENT | AUDIO_SOURCE_OVERFLOW_EVENT, false, K_NO_WAIT); \
@@ -57,10 +46,5 @@ struct sq15 {
     }                                                                                                                      \
 }                             
 
-// To keep a C API for the scheduler we pass a void * for the
-// EventQueue and it needs to be casted to the right type
-// (We could also use the CMSIS Stream option to have a C++ API)
-#define CG_BEFORE_FIFO_INIT \
-  EventQueue *evtQueue = reinterpret_cast<EventQueue *>(evtQueue_);
 
-#include "stream_platform_config.hpp"
+#include "datatypes.hpp"

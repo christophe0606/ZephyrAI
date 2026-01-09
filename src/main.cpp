@@ -106,7 +106,7 @@ int main(void)
 
 	stream_wait_for_threads_end();
 
-	free_scheduler_grapha(queue_grapha,nullptr);
+	free_scheduler_grapha(nullptr);
 
 	delete queue_grapha;
 

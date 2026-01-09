@@ -2,7 +2,6 @@
 
 
 #include "cg_enums.h"
-#include "arm_stream_custom_config.hpp"
 #include "EventQueue.hpp"
 #include "StreamNode.hpp"
 #include "GenericNodes.hpp"
