@@ -7,6 +7,8 @@ class KWSClassify(GenericSink):
         GenericSink.__init__(self,name)
         self.addEventInput(1)
         self.addEventOutput(1)
+        self.addVariableArg("evtQueue")
+        self.addLiteralArg(8)
 
     @property
     def folder(self):

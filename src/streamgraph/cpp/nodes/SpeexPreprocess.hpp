@@ -32,7 +32,7 @@ class SpeexPreprocess<q15_t, 256,
         p_state = speex_preprocess_state_init(256, SAMPLE_RATE);
         if (p_state == NULL)
         {
-            ERROR_PRINT("Failed to initialize SpeexPreprocess\n");
+            LOG_ERR("Failed to initialize SpeexPreprocess\n");
         }
         else
         {
@@ -55,16 +55,6 @@ class SpeexPreprocess<q15_t, 256,
         }
     }
 
-    int prepareForRunning() final
-    {
-        if (this->willOverflow() ||
-            this->willUnderflow())
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
 
     int run() final
     {

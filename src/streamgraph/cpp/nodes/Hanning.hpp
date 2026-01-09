@@ -31,16 +31,7 @@ class Hanning<float32_t, inputSamples, float32_t, outputSamples> : public Generi
         delete[] window;
     }
 
-    int prepareForRunning() final
-    {
-        if ((this->willOverflow()) || (this->willUnderflow()))
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
-
+    
     int run() final
     {
         float32_t *in = this->getReadBuffer();

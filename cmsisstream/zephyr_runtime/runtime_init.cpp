@@ -1,4 +1,3 @@
-#include "runtime_init.h"
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(streamruntime_module);
@@ -7,7 +6,10 @@ LOG_MODULE_DECLARE(streamruntime_module);
 #include "EventQueue.hpp"
 #include "StreamNode.hpp"
 
-#include "event_queue.hpp"
+#include "stream_event_queue.hpp"
+
+#include "runtime_init.hpp"
+
 
 #include <new>
 
@@ -40,33 +42,31 @@ static K_THREAD_STACK_DEFINE(stream_thread_stack, CONFIG_CMSISSTREAM_STREAM_THRE
 
 using namespace arm_cmsis_stream;
 
-static void event_thread_function(void *, void *, void *)
+static void event_thread_function(void *evtQueue, void *, void *)
 {
+	EventQueue *queue =
+		reinterpret_cast<EventQueue *>(evtQueue);
 	LOG_DBG("Started event thread\n");
 
-	arm_cmsis_stream::EventQueue::cg_eventQueue->execute();
+	queue->execute();
 
-	// Delete the event queue when done
-
-	delete arm_cmsis_stream::EventQueue::cg_eventQueue;
-	arm_cmsis_stream::EventQueue::cg_eventQueue = nullptr;
 }
 
-static void stream_thread_function(void * sched, void *params, void *)
+static void stream_thread_function(void * sched, void *evtQueue, void *params)
 {
 	stream_scheduler scheduler = reinterpret_cast<stream_scheduler>(sched);
 	uint32_t nb_iter;
 	int error;
 	LOG_DBG("Stream thread started\n");
 
-	nb_iter = scheduler(&error,params);
+	nb_iter = scheduler(&error,evtQueue,params);
 	if ((error != CG_SUCCESS) && (error != CG_STOP_SCHEDULER)) {
 		LOG_ERR("Scheduler error %d\n", error);
 	}
 	LOG_DBG("Scheduler done after %d iterations\n", nb_iter);
 }
 
-int init_stream_memory()
+int stream_init_memory()
 {
 	/* Init sram0 heap */
 	k_heap_init(&sram0_heap, sram0_heap_area, MEMORY_POOL_HEAP_SIZE);
@@ -102,9 +102,7 @@ int init_stream_memory()
 		return (err);
 	}
 
-	/* Init events */
-	k_event_init(&MyQueue::cg_eventEvent);
-
+	
 	
 
 	LOG_DBG("Stream memory initialized\n");
@@ -112,52 +110,48 @@ int init_stream_memory()
 	return (0);
 }
 
-void start_stream_threads(stream_scheduler scheduler,void *params)
+void stream_start_threads(stream_scheduler scheduler,
+	                      EventQueue *evtQueue, 
+						  void *params)
 {
 
 	tid_event = k_thread_create(
 		&event_thread, event_thread_stack, K_THREAD_STACK_SIZEOF(event_thread_stack),
-		event_thread_function, NULL,NULL, NULL, CONFIG_CMSISSTREAM_EVT_HIGH_PRIORITY, K_FP_REGS, K_NO_WAIT);
+		event_thread_function, evtQueue,NULL, NULL, CONFIG_CMSISSTREAM_EVT_HIGH_PRIORITY, K_FP_REGS, K_NO_WAIT);
 
 	k_thread_name_set(&event_thread, "event_thread");
 
 	tid_stream =
 		k_thread_create(&stream_thread, stream_thread_stack,
 				K_THREAD_STACK_SIZEOF(stream_thread_stack), stream_thread_function,
-				 (void*)scheduler, params, NULL, CONFIG_CMSISSTREAM_STREAM_THREAD_PRIORITY, K_FP_REGS, K_NO_WAIT);
+				 (void*)scheduler, evtQueue,params, CONFIG_CMSISSTREAM_STREAM_THREAD_PRIORITY, K_FP_REGS, K_NO_WAIT);
 
 	k_thread_name_set(&stream_thread, "stream_thread");
 
 	LOG_DBG("Stream thread started\n");
 }
 
-void wait_for_stream_thread_end()
+void stream_wait_for_threads_end()
 {
 	k_thread_join(&stream_thread, K_FOREVER);
-	arm_cmsis_stream::EventQueue::cg_eventQueue->end();
-
 	k_thread_join(&event_thread, K_FOREVER);
-
-	
 }
 
-void free_stream_memory()
+void stream_free_memory()
 {
+   
    k_heap_free(&sram0_heap, event_pool_buffer);
    k_heap_free(&sram0_heap, buf_pool_buffer);
    k_heap_free(&sram0_heap, mutex_pool_buffer);
 
-   delete arm_cmsis_stream::EventQueue::cg_eventQueue;
-   arm_cmsis_stream::EventQueue::cg_eventQueue = nullptr;
 }
 
-void *new_event_queue()
+EventQueue *stream_new_event_queue()
 {
 	MyQueue *queue = new (std::nothrow) MyQueue(CONFIG_CMSISSTREAM_EVT_LOW_PRIORITY,
 										   CONFIG_CMSISSTREAM_EVT_NORMAL_PRIORITY,
 										   CONFIG_CMSISSTREAM_EVT_HIGH_PRIORITY);
-	arm_cmsis_stream::EventQueue::cg_eventQueue = reinterpret_cast<arm_cmsis_stream::EventQueue *>(queue);
-	return (queue);
+	return (static_cast<EventQueue *>(queue));
 
 }
 

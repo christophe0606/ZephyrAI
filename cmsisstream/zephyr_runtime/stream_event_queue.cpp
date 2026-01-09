@@ -28,7 +28,7 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(streamruntime_module);
 
-#include "event_queue.hpp"
+#include "stream_event_queue.hpp"
 #include <cstdint>
 #include <variant>
 
@@ -36,11 +36,16 @@ LOG_MODULE_REGISTER(streamruntime_module);
 
 using namespace arm_cmsis_stream;
 
-struct k_event MyQueue::cg_eventEvent;
+void *EventQueue::handlerData = nullptr;
+EventQueue::AppHandler EventQueue::handler = nullptr;
+std::atomic<bool> EventQueue::handlerReady_ = false;
 
 MyQueue::MyQueue(cg_threadPriority_t low, cg_threadPriority_t normal, cg_threadPriority_t high)
     : arm_cmsis_stream::EventQueue()
 {
+    /* Init events */
+	k_event_init(&cg_eventEvent);
+
     priorities[0] = low;
     priorities[1] = normal;
     priorities[2] = high;
@@ -215,7 +220,7 @@ void MyQueue::execute()
                     else if (std::holds_alternative<DistantDestination>(msg.destination))
                     {
                         DistantDestination &dist = std::get<DistantDestination>(msg.destination);
-                        this->callHandler(dist.src_node_id, std::move(msg.event));
+                        this->callAsyncHandler(dist.src_node_id, std::move(msg.event));
                     }
                     k_thread_priority_set(tid, priorities[nb_priorities - 1]); // Back to highest priority
                 }

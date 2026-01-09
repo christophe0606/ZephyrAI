@@ -1,19 +1,12 @@
-#ifndef stream_runtime_init_h
-#define stream_runtime_init_h 
+#pragma once
 
 #include <zephyr/kernel.h>
 
-#ifdef   __cplusplus
-extern "C"
-{
-#endif 
+#include "cmsisstream_zephyr_config.hpp"
+#include "EventQueue.hpp"
 
 
-extern struct k_mem_slab cg_eventPool;
-extern struct k_mem_slab cg_bufPool;
-extern struct k_mem_slab cg_mutexPool;
-
-typedef uint32_t (*stream_scheduler)(int *error,void *graphData);
+typedef uint32_t (*stream_scheduler)(int *error,void *evtQueue, void *graphData);
 /**
  * @brief Initialize the CMSIS Stream runtime memory and structures
  * @return 0 on success, negative error code on failure
@@ -21,28 +14,30 @@ typedef uint32_t (*stream_scheduler)(int *error,void *graphData);
  * This function initializes the memory pools and event queue required
  * for the CMSIS Stream runtime in a Zephyr environment.
  */
-extern int init_stream_memory();
+extern int stream_init_memory();
 
 /**
  * @brief Start the CMSIS Stream runtime threads
  * This function creates and starts the necessary threads for
  * handling CMSIS Stream events and processing.
  */
-extern void start_stream_threads(stream_scheduler scheduler,void *params);
+extern void stream_start_threads(stream_scheduler scheduler,
+                                 arm_cmsis_stream::EventQueue *evtQueue,
+                                 void *params);
 
 /**
  * @brief Wait for the CMSIS Stream threads to finish
  * This function blocks until the stream and event threads
  * have completed their execution.
  */
-extern void wait_for_stream_thread_end();
+extern void stream_wait_for_threads_end();
 
 /**
  * @brief Free the CMSIS Stream runtime memory
  * This function releases the memory allocated for the CMSIS Stream
  * runtime, including the event queue.
  */
-extern void free_stream_memory();
+extern void stream_free_memory();
 
 /**
  * @brief Create a new CMSIS Stream Event Queue
@@ -51,13 +46,6 @@ extern void free_stream_memory();
  * event thread. This function should be called only when the event thread
  * is not running.
  */
-extern void *new_event_queue();
+extern arm_cmsis_stream::EventQueue *stream_new_event_queue();
 
 
-
-
-#ifdef   __cplusplus
-}
-#endif
-
-#endif

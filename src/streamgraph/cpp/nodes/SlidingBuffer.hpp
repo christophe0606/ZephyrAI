@@ -41,17 +41,6 @@ public:
         memory.resize(overlap);
     };
 
-    int prepareForRunning() final
-    {
-        if (this->willOverflow() ||
-            this->willUnderflow()
-           )
-        {
-           return(CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return(CG_SUCCESS);
-    };
 
     int run() final
     {

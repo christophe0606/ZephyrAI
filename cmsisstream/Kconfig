@@ -50,5 +50,13 @@ config CMSISSTREAM_POOL_SECTION
     string "Linker section where CMSIS Stream memory pool is placed"
     default ".alif_sram0.evt_pool"
 
+config CMSISSTREAM_TENSOR_MAX_DIMENSIONS 
+    int "Maximum number of tensor dimensions"
+    default 2
+
+config CMSISSTREAM_MAX_NUMBER_EVENT_ARGUMENTS
+    int "Maximum number arguments in an event"
+    default 4
+
 endif #CMSISSTREAM
 

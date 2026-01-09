@@ -4,6 +4,7 @@
 #include <iostream>
 #include <variant>
 
+#include "StreamNode.hpp"
 
 using namespace arm_cmsis_stream;
 

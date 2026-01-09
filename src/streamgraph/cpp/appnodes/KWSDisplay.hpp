@@ -15,7 +15,7 @@ class KWSDisplay : public ZephyrLCD
     static constexpr uint32_t duration = 2;
 
   public:
-    KWSDisplay(): ZephyrLCD()
+    KWSDisplay(EventQueue *queue): ZephyrLCD(),eventQueue(queue)
     {
     }
 
@@ -85,7 +85,7 @@ class KWSDisplay : public ZephyrLCD
         uint16_t *renderingFrame = (uint16_t *)this->renderingFrame();
         if (renderingFrame == nullptr)
         {
-            ERROR_PRINT("Failed to get rendering frame");
+            LOG_ERR("Failed to get rendering frame");
             return;
         }
         memset(renderingFrame, 0x00, DISPLAY_IMAGE_SIZE);
@@ -107,7 +107,7 @@ class KWSDisplay : public ZephyrLCD
             (void)canRender;
             // Ask for new frame
             Event evt(kDo, kNormalPriority);
-            EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));
+            eventQueue->push(LocalDestination{this, 0}, std::move(evt));
         }
         else
         {
@@ -136,7 +136,7 @@ class KWSDisplay : public ZephyrLCD
             (void)canRender;
             Event evt(kDo, kNormalPriority);
             evt.setTTL(40);
-            EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));
+            eventQueue->push(LocalDestination{this, 0}, std::move(evt));
         }
     }
 
@@ -164,4 +164,5 @@ class KWSDisplay : public ZephyrLCD
     const uint8_t *currentImg{nullptr};
     uint32_t width,height;
     bool displayLast{false};
+    EventQueue *eventQueue;
 };

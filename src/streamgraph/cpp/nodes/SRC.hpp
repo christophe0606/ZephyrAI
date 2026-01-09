@@ -45,15 +45,6 @@ class SRC<float, inputSamples, float, outputSamples> : public GenericNode<float,
                                  inputSamples);
         };
 
-    int prepareForRunning() final
-    {
-        if ((this->willOverflow()) || (this->willUnderflow()))
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
 
     int run() final
     {

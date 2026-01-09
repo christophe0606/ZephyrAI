@@ -20,15 +20,6 @@ class DeinterleaveStereo<sf32, inputSamples, float32_t, inputSamples, float32_t,
     DeinterleaveStereo(FIFOBase<sf32> &src, FIFOBase<float32_t> &left, FIFOBase<float32_t> &right)
         : GenericNode12<sf32, inputSamples, float32_t, inputSamples, float32_t, inputSamples>(src, left, right) {};
 
-    int prepareForRunning() final
-    {
-        if ((this->willOverflow1()) || (this->willOverflow2()) || (this->willUnderflow()))
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
 
     int run() final
     {
@@ -52,16 +43,6 @@ class DeinterleaveStereo<sq15, inputSamples, q15_t, inputSamples, q15_t, inputSa
   public:
     DeinterleaveStereo(FIFOBase<sq15> &src, FIFOBase<q15_t> &left, FIFOBase<q15_t> &right)
         : GenericNode12<sq15, inputSamples, q15_t, inputSamples, q15_t, inputSamples>(src, left, right) {};
-
-    int prepareForRunning() final
-    {
-        if ((this->willOverflow1()) || (this->willOverflow2()) || (this->willUnderflow()))
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
 
     int run() final
     {

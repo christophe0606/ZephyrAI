@@ -7,6 +7,7 @@
 
 #include "cg_enums.h"
 #include "arm_stream_custom_config.hpp"
+#include "EventQueue.hpp"
 #include "StreamNode.hpp"
 #include "GenericNodes.hpp"
 #include "arm_math_types.h"
@@ -24,7 +25,7 @@ K_MEM_SLAB_DEFINE_STATIC(video_slab, DBG_VIDEO_FRAME_SIZE, 2, 4);
 class ZephyrDebugVideoSource: public StreamNode
 {
 public:
-	ZephyrDebugVideoSource() : StreamNode() 
+	ZephyrDebugVideoSource(EventQueue *queue) : StreamNode(),ev(queue)
     {
 		dt = 1.0f / 10.0f;
 		val=0.0f;

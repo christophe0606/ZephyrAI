@@ -22,16 +22,7 @@ class Convert<sq15, inputSamples, sf32, inputSamples> : public GenericNode<sq15,
     Convert(FIFOBase<sq15> &src, FIFOBase<sf32> &dst)
         : GenericNode<sq15, inputSamples, sf32, inputSamples>(src, dst) {};
 
-    int prepareForRunning() final
-    {
-        if ((this->willOverflow()) || (this->willUnderflow()))
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
-
+    
     int run() final
     {
         sf32 *o = this->getWriteBuffer();
@@ -49,15 +40,6 @@ class Convert<sf32, inputSamples, sq15, inputSamples> : public GenericNode<sf32,
     Convert(FIFOBase<sf32> &src, FIFOBase<sq15> &dst)
         : GenericNode<sf32, inputSamples, sq15, inputSamples>(src, dst) {};
 
-    int prepareForRunning() final
-    {
-        if ((this->willOverflow()) || (this->willUnderflow()))
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
 
     int run() final
     {
@@ -76,15 +58,6 @@ class Convert<q15_t, inputSamples, float, inputSamples> : public GenericNode<q15
     Convert(FIFOBase<q15_t> &src, FIFOBase<float> &dst)
         : GenericNode<q15_t, inputSamples, float, inputSamples>(src, dst) {};
 
-    int prepareForRunning() final
-    {
-        if ((this->willOverflow()) || (this->willUnderflow()))
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
 
     int run() final
     {

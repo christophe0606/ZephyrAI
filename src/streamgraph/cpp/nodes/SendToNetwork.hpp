@@ -2,8 +2,9 @@
 
 
 #include "arm_stream_custom_config.hpp"
-#include "GenericNodes.hpp"
+#include "EventQueue.hpp"
 #include "StreamNode.hpp"
+#include "GenericNodes.hpp"
 #include "arm_math_types.h"
 #include "cg_enums.h"
 #include <cstring>
@@ -15,20 +16,11 @@ template <typename IN, int inputSamples>
 class SendToNetwork : public GenericSink<IN, inputSamples>
 {
   public:
-    SendToNetwork(FIFOBase<IN> &src)
-        : GenericSink<IN, inputSamples>(src) {
+    SendToNetwork(FIFOBase<IN> &src, EventQueue *queue)
+        : GenericSink<IN, inputSamples>(src), ev0(queue) {
           };
 
-    int prepareForRunning() final
-    {
-        if (this->willUnderflow())
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
-
+   
     int run() override final
     {
         IN *in = this->getReadBuffer();

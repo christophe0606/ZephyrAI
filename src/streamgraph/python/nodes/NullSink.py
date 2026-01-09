@@ -9,6 +9,7 @@ class NullSink(GenericSink):
         self.addInput("i",theType,outLength)
         self.addEventInput()
         self.addEventOutput()
+        self.addVariableArg("evtQueue")
 
     @property
     def typeName(self):

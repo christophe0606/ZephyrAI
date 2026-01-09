@@ -1,7 +1,8 @@
 #include <atomic>
 #include "arm_stream_custom_config.hpp"
-#include "GenericNodes.hpp"
+#include "EventQueue.hpp"
 #include "StreamNode.hpp"
+#include "GenericNodes.hpp"
 #include "arm_math_types.h"
 #include "cg_enums.h"
 

@@ -9,5 +9,5 @@ class ZephyrLCD(GenericSink):
         ZephyrLCD.COUNT = ZephyrLCD.COUNT + 1
         if (ZephyrLCD.COUNT > 1):
             raise Exception("Only one ZephyrLCD node can be instantiated")
-       
+        
 

@@ -9,6 +9,7 @@ class TFLite(GenericSink):
         # producer that the network is ready
         self.addEventInput(nbInputs)
         self.addEventOutput(nbOutputs+1)
+        self.addVariableArg("evtQueue")
         self.addVariableArg(addr)
         if type(size) is int:
             self.addLiteralArg(size)

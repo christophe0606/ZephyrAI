@@ -190,7 +190,7 @@ CStreamNode* get_scheduler_grapha_node(int32_t nodeID)
     return(&identifiedNodes[nodeID]);
 }
 
-int init_scheduler_grapha(void *graphData)
+int init_scheduler_grapha(void *evtQueue_,void *graphData)
 {
 
     CG_BEFORE_FIFO_INIT;
@@ -273,7 +273,7 @@ int init_scheduler_grapha(void *graphData)
     identifiedNodes[STREAMMFCCWIN_ID]=createStreamNode(*nodes.mfccWin);
     nodes.mfccWin->setID(STREAMMFCCWIN_ID);
 
-    nodes.nullRight = new (std::nothrow) NullSink<q15_t,320>(*(fifos.fifo6));
+    nodes.nullRight = new (std::nothrow) NullSink<q15_t,320>(*(fifos.fifo6),evtQueue);
     if (nodes.nullRight==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -281,7 +281,7 @@ int init_scheduler_grapha(void *graphData)
     identifiedNodes[STREAMNULLRIGHT_ID]=createStreamNode(*nodes.nullRight);
     nodes.nullRight->setID(STREAMNULLRIGHT_ID);
 
-    nodes.send = new (std::nothrow) SendToNetwork<float,490>(*(fifos.fifo5));
+    nodes.send = new (std::nothrow) SendToNetwork<float,490>(*(fifos.fifo5),evtQueue);
     if (nodes.send==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -297,7 +297,7 @@ int init_scheduler_grapha(void *graphData)
     identifiedNodes[STREAMTO_F32_ID]=createStreamNode(*nodes.to_f32);
     nodes.to_f32->setID(STREAMTO_F32_ID);
 
-    nodes.classify = new (std::nothrow) KWSClassify;
+    nodes.classify = new (std::nothrow) KWSClassify(evtQueue,8);
     if (nodes.classify==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -305,7 +305,7 @@ int init_scheduler_grapha(void *graphData)
     identifiedNodes[STREAMCLASSIFY_ID]=createStreamNode(*nodes.classify);
     nodes.classify->setID(STREAMCLASSIFY_ID);
 
-    nodes.display = new (std::nothrow) KWSDisplay;
+    nodes.display = new (std::nothrow) KWSDisplay(evtQueue);
     if (nodes.display==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -313,7 +313,7 @@ int init_scheduler_grapha(void *graphData)
     identifiedNodes[STREAMDISPLAY_ID]=createStreamNode(*nodes.display);
     nodes.display->setID(STREAMDISPLAY_ID);
 
-    nodes.kws = new (std::nothrow) KWS(GetModelPointer(),GetModelLen());
+    nodes.kws = new (std::nothrow) KWS(evtQueue,GetModelPointer(),GetModelLen());
     if (nodes.kws==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -380,7 +380,7 @@ int init_scheduler_grapha(void *graphData)
 
 }
 
-void free_scheduler_grapha(void *graphData)
+void free_scheduler_grapha(void *evtQueue_,void *graphData)
 {
     if (fifos.fifo0!=NULL)
     {
@@ -459,7 +459,7 @@ void free_scheduler_grapha(void *graphData)
 
 
 CG_BEFORE_SCHEDULER_FUNCTION
-uint32_t scheduler_grapha(int *error,void *graphData)
+uint32_t scheduler_grapha(int *error,void *evtQueue_,void *graphData)
 {
     int cgStaticError=0;
     uint32_t nbSchedule=0;

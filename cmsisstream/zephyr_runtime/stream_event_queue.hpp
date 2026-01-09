@@ -44,9 +44,6 @@ typedef int cg_threadPriority_t;
 class MyQueue:public arm_cmsis_stream::EventQueue
 {
 public:
-    // Event to the event thread
-    // and "shared" between all the queues
-    static struct k_event cg_eventEvent;
 
     MyQueue(cg_threadPriority_t low, cg_threadPriority_t normal, cg_threadPriority_t high);
     ~MyQueue();
@@ -73,6 +70,8 @@ protected:
     uint32_t nb_elems[nb_priorities];
 
     cg_threadPriority_t priorities[nb_priorities];
+
+    struct k_event cg_eventEvent;
 
    
 };

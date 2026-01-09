@@ -19,16 +19,7 @@ class RealToComplex<float, inputSamples, cf32, inputSamples> : public GenericNod
     RealToComplex(FIFOBase<float> &src, FIFOBase<cf32> &dst)
         : GenericNode<float, inputSamples, cf32, inputSamples>(src, dst) {};
 
-    int prepareForRunning() final
-    {
-        if ((this->willOverflow()) || (this->willUnderflow()))
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
-
+    
     int run() final
     {
         cf32 *o = this->getWriteBuffer();

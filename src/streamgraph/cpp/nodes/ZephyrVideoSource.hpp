@@ -16,6 +16,7 @@ Alif video example modified for inclusion in CMSIS Stream
 
 #include "cg_enums.h"
 #include "arm_stream_custom_config.hpp"
+#include "EventQueue.hpp"
 #include "StreamNode.hpp"
 #include "GenericNodes.hpp"
 #include "arm_math_types.h"
@@ -38,7 +39,7 @@ using namespace arm_cmsis_stream;
 class ZephyrVideoSource : public StreamNode
 {
       public:
-	ZephyrVideoSource() : StreamNode()
+	ZephyrVideoSource(EventQueue *queue) : StreamNode(), ev(queue)
 	{
 		dt = 1.0f / 10.0f;
 		val = 0.0f;

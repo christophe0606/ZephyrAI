@@ -7,6 +7,7 @@ class Spectrogram(GenericSink):
         GenericSink.__init__(self,name)
         self.addInput("i",F32_COMPLEX,nbSamples)
         self.addEventOutput()
+        self.addVariableArg("evtQueue")
 
     @property
     def folder(self):

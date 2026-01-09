@@ -40,71 +40,59 @@
 #include <iostream>
 
 #include "cg_enums.h"
+#include "cmsisstream_zephyr_config.hpp"
 
-#define CG_TENSOR_NB_DIMS 8
+#define CG_TENSOR_NB_DIMS CONFIG_CMSISSTREAM_TENSOR_MAX_DIMENSIONS
 
 // Used for ListValue
 #ifndef CG_MK_LIST_EVENT_ALLOCATOR
-#define CG_MK_LIST_EVENT_ALLOCATOR(T) \
-    std::allocator<T> {}
+#error "CG_MK_LIST_EVENT_ALLOCATOR must be defined"
 #endif
 
 // Used for RawBuffer and Tensors
 #ifndef CG_MK_PROTECTED_BUF_ALLOCATOR
-#define CG_MK_PROTECTED_BUF_ALLOCATOR(T) \
-    std::allocator<T> {}
+#error "CG_MK_PROTECTED_BUF_ALLOCATOR must be defined"
 #endif
 
 // Used for mutexes used to protect access to the buffers
 // since they are allocated in a shared_ptr
 #ifndef CG_MK_PROTECTED_MUTEX_ALLOCATOR
-#define CG_MK_PROTECTED_MUTEX_ALLOCATOR(T) \
-    std::allocator<T> {}
+#error "CG_MK_PROTECTED_MUTEX_ALLOCATOR must be defined"
 #endif
 
 // Used only when CG_EVENTS_MULTI_THREAD is ON
 // but a definition is needed to build
 #ifndef CG_MUTEX
-#define CG_MUTEX int
+#error "CG_MUTEX must be defined"
 #endif
 
 #ifndef CG_MUTEX_ERROR_TYPE
-#define CG_MUTEX_ERROR_TYPE int
+#error "CG_MUTEX_ERROR_TYPE must be defined"
 #endif
 
 #ifndef CG_MUTEX_HAS_ERROR
-#define CG_MUTEX_HAS_ERROR(ERROR) false
+#error "CG_MUTEX_HAS_ERROR must be defined"
 #endif
 
 #ifndef CG_ENTER_CRITICAL_SECTION
-#define CG_ENTER_CRITICAL_SECTION(mutex, error)
+#error "CG_ENTER_CRITICAL_SECTION must be defined"
 #endif
 
 #ifndef CG_EXIT_CRITICAL_SECTION
-#define CG_EXIT_CRITICAL_SECTION(mutex, error)
+#error "CG_EXIT_CRITICAL_SECTION must be defined"
 #endif
 
 #ifndef CG_ENTER_READ_CRITICAL_SECTION
-#define CG_ENTER_READ_CRITICAL_SECTION(mutex, error)
+#error "CG_ENTER_READ_CRITICAL_SECTION must be defined"
 #endif
 
 #ifndef CG_EXIT_READ_CRITICAL_SECTION
-#define CG_EXIT_READ_CRITICAL_SECTION(mutex, error)
+#error "CG_EXIT_READ_CRITICAL_SECTION must be defined"
 #endif
 
 // Maximum number of values in a combined value
-#ifndef CG_MAX_VALUES
-#define CG_MAX_VALUES 8
-#endif
 
-
-#ifndef DEBUG_PRINT
-#define DEBUG_PRINT(...) //printf(__VA_ARGS__)
-#endif
-
-#ifndef ERROR_PRINT
-#define ERROR_PRINT(...) //printf(__VA_ARGS__)
-#endif
+#define CG_MAX_VALUES CONFIG_CMSISSTREAM_MAX_NUMBER_EVENT_ARGUMENTS
 
 /* Node ID is -1 when nodes are not identified for the external world */
 #define CG_UNIDENTIFIED_NODE (-1)
@@ -217,7 +205,7 @@ namespace arm_cmsis_stream
             }
             if (global_id_ == -1)
             {
-                ERROR_PRINT("Global id not set.\n");
+                LOG_ERR("Global id not set.\n");
                 return -1; // Error: Lock offset not set
             }
             return MemServer::mem_server->lock(global_id_);
@@ -231,7 +219,7 @@ namespace arm_cmsis_stream
             }
             if (global_id_ == -1)
             {
-                ERROR_PRINT("Global id not set.\n");
+                LOG_ERR("Global id not set.\n");
                 return -1; // Error: Lock offset not set
             }
             return MemServer::mem_server->read_lock(global_id_);
@@ -245,7 +233,7 @@ namespace arm_cmsis_stream
             }
             if (global_id_ == -1)
             {
-                ERROR_PRINT("Global id is not set.\n");
+                LOG_ERR("Global id is not set.\n");
                 return -1; // Error: Lock offset not set
             }
             return MemServer::mem_server->unlock(global_id_);
@@ -259,7 +247,7 @@ namespace arm_cmsis_stream
             }
             if (global_id_ == -1)
             {
-                ERROR_PRINT("Global id is not set.\n");
+                LOG_ERR("Global id is not set.\n");
                 return -1; // Error: Lock offset not set
             }
             return MemServer::mem_server->read_unlock(global_id_);

@@ -6,6 +6,7 @@ class KWSDisplay(ZephyrLCD):
     def __init__(self,name):
         ZephyrLCD.__init__(self,name)
         self.addEventInput(1)
+        self.addVariableArg("evtQueue")
 
 
     @property

@@ -2,7 +2,7 @@ if(CONFIG_CMSIS_DSP)
 zephyr_library()
 
 zephyr_library_sources(
-    zephyr_runtime/event_queue.cpp
+    zephyr_runtime/stream_event_queue.cpp
     zephyr_runtime/runtime_init.cpp
 )
 

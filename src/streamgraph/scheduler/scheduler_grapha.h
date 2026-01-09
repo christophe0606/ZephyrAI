@@ -34,10 +34,10 @@ extern "C"
 extern CStreamNode* get_scheduler_grapha_node(int32_t nodeID);
 
 
-extern int init_scheduler_grapha(void *graphData);
-extern void free_scheduler_grapha(void *graphData);
+extern int init_scheduler_grapha(void *evtQueue_,void *graphData);
+extern void free_scheduler_grapha(void *evtQueue_,void *graphData);
 
-extern uint32_t scheduler_grapha(int *error,void *graphData);
+extern uint32_t scheduler_grapha(int *error,void *evtQueue_,void *graphData);
 
 #ifdef   __cplusplus
 }

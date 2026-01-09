@@ -23,15 +23,6 @@ class StereoToMono<T, inputSamples, T, inputSamples, T, inputSamples> : public G
     StereoToMono(FIFOBase<T> &left, FIFOBase<T> &right, FIFOBase<T> &dst)
         : GenericNode21<T, inputSamples, T, inputSamples, T, inputSamples>(left, right, dst) {};
 
-    int prepareForRunning() final
-    {
-        if ((this->willOverflow()) || (this->willUnderflow1()) || (this->willUnderflow2()))
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
 
     int run() final
     {

@@ -5,6 +5,7 @@
 
 #include "cg_enums.h"
 #include "arm_stream_custom_config.hpp"
+#include "EventQueue.hpp"
 #include "StreamNode.hpp"
 #include "GenericNodes.hpp"
 #include "arm_math_types.h"
@@ -18,21 +19,12 @@ template <int outputSamples>
 class ZephyrDebugAudioSource<sq15, outputSamples> : public GenericSource<sq15, outputSamples>
 {
     public:
-    ZephyrDebugAudioSource(FIFOBase<sq15> &dst,int master=1)
-        : GenericSource<sq15, outputSamples>(dst), nb_frame_(0),master_(master)
+    ZephyrDebugAudioSource(FIFOBase<sq15> &dst,EventQueue *queue,int master=1)
+        : GenericSource<sq15, outputSamples>(dst), nb_frame_(0),master_(master),ev(queue)
     {
         // Initialization code for debug audio source
     };
 
-    int prepareForRunning() final
-    {
-        if (this->willOverflow())
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
 
     int run() final
     {

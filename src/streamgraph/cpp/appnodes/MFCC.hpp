@@ -68,7 +68,7 @@ class MFCC<float32_t, 640, float32_t, 10> : public GenericNode<float32_t, 640, f
 
         if (status != ARM_MATH_SUCCESS)
         {
-            ERROR_PRINT("MFCC init error\n");
+            LOG_ERR("MFCC init error\n");
         }
 #if defined(ARM_MFCC_CFFT_BASED)
         memory.resize(2 * 1024);
@@ -79,16 +79,6 @@ class MFCC<float32_t, 640, float32_t, 10> : public GenericNode<float32_t, 640, f
 #endif
     };
 
-    int prepareForRunning() final
-    {
-        if (this->willOverflow() ||
-            this->willUnderflow())
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (CG_SUCCESS);
-    };
 
     int run() final
     {

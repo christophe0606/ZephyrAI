@@ -23,15 +23,7 @@ class Gain<float32_t, inputSamples, float32_t, inputSamples>
 
 		  };
 
-	int prepareForRunning() final
-	{
-		if ((this->willOverflow()) || (this->willUnderflow())) {
-			return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-		}
-
-		return (0);
-	};
-
+	
 	int run() final
 	{
 		float32_t *in = this->getReadBuffer();
@@ -56,14 +48,7 @@ class Gain<sf32, inputSamples, sf32, inputSamples>
 
 		  };
 
-	int prepareForRunning() final
-	{
-		if ((this->willOverflow()) || (this->willUnderflow())) {
-			return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-		}
 
-		return (0);
-	};
 
 	int run() final
 	{
@@ -94,14 +79,6 @@ class Gain<q15_t, inputSamples, q15_t, inputSamples>
 		gain_ = (q15_t)(gain * 32768.0f);
 	};
 
-	int prepareForRunning() final
-	{
-		if ((this->willOverflow()) || (this->willUnderflow())) {
-			return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-		}
-
-		return (0);
-	};
 
 	int run() final
 	{
@@ -134,14 +111,6 @@ class Gain<sq15, inputSamples, sq15, inputSamples>
 
 	};
 
-	int prepareForRunning() final
-	{
-		if ((this->willOverflow()) || (this->willUnderflow())) {
-			return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-		}
-
-		return (0);
-	};
 
 	int run() final
 	{

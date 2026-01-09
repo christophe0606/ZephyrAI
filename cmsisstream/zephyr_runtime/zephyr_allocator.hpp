@@ -33,7 +33,6 @@ public:
     {
         if ((n == 1) && (sizeof(T) <= cg_eventPool.info.block_size))
         {
-            //CG_DEBUG_PRINT("Alloc event %d\n",sizeof(T));
             T* p;
             k_mem_slab_alloc(&cg_eventPool, (void **)&p, K_FOREVER);
             return p;
@@ -83,7 +82,6 @@ public:
     {
         if ((n == 1) && (sizeof(T) <= cg_bufPool.info.block_size))
         {
-            //CG_DEBUG_PRINT("Alloc buf %d\n",sizeof(T));
             T* p;
             k_mem_slab_alloc(&cg_bufPool, (void **)&p, K_FOREVER);
             return p;

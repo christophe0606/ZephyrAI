@@ -83,15 +83,6 @@ class Mixer<float, inputSamples, float, inputSamples, float, inputSamples, float
             phase = 0.0f;
         };
 
-    int prepareForRunning() final
-    {
-         if ((this->willOverflow1()) || this->willUnderflow1() || (this->willOverflow2()) || this->willUnderflow2())
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    }
 
      int run() final
     {

@@ -7,6 +7,7 @@ class SendToNetwork(GenericSink):
         self.addInput("i",theType,nbSamples)
         self.addEventInput()
         self.addEventOutput()
+        self.addVariableArg("evtQueue")
 
     @property
     def folder(self):

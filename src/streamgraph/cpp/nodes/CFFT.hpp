@@ -37,16 +37,6 @@ class CFFT<cf32, inputSamples, cf32, inputSamples> : public GenericNode<cf32, in
             static_assert("Unsupported FFT size");
     };
 
-    int prepareForRunning() final
-    {
-        if ((this->willOverflow()) || this->willUnderflow())
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
-
     int run() final
     {
         cf32 *o = this->getWriteBuffer();

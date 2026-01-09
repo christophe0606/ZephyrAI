@@ -4,6 +4,7 @@
 
 #include "cg_enums.h"
 #include "arm_stream_custom_config.hpp"
+#include "EventQueue.hpp"
 #include "StreamNode.hpp"
 #include "GenericNodes.hpp"
 
@@ -16,8 +17,8 @@ class NullSink: public GenericSink<OUT, outputSamples>
 {
   public:
    
-    NullSink(FIFOBase<OUT> &dst)
-        : GenericSink<OUT, outputSamples>(dst)
+    NullSink(FIFOBase<OUT> &dst,EventQueue *queue)
+        : GenericSink<OUT, outputSamples>(dst),ev(queue)
     {
 
        
@@ -28,15 +29,6 @@ class NullSink: public GenericSink<OUT, outputSamples>
         
     };
 
-    int prepareForRunning() final
-    {
-        if (this->willUnderflow())
-        {
-            return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-        }
-
-        return (0);
-    };
 
     int run() final
     {
@@ -50,7 +42,7 @@ class NullSink: public GenericSink<OUT, outputSamples>
 
     void processValue(uint32_t v)
     {
-       DEBUG_PRINT("NullSink received value: %u\n", v);
+       LOG_DBG("NullSink received value: %u\n", v);
     }
 
     void processEvent(int dstPort, Event &&evt) final override

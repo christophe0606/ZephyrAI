@@ -88,14 +88,6 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 		return (CG_SUCCESS);
 	}
 
-	int prepareForRunning() final
-	{
-		if (this->willOverflow()) {
-			return (CG_SKIP_EXECUTION_ID_CODE); // Skip execution
-		}
-
-		return (0);
-	};
 
 	int run() final
 	{

@@ -13,7 +13,12 @@ LOG_MODULE_REGISTER(mainapp);
 
 #include "cstream_node.h"
 #include "scheduler_grapha.h"
-#include "runtime_init.h"
+
+#include "EventQueue.hpp"
+#include "StreamNode.hpp"
+
+#include "runtime_init.hpp"
+
 
 
 // Event to the interrupt thread
@@ -24,6 +29,8 @@ static struct k_thread interrupt_thread;
 struct k_event cg_streamEvent;
 
 static K_THREAD_STACK_DEFINE(interrupt_thread_stack, 4096);
+
+using namespace arm_cmsis_stream;
 
 // Translate interrupt events into CMSIS Stream events
 void interrupt_thread_function(void *, void *, void *)
@@ -59,7 +66,7 @@ int main(void)
 	k_event_init(&cg_streamEvent);
 
 
-	int err = init_stream_memory();
+	int err = stream_init_memory();
 	if (err != 0)
 	{
 		LOG_ERR("Error initializing stream\n");
@@ -67,7 +74,7 @@ int main(void)
 	}
 
 	/* Event queue init */
-	void *queue_grapha = new_event_queue();
+	EventQueue *queue_grapha = stream_new_event_queue();
 
 	if (queue_grapha == nullptr) {
 		LOG_ERR("Can't create CMSIS Stream Event Queue\n");
@@ -77,7 +84,7 @@ int main(void)
 	
 
 	// Init nodes
-	err = init_scheduler_grapha(nullptr);
+	err = init_scheduler_grapha(queue_grapha,nullptr);
 	if (err != CG_SUCCESS) {
 		LOG_ERR("Error: Failure during scheduler initialization for grapha.\n");
 		return (ENOMEM);
@@ -94,13 +101,16 @@ int main(void)
 
 	k_thread_name_set(&interrupt_thread, "interrupt_to_evt");
 
-	start_stream_threads(&scheduler_grapha,nullptr);
-	
-	wait_for_stream_thread_end();
+	stream_start_threads(&scheduler_grapha,queue_grapha,nullptr);
 
-	free_scheduler_grapha(nullptr);
 
-	free_stream_memory();
+	stream_wait_for_threads_end();
+
+	free_scheduler_grapha(queue_grapha,nullptr);
+
+	delete queue_grapha;
+
+	stream_free_memory();
 
 	return 0;
 

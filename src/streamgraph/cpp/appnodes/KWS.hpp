@@ -8,8 +8,8 @@ extern "C"
 class KWS : public TFLite
 {
   public:
-    KWS(const uint8_t *nnModelAddr, uint32_t nnModelSize)
-        : TFLite(nnModelAddr, nnModelSize,1),mNbOutputs(1) {
+    KWS(EventQueue *queue,const uint8_t *nnModelAddr, uint32_t nnModelSize)
+        : TFLite(queue,nnModelAddr, nnModelSize,1),mNbOutputs(1) {
           };
 
     virtual ~KWS()
@@ -33,12 +33,12 @@ class KWS : public TFLite
 
         if (kTfLiteOk == this->m_opResolver.AddEthosU())
         {
-            DEBUG_PRINT("Added %s support to op resolver\n",
+            LOG_DBG("Added %s support to op resolver\n",
                         tflite::GetString_ETHOSU());
         }
         else
         {
-            ERROR_PRINT("Failed to add Arm NPU support to op resolver.");
+            LOG_ERR("Failed to add Arm NPU support to op resolver.");
             return false;
         }
         return true;

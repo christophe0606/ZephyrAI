@@ -18,7 +18,7 @@ using namespace arm_cmsis_stream;
 class KWSClassify : public StreamNode
 {
     static constexpr size_t nbLabels = 12;
-    static constexpr size_t historySize = 4;
+    static constexpr size_t historySizeDefault = 4;
     static constexpr const char *labelsVec[nbLabels] = {
         "down",
         "go",
@@ -35,8 +35,8 @@ class KWSClassify : public StreamNode
     };
 
   public:
-    KWSClassify()
-        : StreamNode()
+    KWSClassify(EventQueue *queue,size_t historySize = KWSClassify::historySizeDefault)
+        : StreamNode(), ev0(queue),historySize_(historySize)
     {
         history.resize(historySize+1);
         for (auto &v : history)
@@ -120,7 +120,7 @@ class KWSClassify : public StreamNode
         // softmax
         softmax(buf, nbLabels);
         // add array to history
-        for (int i = historySize - 1; i > 0; i--)
+        for (int i = historySize_ - 1; i > 0; i--)
             history[i] = std::move(history[i - 1]);
         history[0] = std::vector<float>(buf, buf + nbLabels);
 
@@ -186,4 +186,5 @@ class KWSClassify : public StreamNode
     float buf[nbLabels];
     std::vector<std::vector<float>> history;
     EventOutput ev0;
+    size_t historySize_;
 };

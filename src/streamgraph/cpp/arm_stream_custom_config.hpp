@@ -55,7 +55,12 @@ struct sq15 {
         cgStaticError = CG_BUFFER_OVERFLOW;                                                                                \
         goto errorHandling;                                                                                                \
     }                                                                                                                      \
-}                                                                                                                 
+}                             
 
+// To keep a C API for the scheduler we pass a void * for the
+// EventQueue and it needs to be casted to the right type
+// (We could also use the CMSIS Stream option to have a C++ API)
+#define CG_BEFORE_FIFO_INIT \
+  EventQueue *evtQueue = reinterpret_cast<EventQueue *>(evtQueue_);
 
 #include "cmsisstream_zephyr_config.hpp"
