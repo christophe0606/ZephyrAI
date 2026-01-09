@@ -89,6 +89,8 @@ class ZephyrLock
     int error;
 };
 
+#define CG_TENSOR_NB_DIMS CONFIG_CMSISSTREAM_TENSOR_MAX_DIMENSIONS
+#define CG_MAX_VALUES CONFIG_CMSISSTREAM_MAX_NUMBER_EVENT_ARGUMENTS
 
 // Needed for pure event graphs to avoid having
 // the infinite loop generated in single thread mode
@@ -124,7 +126,7 @@ class ZephyrLock
 
 
 // Because memory optimization is enabled
-#define CG_BEFORE_BUFFER __aligned(16)
+#define CG_BEFORE_BUFFER __aligned(16)__attribute__((section(CONFIG_CMSISSTREAM_FIFO_SECTION))) 
 
 #define CG_TIME_STAMP_TYPE uint32_t
 

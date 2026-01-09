@@ -42,7 +42,9 @@
 #include "cg_enums.h"
 #include "cmsisstream_zephyr_config.hpp"
 
-#define CG_TENSOR_NB_DIMS CONFIG_CMSISSTREAM_TENSOR_MAX_DIMENSIONS
+#ifndef CG_TENSOR_NB_DIMS
+#error "CG_TENSOR_NB_DIMS must be defined"
+#endif
 
 // Used for ListValue
 #ifndef CG_MK_LIST_EVENT_ALLOCATOR
@@ -92,7 +94,9 @@
 
 // Maximum number of values in a combined value
 
-#define CG_MAX_VALUES CONFIG_CMSISSTREAM_MAX_NUMBER_EVENT_ARGUMENTS
+#ifndef CG_MAX_VALUES
+#error "CG_MAX_VALUES must be defined"
+#endif
 
 /* Node ID is -1 when nodes are not identified for the external world */
 #define CG_UNIDENTIFIED_NODE (-1)
