@@ -3,6 +3,17 @@
 Commit  1e1d38883a59e121592c1f23f3d4185453587cbe of
 https://github.com/alifsemi/sdk-alif is used
 
+Display problems with more recent version.
+
+But there are issue with this older commit and they need to be solved first. See below.
+
+The path to the CMSIS Stream Zephyr module ic currently hardcoded
+in the cmake.
+
+Once the new CMSIS Stream package has been updated on PyPI, the
+detection / installation of the CMSIS Stream module will go through the
+west file.
+
 
 ## Issues
 
@@ -25,3 +36,4 @@ Zephyr cmakefile for cmsis-dsp module must be changed
 `  zephyr_library_compile_definitions(ZEPHYR_INCLUDE_TOOLCHAIN_STDINT_H_)
 ` must be added before the `zephyr_library_compile_definitions_ifdef`
 to be able to compile with Helium.
+

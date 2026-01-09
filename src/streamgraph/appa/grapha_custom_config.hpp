@@ -10,14 +10,12 @@
  */
 
 
-extern "C"
-{
+
 #include <zephyr/kernel.h>
-
-
+#include <cstdlib>
 extern struct k_event cg_streamEvent;
 
-}
+
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(streamsched);
@@ -51,5 +49,3 @@ LOG_MODULE_REGISTER(streamsched);
 
 #include "grapha_params.h"
 
-#define CG_BEFORE_NODE_INIT \
-    struct GraphaParams &params = *reinterpret_cast<struct GraphaParams *>(graphData);

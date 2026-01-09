@@ -4,7 +4,9 @@ from nodes import *
 
 class KWS(TFLite):
     def __init__(self,name,addr="nullptr" ,size="0"):
-        TFLite.__init__(self,name,addr=addr,size=size)
+        TFLite.__init__(self,name,
+                        addr=f"params->{name}.modelAddr",
+                        size=f"params->{name}.modelSize")
 
     @property
     def folder(self):

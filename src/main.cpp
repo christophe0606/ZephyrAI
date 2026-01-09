@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #include "cg_enums.h"
 #include <zephyr/kernel.h>
@@ -12,6 +13,7 @@
 LOG_MODULE_REGISTER(mainapp);
 
 #include "cstream_node.h"
+#include "grapha_params.h"
 #include "scheduler_grapha.h"
 
 #include "EventQueue.hpp"
@@ -19,7 +21,10 @@ LOG_MODULE_REGISTER(mainapp);
 
 #include "stream_runtime_init.hpp"
 
-#include "grapha_params.h"
+extern "C"
+{
+	#include "network.h"
+}
 
 // Event to the interrupt thread
 struct k_event cg_interruptEvent;
@@ -65,6 +70,14 @@ int main(void)
 
 	k_event_init(&cg_streamEvent);
 
+	/*
+	
+	Init settings for grapha scheduler
+	
+	*/
+    graphaParams.kws.modelAddr = (uint8_t *)GetModelPointer();
+	graphaParams.kws.modelSize = GetModelLen();
+
 
 	int err = stream_init_memory();
 	if (err != 0)
@@ -84,7 +97,7 @@ int main(void)
 	
 
 	// Init nodes
-	err = init_scheduler_grapha(queue_grapha,(void*)&graphaParams);
+	err = init_scheduler_grapha(queue_grapha,&graphaParams);
 	if (err != CG_SUCCESS) {
 		LOG_ERR("Error: Failure during scheduler initialization for grapha.\n");
 		return (ENOMEM);

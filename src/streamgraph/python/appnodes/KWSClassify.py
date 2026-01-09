@@ -12,7 +12,7 @@ class KWSClassify(GenericSink):
         # structure with initial settings.
         # The settings would come from the instantiation of the nodes
         # in the Python.
-        self.addVariableArg(f"params.{name}.historyLength")
+        self.addVariableArg(f"params->{name}.historyLength")
 
     @property
     def folder(self):

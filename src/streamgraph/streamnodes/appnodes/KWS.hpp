@@ -1,9 +1,5 @@
 #include "nodes/TFLite.hpp"
 
-extern "C"
-{
-#include "network.h"
-}
 
 class KWS : public TFLite
 {

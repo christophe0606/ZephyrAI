@@ -23,7 +23,7 @@
 #define MAKE_ATTRIBUTE(x)           __attribute__((ALIGNMENT_REQ, x))
 #define ACTIVATION_BUF_ATTRIBUTE    MAKE_ATTRIBUTE(ACTIVATION_BUF_SECTION)
 
-static uint8_t tensorArena[ACTIVATION_BUF_SZ] ACTIVATION_BUF_ATTRIBUTE;
+static uint8_t tensorArena[CONFIG_ACTIVATION_BUF_SZ] ACTIVATION_BUF_ATTRIBUTE;
 
 using namespace arm_cmsis_stream;
 

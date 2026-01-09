@@ -17,7 +17,7 @@ The support classes and code are covered by CMSIS-Stream license.
 #include "IdentifiedNode.hpp"
 #include "EventQueue.hpp"
 #include "GenericNodes.hpp"
-#include "AppNodes.hpp"
+#include "AppNodes_grapha.hpp"
 #include "scheduler_grapha.h"
 
 #if !defined(CHECKERROR)
@@ -191,7 +191,7 @@ CStreamNode* get_scheduler_grapha_node(int32_t nodeID)
     return(&identifiedNodes[nodeID]);
 }
 
-int init_scheduler_grapha(void *evtQueue_,void *graphData)
+int init_scheduler_grapha(void *evtQueue_,GraphaParams *params)
 {
     EventQueue *evtQueue = reinterpret_cast<EventQueue *>(evtQueue_);
 
@@ -299,7 +299,7 @@ int init_scheduler_grapha(void *evtQueue_,void *graphData)
     identifiedNodes[STREAMTO_F32_ID]=createStreamNode(*nodes.to_f32);
     nodes.to_f32->setID(STREAMTO_F32_ID);
 
-    nodes.classify = new (std::nothrow) KWSClassify(evtQueue,params.classify.historyLength);
+    nodes.classify = new (std::nothrow) KWSClassify(evtQueue,params->classify.historyLength);
     if (nodes.classify==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -315,7 +315,7 @@ int init_scheduler_grapha(void *evtQueue_,void *graphData)
     identifiedNodes[STREAMDISPLAY_ID]=createStreamNode(*nodes.display);
     nodes.display->setID(STREAMDISPLAY_ID);
 
-    nodes.kws = new (std::nothrow) KWS(evtQueue,GetModelPointer(),GetModelLen());
+    nodes.kws = new (std::nothrow) KWS(evtQueue,params->kws.modelAddr,params->kws.modelSize);
     if (nodes.kws==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);

@@ -11,11 +11,18 @@ struct classifyParams
     int historyLength;
 };
 
+struct tfliteNode
+{
+   uint8_t *modelAddr;
+   size_t modelSize;
+};
+
 struct GraphaParams
 {
     // Name of struct is the name of the node as defined
     // in Python graph.
     struct classifyParams classify;
+    struct tfliteNode kws;
 };
 
 extern struct GraphaParams graphaParams;
