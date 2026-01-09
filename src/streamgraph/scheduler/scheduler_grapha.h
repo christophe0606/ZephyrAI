@@ -10,10 +10,14 @@ The support classes and code are covered by CMSIS-Stream license.
 #ifndef SCHEDULER_GRAPHA_H_ 
 #define SCHEDULER_GRAPHA_H_
 
+#include <stdint.h>
+
 #ifdef   __cplusplus
 extern "C"
 {
 #endif
+
+#include "cstream_node.h"
 
 
 /* Node identifiers */
