@@ -2,13 +2,13 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(streamruntime_module);
 
-#include "cmsisstream_zephyr_config.hpp"
+#include "stream_platform_config.hpp"
 #include "EventQueue.hpp"
 #include "StreamNode.hpp"
 
 #include "stream_event_queue.hpp"
 
-#include "runtime_init.hpp"
+#include "stream_runtime_init.hpp"
 
 
 #include <new>

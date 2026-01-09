@@ -40,7 +40,7 @@
 #include <iostream>
 
 #include "cg_enums.h"
-#include "cmsisstream_zephyr_config.hpp"
+#include "stream_platform_config.hpp"
 
 #ifndef CG_TENSOR_NB_DIMS
 #error "CG_TENSOR_NB_DIMS must be defined"

@@ -10,6 +10,7 @@ The support classes and code are covered by CMSIS-Stream license.
 
 #include <cstdint>
 #include "arm_stream_custom_config.hpp"
+#include "stream_platform_config.hpp"
 #include "cg_enums.h"
 #include "StreamNode.hpp"
 #include "cstream_node.h"

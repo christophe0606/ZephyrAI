@@ -13,7 +13,7 @@ def generate(graph_name,the_graph,myStyle):
     conf.schedName = f"scheduler_{graph_name}"
     conf.schedulerCFileName = f"scheduler_{graph_name}"
     conf.memoryOptimization = True
-    conf.customCName = "arm_stream_custom_config.hpp"
+    conf.appConfigCName = "arm_stream_custom_config.hpp"
     conf.cOptionalArgs = "void *evtQueue_,void *graphData"
 
     # Alif code is defining some variables as buf0, buf1 and not static

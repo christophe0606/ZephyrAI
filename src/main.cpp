@@ -17,7 +17,7 @@ LOG_MODULE_REGISTER(mainapp);
 #include "EventQueue.hpp"
 #include "StreamNode.hpp"
 
-#include "runtime_init.hpp"
+#include "stream_runtime_init.hpp"
 
 
 

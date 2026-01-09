@@ -2,7 +2,7 @@
 
 #include <zephyr/kernel.h>
 
-#include "cmsisstream_zephyr_config.hpp"
+#include "stream_platform_config.hpp"
 #include "EventQueue.hpp"
 
 

@@ -32,7 +32,7 @@ extern "C"
 }
 
 #include "cg_enums.h"
-#include "cmsisstream_zephyr_config.hpp"
+#include "stream_platform_config.hpp"
 #include "StreamNode.hpp"
 #include "EventQueue.hpp"
 #include <utility>

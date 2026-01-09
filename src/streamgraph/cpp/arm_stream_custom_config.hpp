@@ -63,4 +63,4 @@ struct sq15 {
 #define CG_BEFORE_FIFO_INIT \
   EventQueue *evtQueue = reinterpret_cast<EventQueue *>(evtQueue_);
 
-#include "cmsisstream_zephyr_config.hpp"
+#include "stream_platform_config.hpp"

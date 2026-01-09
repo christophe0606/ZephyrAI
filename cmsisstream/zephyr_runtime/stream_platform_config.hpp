@@ -122,7 +122,7 @@ class ZephyrLock
 #define CG_MK_PROTECTED_BUF_ALLOCATOR(T) (ZephyrBufPoolAllocator<T>{})
 #define CG_MK_PROTECTED_MUTEX_ALLOCATOR(T) (ZephyrMutexPoolAllocator<T>{})
 
-#include "zephyr_allocator.hpp"
+#include "stream_zephyr_allocator.hpp"
 
 
 // Because memory optimization is enabled
