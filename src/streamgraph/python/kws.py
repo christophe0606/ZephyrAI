@@ -84,4 +84,4 @@ class MyStyle(Style):
 myStyle = MyStyle()
 
 
-generate("appa","grapha",the_graph,myStyle)
+generate("appa",the_graph,myStyle)

@@ -1,5 +1,5 @@
-#ifndef GRAPHA_PARAMS_H
-#define GRAPHA_PARAMS_H
+#ifndef APPA_PARAMS_H
+#define APPA_PARAMS_H
 
 #ifdef   __cplusplus
 extern "C"
@@ -17,7 +17,7 @@ struct tfliteNode
    size_t modelSize;
 };
 
-struct GraphaParams
+struct AppaParams
 {
     // Name of struct is the name of the node as defined
     // in Python graph.
@@ -25,7 +25,7 @@ struct GraphaParams
     struct tfliteNode kws;
 };
 
-extern struct GraphaParams graphaParams;
+extern struct AppaParams appaParams;
 
 #ifdef   __cplusplus
 }

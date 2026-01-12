@@ -9,7 +9,7 @@ The support classes and code are covered by CMSIS-Stream license.
 
 
 #include <cstdint>
-#include "grapha_custom_config.hpp"
+#include "appa_custom_config.hpp"
 #include "stream_platform_config.hpp"
 #include "cg_enums.h"
 #include "StreamNode.hpp"
@@ -17,8 +17,8 @@ The support classes and code are covered by CMSIS-Stream license.
 #include "IdentifiedNode.hpp"
 #include "EventQueue.hpp"
 #include "GenericNodes.hpp"
-#include "AppNodes_grapha.hpp"
-#include "scheduler_grapha.h"
+#include "AppNodes_appa.hpp"
+#include "scheduler_appa.h"
 
 #if !defined(CHECKERROR)
 #define CHECKERROR       if (cgStaticError < 0) \
@@ -178,7 +178,7 @@ static fifos_t fifos={0};
 
 static nodes_t nodes={0};
 
-CStreamNode* get_scheduler_grapha_node(int32_t nodeID)
+CStreamNode* get_scheduler_appa_node(int32_t nodeID)
 {
     if (nodeID >= STREAMNB_IDENTIFIED_NODES)
     {
@@ -191,7 +191,7 @@ CStreamNode* get_scheduler_grapha_node(int32_t nodeID)
     return(&identifiedNodes[nodeID]);
 }
 
-int init_scheduler_grapha(void *evtQueue_,GraphaParams *params)
+int init_scheduler_appa(void *evtQueue_,AppaParams *params)
 {
     EventQueue *evtQueue = reinterpret_cast<EventQueue *>(evtQueue_);
 
@@ -382,7 +382,7 @@ int init_scheduler_grapha(void *evtQueue_,GraphaParams *params)
 
 }
 
-void free_scheduler_grapha()
+void free_scheduler_appa()
 {
     if (fifos.fifo0!=NULL)
     {
@@ -461,7 +461,7 @@ void free_scheduler_grapha()
 
 
 CG_BEFORE_SCHEDULER_FUNCTION
-uint32_t scheduler_grapha(int *error)
+uint32_t scheduler_appa(int *error)
 {
     int cgStaticError=0;
     uint32_t nbSchedule=0;

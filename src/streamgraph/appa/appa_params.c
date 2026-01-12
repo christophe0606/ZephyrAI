@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdint.h>
-#include "grapha_params.h"
+#include "appa_params.h"
 
 
-struct GraphaParams graphaParams = {
+struct AppaParams appaParams = {
     // Initialize parameters for each node as needed
     .classify = {
         .historyLength = 10, // Example value

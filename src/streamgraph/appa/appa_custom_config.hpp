@@ -47,5 +47,5 @@ LOG_MODULE_REGISTER(streamsched);
 
 #include "datatypes.hpp"
 
-#include "grapha_params.h"
+#include "appa_params.h"
 

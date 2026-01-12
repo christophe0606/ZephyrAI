@@ -13,8 +13,8 @@
 LOG_MODULE_REGISTER(mainapp);
 
 #include "cstream_node.h"
-#include "grapha_params.h"
-#include "scheduler_grapha.h"
+#include "appa_params.h"
+#include "scheduler_appa.h"
 
 #include "EventQueue.hpp"
 #include "StreamNode.hpp"
@@ -72,12 +72,11 @@ int main(void)
 
 	/*
 	
-	Init settings for grapha scheduler
+	Init settings for appa scheduler
 	
 	*/
-    graphaParams.kws.modelAddr = (uint8_t *)GetModelPointer();
-	graphaParams.kws.modelSize = GetModelLen();
-
+    appaParams.kws.modelAddr = (uint8_t *)GetModelPointer();
+	appaParams.kws.modelSize = GetModelLen();
 
 	int err = stream_init_memory();
 	if (err != 0)
@@ -87,9 +86,9 @@ int main(void)
 	}
 
 	/* Event queue init */
-	EventQueue *queue_grapha = stream_new_event_queue();
+	EventQueue *queue_appa = stream_new_event_queue();
 
-	if (queue_grapha == nullptr) {
+	if (queue_appa == nullptr) {
 		LOG_ERR("Can't create CMSIS Stream Event Queue\n");
 		return (ENOMEM);
 	}
@@ -97,9 +96,9 @@ int main(void)
 	
 
 	// Init nodes
-	err = init_scheduler_grapha(queue_grapha,&graphaParams);
+	err = init_scheduler_appa(queue_appa,&appaParams);
 	if (err != CG_SUCCESS) {
-		LOG_ERR("Error: Failure during scheduler initialization for grapha.\n");
+		LOG_ERR("Error: Failure during scheduler initialization for appa.\n");
 		return (ENOMEM);
 	}
 
@@ -115,17 +114,17 @@ int main(void)
 	k_thread_name_set(&interrupt_thread, "interrupt_to_evt");
 
 	stream_execution_context_t contexta = {
-		.dataflow_scheduler = scheduler_grapha,
-		.evtQueue = queue_grapha,
+		.dataflow_scheduler = scheduler_appa,
+		.evtQueue = queue_appa,
 	};
 
 	stream_start_threads(&contexta);
 
 	stream_wait_for_threads_end();
 
-	free_scheduler_grapha();
+	free_scheduler_appa();
 
-	delete queue_grapha;
+	delete queue_appa;
 
 	stream_free_memory();
 

@@ -7,8 +7,8 @@ The support classes and code are covered by CMSIS-Stream license.
 
 */
 
-#ifndef SCHEDULER_GRAPHA_H_ 
-#define SCHEDULER_GRAPHA_H_
+#ifndef SCHEDULER_APPA_H_ 
+#define SCHEDULER_APPA_H_
 
 
 #include <stdint.h>
@@ -36,13 +36,13 @@ extern "C"
 #define STREAMKWS_ID 10
 
 
-extern CStreamNode* get_scheduler_grapha_node(int32_t nodeID);
+extern CStreamNode* get_scheduler_appa_node(int32_t nodeID);
 
 
-extern int init_scheduler_grapha(void *evtQueue_,GraphaParams *params);
-extern void free_scheduler_grapha();
+extern int init_scheduler_appa(void *evtQueue_,AppaParams *params);
+extern void free_scheduler_appa();
 
-extern uint32_t scheduler_grapha(int *error);
+extern uint32_t scheduler_appa(int *error);
 
 #ifdef   __cplusplus
 }
