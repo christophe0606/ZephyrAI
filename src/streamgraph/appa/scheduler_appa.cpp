@@ -459,6 +459,45 @@ void free_scheduler_appa()
     }
 }
 
+void reset_fifos_scheduler_appa(int all)
+{
+    if (fifos.fifo0!=NULL)
+    {
+       fifos.fifo0->reset();
+    }
+    if (fifos.fifo1!=NULL)
+    {
+       fifos.fifo1->reset();
+    }
+    if (fifos.fifo2!=NULL)
+    {
+       fifos.fifo2->reset();
+    }
+    if (fifos.fifo3!=NULL)
+    {
+       fifos.fifo3->reset();
+    }
+    if (fifos.fifo4!=NULL)
+    {
+       fifos.fifo4->reset();
+    }
+    if (fifos.fifo5!=NULL)
+    {
+       fifos.fifo5->reset();
+    }
+    if (fifos.fifo6!=NULL)
+    {
+       fifos.fifo6->reset();
+    }
+   // Buffers are set to zero too
+   if (all)
+   {
+       std::fill_n(streambuf0, BUFFERSIZE0, 0);
+       std::fill_n(streambuf1, BUFFERSIZE1, 0);
+       std::fill_n(streambuf2, BUFFERSIZE2, 0);
+   }
+}
+
 
 CG_BEFORE_SCHEDULER_FUNCTION
 uint32_t scheduler_appa(int *error)

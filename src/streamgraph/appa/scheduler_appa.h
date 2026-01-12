@@ -38,11 +38,10 @@ extern "C"
 
 extern CStreamNode* get_scheduler_appa_node(int32_t nodeID);
 
-
 extern int init_scheduler_appa(void *evtQueue_,AppaParams *params);
 extern void free_scheduler_appa();
-
 extern uint32_t scheduler_appa(int *error);
+extern void reset_fifos_scheduler_appa(int all);
 
 #ifdef   __cplusplus
 }
