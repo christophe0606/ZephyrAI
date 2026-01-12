@@ -492,9 +492,9 @@ void reset_fifos_scheduler_appa(int all)
    // Buffers are set to zero too
    if (all)
    {
-       std::fill_n(streambuf0, BUFFERSIZE0, 0);
-       std::fill_n(streambuf1, BUFFERSIZE1, 0);
-       std::fill_n(streambuf2, BUFFERSIZE2, 0);
+       std::fill_n(streambuf0, BUFFERSIZE0, (uint8_t)0);
+       std::fill_n(streambuf1, BUFFERSIZE1, (uint8_t)0);
+       std::fill_n(streambuf2, BUFFERSIZE2, (uint8_t)0);
    }
 }
 
