@@ -15,7 +15,11 @@ You can add it to your west file with:
 The Python script `src\streamgraph\python\kws.py` can be used
 to generate the KWS example.
 
-You need version at least `3.0.0` of the CMSIS Stream Python package.
+You need version at least `3.0.0` of the CMSIS Stream Python package. It was recently updated so do a:
+
+```
+pip install cmsis-stream --upgrade
+```
 
 
 Other Python scripts in `src\streamgraph\python` have not yet been
