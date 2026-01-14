@@ -101,4 +101,4 @@ class MyStyle(Style):
                 return("orange")
             return(super().edge_color(edge))
 
-generate(the_graph,Style())
+generate("appb",the_graph,Style())

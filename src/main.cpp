@@ -10,7 +10,7 @@
 #include "cg_enums.h"
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
-LOG_MODULE_REGISTER(mainapp);
+LOG_MODULE_REGISTER(streamsched_apps);
 
 #include "cstream_node.h"
 #include "appa_params.h"
@@ -31,6 +31,10 @@ struct k_event cg_interruptEvent;
 static k_tid_t tid_interrupts = NULL;
 static struct k_thread interrupt_thread;
 
+
+// Event to the CMSIS Stream data stream thread
+// Could be used to pause / stop the stream graph or to signal errors like overflow / underflow
+// and the stream graph would stop with an error code.
 struct k_event cg_streamEvent;
 
 static K_THREAD_STACK_DEFINE(interrupt_thread_stack, 4096);

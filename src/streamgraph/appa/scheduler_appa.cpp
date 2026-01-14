@@ -9,7 +9,7 @@ The support classes and code are covered by CMSIS-Stream license.
 
 
 #include <cstdint>
-#include "appa_custom_config.hpp"
+#include "app_config.hpp"
 #include "stream_platform_config.hpp"
 #include "cg_enums.h"
 #include "StreamNode.hpp"
@@ -19,6 +19,7 @@ The support classes and code are covered by CMSIS-Stream license.
 #include "GenericNodes.hpp"
 #include "AppNodes_appa.hpp"
 #include "scheduler_appa.h"
+#include "appa_extern_templates.hpp"
 
 #if !defined(CHECKERROR)
 #define CHECKERROR       if (cgStaticError < 0) \
@@ -120,7 +121,7 @@ Internal ID identification for the nodes
 Node identification
 
 ************/
-static CStreamNode identifiedNodes[STREAMNB_IDENTIFIED_NODES]={0};
+static CStreamNode identifiedNodes[STREAM_APPA_NB_IDENTIFIED_NODES]={0};
 
 CG_BEFORE_FIFO_BUFFERS
 /***********
@@ -138,15 +139,15 @@ FIFO buffers
 
 #define BUFFERSIZE0 2560
 CG_BEFORE_BUFFER
-uint8_t streambuf0[BUFFERSIZE0]={0};
+uint8_t stream_appa_buf0[BUFFERSIZE0]={0};
 
 #define BUFFERSIZE1 1280
 CG_BEFORE_BUFFER
-uint8_t streambuf1[BUFFERSIZE1]={0};
+uint8_t stream_appa_buf1[BUFFERSIZE1]={0};
 
 #define BUFFERSIZE2 640
 CG_BEFORE_BUFFER
-uint8_t streambuf2[BUFFERSIZE2]={0};
+uint8_t stream_appa_buf2[BUFFERSIZE2]={0};
 
 
 typedef struct {
@@ -180,7 +181,7 @@ static nodes_t nodes={0};
 
 CStreamNode* get_scheduler_appa_node(int32_t nodeID)
 {
-    if (nodeID >= STREAMNB_IDENTIFIED_NODES)
+    if (nodeID >= STREAM_APPA_NB_IDENTIFIED_NODES)
     {
         return(nullptr);
     }
@@ -196,37 +197,37 @@ int init_scheduler_appa(void *evtQueue_,AppaParams *params)
     EventQueue *evtQueue = reinterpret_cast<EventQueue *>(evtQueue_);
 
     CG_BEFORE_FIFO_INIT;
-    fifos.fifo0 = new (std::nothrow) FIFO<sq15,FIFOSIZE0,1,0>(streambuf1);
+    fifos.fifo0 = new (std::nothrow) FIFO<sq15,FIFOSIZE0,1,0>(stream_appa_buf1);
     if (fifos.fifo0==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo1 = new (std::nothrow) FIFO<q15_t,FIFOSIZE1,1,0>(streambuf0);
+    fifos.fifo1 = new (std::nothrow) FIFO<q15_t,FIFOSIZE1,1,0>(stream_appa_buf0);
     if (fifos.fifo1==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo2 = new (std::nothrow) FIFO<float,FIFOSIZE2,1,0>(streambuf1);
+    fifos.fifo2 = new (std::nothrow) FIFO<float,FIFOSIZE2,1,0>(stream_appa_buf1);
     if (fifos.fifo2==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo3 = new (std::nothrow) FIFO<float,FIFOSIZE3,1,0>(streambuf0);
+    fifos.fifo3 = new (std::nothrow) FIFO<float,FIFOSIZE3,1,0>(stream_appa_buf0);
     if (fifos.fifo3==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo4 = new (std::nothrow) FIFO<float,FIFOSIZE4,1,0>(streambuf1);
+    fifos.fifo4 = new (std::nothrow) FIFO<float,FIFOSIZE4,1,0>(stream_appa_buf1);
     if (fifos.fifo4==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo5 = new (std::nothrow) FIFO<float,FIFOSIZE5,1,0>(streambuf0);
+    fifos.fifo5 = new (std::nothrow) FIFO<float,FIFOSIZE5,1,0>(stream_appa_buf0);
     if (fifos.fifo5==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    fifos.fifo6 = new (std::nothrow) FIFO<q15_t,FIFOSIZE6,1,0>(streambuf2);
+    fifos.fifo6 = new (std::nothrow) FIFO<q15_t,FIFOSIZE6,1,0>(stream_appa_buf2);
     if (fifos.fifo6==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -240,88 +241,88 @@ int init_scheduler_appa(void *evtQueue_,AppaParams *params)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMAUDIOSOURCE_ID]=createStreamNode(*nodes.audioSource);
-    nodes.audioSource->setID(STREAMAUDIOSOURCE_ID);
+    identifiedNodes[STREAM_APPA_AUDIOSOURCE_ID]=createStreamNode(*nodes.audioSource);
+    nodes.audioSource->setID(STREAM_APPA_AUDIOSOURCE_ID);
 
     nodes.audioWin = new (std::nothrow) SlidingBuffer<float,640,320>(*(fifos.fifo2),*(fifos.fifo3));
     if (nodes.audioWin==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMAUDIOWIN_ID]=createStreamNode(*nodes.audioWin);
-    nodes.audioWin->setID(STREAMAUDIOWIN_ID);
+    identifiedNodes[STREAM_APPA_AUDIOWIN_ID]=createStreamNode(*nodes.audioWin);
+    nodes.audioWin->setID(STREAM_APPA_AUDIOWIN_ID);
 
     nodes.deinterleave = new (std::nothrow) DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>(*(fifos.fifo0),*(fifos.fifo1),*(fifos.fifo6));
     if (nodes.deinterleave==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMDEINTERLEAVE_ID]=createStreamNode(*nodes.deinterleave);
-    nodes.deinterleave->setID(STREAMDEINTERLEAVE_ID);
+    identifiedNodes[STREAM_APPA_DEINTERLEAVE_ID]=createStreamNode(*nodes.deinterleave);
+    nodes.deinterleave->setID(STREAM_APPA_DEINTERLEAVE_ID);
 
     nodes.mfcc = new (std::nothrow) MFCC<float,640,float,10>(*(fifos.fifo3),*(fifos.fifo4));
     if (nodes.mfcc==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMMFCC_ID]=createStreamNode(*nodes.mfcc);
-    nodes.mfcc->setID(STREAMMFCC_ID);
+    identifiedNodes[STREAM_APPA_MFCC_ID]=createStreamNode(*nodes.mfcc);
+    nodes.mfcc->setID(STREAM_APPA_MFCC_ID);
 
     nodes.mfccWin = new (std::nothrow) SlidingBuffer<float,490,480>(*(fifos.fifo4),*(fifos.fifo5));
     if (nodes.mfccWin==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMMFCCWIN_ID]=createStreamNode(*nodes.mfccWin);
-    nodes.mfccWin->setID(STREAMMFCCWIN_ID);
+    identifiedNodes[STREAM_APPA_MFCCWIN_ID]=createStreamNode(*nodes.mfccWin);
+    nodes.mfccWin->setID(STREAM_APPA_MFCCWIN_ID);
 
     nodes.nullRight = new (std::nothrow) NullSink<q15_t,320>(*(fifos.fifo6),evtQueue);
     if (nodes.nullRight==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMNULLRIGHT_ID]=createStreamNode(*nodes.nullRight);
-    nodes.nullRight->setID(STREAMNULLRIGHT_ID);
+    identifiedNodes[STREAM_APPA_NULLRIGHT_ID]=createStreamNode(*nodes.nullRight);
+    nodes.nullRight->setID(STREAM_APPA_NULLRIGHT_ID);
 
     nodes.send = new (std::nothrow) SendToNetwork<float,490>(*(fifos.fifo5),evtQueue);
     if (nodes.send==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMSEND_ID]=createStreamNode(*nodes.send);
-    nodes.send->setID(STREAMSEND_ID);
+    identifiedNodes[STREAM_APPA_SEND_ID]=createStreamNode(*nodes.send);
+    nodes.send->setID(STREAM_APPA_SEND_ID);
 
     nodes.to_f32 = new (std::nothrow) Convert<q15_t,320,float,320>(*(fifos.fifo1),*(fifos.fifo2));
     if (nodes.to_f32==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMTO_F32_ID]=createStreamNode(*nodes.to_f32);
-    nodes.to_f32->setID(STREAMTO_F32_ID);
+    identifiedNodes[STREAM_APPA_TO_F32_ID]=createStreamNode(*nodes.to_f32);
+    nodes.to_f32->setID(STREAM_APPA_TO_F32_ID);
 
     nodes.classify = new (std::nothrow) KWSClassify(evtQueue,params->classify.historyLength);
     if (nodes.classify==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMCLASSIFY_ID]=createStreamNode(*nodes.classify);
-    nodes.classify->setID(STREAMCLASSIFY_ID);
+    identifiedNodes[STREAM_APPA_CLASSIFY_ID]=createStreamNode(*nodes.classify);
+    nodes.classify->setID(STREAM_APPA_CLASSIFY_ID);
 
     nodes.display = new (std::nothrow) KWSDisplay(evtQueue);
     if (nodes.display==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMDISPLAY_ID]=createStreamNode(*nodes.display);
-    nodes.display->setID(STREAMDISPLAY_ID);
+    identifiedNodes[STREAM_APPA_DISPLAY_ID]=createStreamNode(*nodes.display);
+    nodes.display->setID(STREAM_APPA_DISPLAY_ID);
 
     nodes.kws = new (std::nothrow) KWS(evtQueue,params->kws.modelAddr,params->kws.modelSize);
     if (nodes.kws==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAMKWS_ID]=createStreamNode(*nodes.kws);
-    nodes.kws->setID(STREAMKWS_ID);
+    identifiedNodes[STREAM_APPA_KWS_ID]=createStreamNode(*nodes.kws);
+    nodes.kws->setID(STREAM_APPA_KWS_ID);
 
 
 /* Subscribe nodes for the event system*/
@@ -492,9 +493,9 @@ void reset_fifos_scheduler_appa(int all)
    // Buffers are set to zero too
    if (all)
    {
-       std::fill_n(streambuf0, BUFFERSIZE0, (uint8_t)0);
-       std::fill_n(streambuf1, BUFFERSIZE1, (uint8_t)0);
-       std::fill_n(streambuf2, BUFFERSIZE2, (uint8_t)0);
+       std::fill_n(stream_appa_buf0, BUFFERSIZE0, (uint8_t)0);
+       std::fill_n(stream_appa_buf1, BUFFERSIZE1, (uint8_t)0);
+       std::fill_n(stream_appa_buf2, BUFFERSIZE2, (uint8_t)0);
    }
 }
 

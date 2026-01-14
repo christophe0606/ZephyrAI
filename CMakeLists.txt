@@ -14,8 +14,8 @@ add_subdirectory(src/streamgraph/common)
 add_subdirectory(src/streamgraph/streamnodes)
 
 target_sources(app PRIVATE src/main.cpp
-  src/streamgraph/nodes_csrc/kws_img.c 
-  src/streamgraph/nodes_csrc/kws_mfcc.c
+  src/streamgraph/nodes_src/kws_img.c 
+  src/streamgraph/nodes_src/kws_mfcc.c
   src/networks/kws_micronet_m_vela_H128.tflite.cpp
   src/networks/network.cpp
 )
@@ -26,6 +26,7 @@ target_include_directories(app PUBLIC
   src/networks
   )
 
+#######################
 # Appa
 target_sources(app PRIVATE 
   src/streamgraph/appa/scheduler_appa.cpp
@@ -36,6 +37,19 @@ target_include_directories(app PUBLIC
   src/streamgraph/appa
   )
 
+#######################
+# AppB
+target_sources(app PRIVATE 
+  src/streamgraph/appb/scheduler_appb.cpp
+  )
 
+target_include_directories(app PUBLIC 
+  src/streamgraph/appb
+  )
+
+if (CONFIG_TEMPLATE_INSTANTIATIONS)
+    message(STATUS "Including template instantiations for code size optimization")
+    target_sources(app PRIVATE src/streamgraph/common/template_instantiations.cpp)
+endif()
 
 target_link_libraries(app PRIVATE stream_nodes appcommon)

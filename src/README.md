@@ -1,5 +1,5 @@
 # README
 
-* networks : networks used in the applications
+* networks : Neural networks used in the applications
 * streamgraph : the applications using CMSIS-Stream
-* main.cpp : Initialization of CMSIS Stream fremwork and start of application
+* main.cpp : Initialization of CMSIS Stream framework and start of application

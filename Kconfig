@@ -40,4 +40,8 @@ config ETHOS_U_AXI0_ONLY
 	bool "Only use AXI0 port on the Ethos"
 	default false
 
+config TEMPLATE_INSTANTIATIONS
+	bool "Code size optimization with template instantiations"
+	default false
+
 source "Kconfig.zephyr"

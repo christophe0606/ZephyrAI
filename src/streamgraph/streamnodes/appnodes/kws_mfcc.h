@@ -1,5 +1,5 @@
-#ifndef _MFCC_DATA_H_
-#define _MFCC_DATA_H_ 
+#ifndef MFCC_DATA_H_
+#define MFCC_DATA_H_ 
 
 #include "arm_math_types.h"
 

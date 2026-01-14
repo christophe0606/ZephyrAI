@@ -1,0 +1,12 @@
+[
+    "nodes/ZephyrAudioSource.hpp",
+    "appnodes/Spectrogram.hpp",
+    "nodes/Convert.hpp",
+    "nodes/CFFT.hpp",
+    "nodes/DeinterleaveStereo.hpp",
+    "appnodes/SpectrogramDisplay.hpp",
+    "nodes/SlidingBuffer.hpp",
+    "nodes/Hanning.hpp",
+    "nodes/Gain.hpp",
+    "nodes/RealToComplex.hpp"
+]
