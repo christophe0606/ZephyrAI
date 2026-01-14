@@ -106,7 +106,7 @@ class KWSClassify : public StreamNode
           const char *a = labelsVec[label_idx];
           if (label_idx != lastRec)
           {
-            printf("KWS Classify: %s\n", a);
+            LOG_INF("KWS Classify: %s\n", a);
           }
           lastRec = label_idx;
           ev0.sendSync(kNormalPriority, kValue, (uint32_t)label_idx); // Send the event to the subscribed nodes

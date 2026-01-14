@@ -142,7 +142,6 @@ class KWSDisplay : public ZephyrLCD
 
     void processEvent(int dstPort, Event &&evt) final override
     {
-        //printf("KWS Display: event %d\n", evt.event_id);
         if (evt.event_id == kDo)
         {
             genNewFrame();
