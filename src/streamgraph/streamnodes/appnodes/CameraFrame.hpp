@@ -47,7 +47,7 @@ class CameraFrame : public ZephyrLCD
             if (buf)
             {
                 uint16_t *renderingFrame = (uint16_t *)this->renderingFrame();
-                displayImage(renderingFrame, buf, tensor.dims[1], tensor.dims[0]);
+                ::displayImage(renderingFrame, buf, tensor.dims[1], tensor.dims[0]);
             }
         });
     }

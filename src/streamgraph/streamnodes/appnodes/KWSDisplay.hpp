@@ -19,10 +19,6 @@ class KWSDisplay : public ZephyrLCD
     {
     }
 
-    cg_status init() final override
-    {
-        return ZephyrLCD::init();
-    }
 
     virtual ~KWSDisplay() {};
 

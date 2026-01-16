@@ -3,7 +3,7 @@ from cmsis_stream.cg.scheduler import GenericNode
 
 class Convert(GenericNode):
     def __init__(self,name,srcType,dstType,outLength):
-        GenericNode.__init__(self,name)
+        GenericNode.__init__(self,name,identified=False)
         self.addInput("i",srcType,outLength)
         self.addOutput("o",dstType,outLength)
 

@@ -286,7 +286,7 @@ int init_scheduler_appb(void *evtQueue_,AppbParams *params)
     CG_BEFORE_NODE_INIT;
     cg_status initError;
 
-    nodes.audio = new (std::nothrow) ZephyrAudioSource<sq15,320>(*(fifos.fifo0));
+    nodes.audio = new (std::nothrow) ZephyrAudioSource<sq15,320>(*(fifos.fifo0),params->audio);
     if (nodes.audio==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -299,104 +299,78 @@ int init_scheduler_appb(void *evtQueue_,AppbParams *params)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_AUDIOWINLEFT_ID]=createStreamNode(*nodes.audioWinLeft);
-    nodes.audioWinLeft->setID(STREAM_APPB_AUDIOWINLEFT_ID);
 
     nodes.audioWinRight = new (std::nothrow) SlidingBuffer<float,640,320>(*(fifos.fifo8),*(fifos.fifo9));
     if (nodes.audioWinRight==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_AUDIOWINRIGHT_ID]=createStreamNode(*nodes.audioWinRight);
-    nodes.audioWinRight->setID(STREAM_APPB_AUDIOWINRIGHT_ID);
 
     nodes.deinterleave = new (std::nothrow) DeinterleaveStereo<sf32,320,float,320,float,320>(*(fifos.fifo2),*(fifos.fifo3),*(fifos.fifo8));
     if (nodes.deinterleave==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_DEINTERLEAVE_ID]=createStreamNode(*nodes.deinterleave);
-    nodes.deinterleave->setID(STREAM_APPB_DEINTERLEAVE_ID);
 
     nodes.fftLeft = new (std::nothrow) CFFT<cf32,1024,cf32,1024>(*(fifos.fifo6),*(fifos.fifo7));
     if (nodes.fftLeft==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_FFTLEFT_ID]=createStreamNode(*nodes.fftLeft);
-    nodes.fftLeft->setID(STREAM_APPB_FFTLEFT_ID);
 
     nodes.fftRight = new (std::nothrow) CFFT<cf32,1024,cf32,1024>(*(fifos.fifo11),*(fifos.fifo12));
     if (nodes.fftRight==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_FFTRIGHT_ID]=createStreamNode(*nodes.fftRight);
-    nodes.fftRight->setID(STREAM_APPB_FFTRIGHT_ID);
 
     nodes.gain = new (std::nothrow) Gain<sq15,320,sq15,320>(*(fifos.fifo0),*(fifos.fifo1),4);
     if (nodes.gain==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_GAIN_ID]=createStreamNode(*nodes.gain);
-    nodes.gain->setID(STREAM_APPB_GAIN_ID);
 
     nodes.spectrogramLeft = new (std::nothrow) Spectrogram<cf32,1024>(*(fifos.fifo7),evtQueue);
     if (nodes.spectrogramLeft==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_SPECTROGRAMLEFT_ID]=createStreamNode(*nodes.spectrogramLeft);
-    nodes.spectrogramLeft->setID(STREAM_APPB_SPECTROGRAMLEFT_ID);
 
     nodes.spectrogramRight = new (std::nothrow) Spectrogram<cf32,1024>(*(fifos.fifo12),evtQueue);
     if (nodes.spectrogramRight==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_SPECTROGRAMRIGHT_ID]=createStreamNode(*nodes.spectrogramRight);
-    nodes.spectrogramRight->setID(STREAM_APPB_SPECTROGRAMRIGHT_ID);
 
     nodes.toComplexLeft = new (std::nothrow) RealToComplex<float,1024,cf32,1024>(*(fifos.fifo5),*(fifos.fifo6));
     if (nodes.toComplexLeft==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_TOCOMPLEXLEFT_ID]=createStreamNode(*nodes.toComplexLeft);
-    nodes.toComplexLeft->setID(STREAM_APPB_TOCOMPLEXLEFT_ID);
 
     nodes.toComplexRight = new (std::nothrow) RealToComplex<float,1024,cf32,1024>(*(fifos.fifo10),*(fifos.fifo11));
     if (nodes.toComplexRight==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_TOCOMPLEXRIGHT_ID]=createStreamNode(*nodes.toComplexRight);
-    nodes.toComplexRight->setID(STREAM_APPB_TOCOMPLEXRIGHT_ID);
 
     nodes.to_f32 = new (std::nothrow) Convert<sq15,320,sf32,320>(*(fifos.fifo1),*(fifos.fifo2));
     if (nodes.to_f32==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_TO_F32_ID]=createStreamNode(*nodes.to_f32);
-    nodes.to_f32->setID(STREAM_APPB_TO_F32_ID);
 
     nodes.winLeft = new (std::nothrow) Hanning<float,640,float,1024>(*(fifos.fifo4),*(fifos.fifo5));
     if (nodes.winLeft==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_WINLEFT_ID]=createStreamNode(*nodes.winLeft);
-    nodes.winLeft->setID(STREAM_APPB_WINLEFT_ID);
 
     nodes.winRight = new (std::nothrow) Hanning<float,640,float,1024>(*(fifos.fifo9),*(fifos.fifo10));
     if (nodes.winRight==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPB_WINRIGHT_ID]=createStreamNode(*nodes.winRight);
-    nodes.winRight->setID(STREAM_APPB_WINRIGHT_ID);
 
     nodes.display = new (std::nothrow) SpectrogramDisplay;
     if (nodes.display==NULL)

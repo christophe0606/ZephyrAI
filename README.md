@@ -2,7 +2,9 @@
 
 Example of use of CMSIS Stream to implement AI + audio + video apps on Alif E7 board.
 
-This version uses the CMSIS Stream Zephyr module.
+Several demos are implemented in this application and you can read more details about them [here](doc/demos.md)
+
+This version of the demo uses the CMSIS Stream Zephyr module.
 
 You can add it to your west file with:
 ```
@@ -13,10 +15,10 @@ You can add it to your west file with:
 ```
 
 The Python script `src/streamgraph/python/kws.py` can be used
-to generate the KWS example in folder `src/streamgraph/appa`
+to regenerate the KWS example in folder `src/streamgraph/appa`
 
 The Python script `src/streamgraph/python/spectrogram.py` can be used
-to generate the KWS example in folder `src/streamgraph/appb`
+to regenerate the stereo audio spectrogram example in folder `src/streamgraph/appb`
 
 You need version at least `3.0.0` of the CMSIS Stream Python package. It was recently updated so do a:
 
@@ -24,38 +26,52 @@ You need version at least `3.0.0` of the CMSIS Stream Python package. It was rec
 pip install cmsis-stream --upgrade
 ```
 
+And to be sure the latest CMSIS Stream runtime is used, do a `west update`.
+
 
 Other Python scripts in `src\streamgraph\python` have not yet been
 updated to use the new directory structure.
 
-In current version of the demo, only appa is launched.
+## Code size optimizations
 
-## Next steps
-* Context switching between graphs
+When using several graphs for several applications,  the same C++ template may be instantiated several times (in each different app).
+Code size optimization is a feature of this demo implemented in `src/streamgraph/python/generate.py`. It is independent of CMSIS Stream.
 
-# Code size optimizations
 
-With several CMSIS Stream implementing several applications, a C++ template may be instantiated several times : in each graph.
+If you want to enable the code size optimization, use the scripts with `--size` options.
 
-The linker may be able to remove the redundant definitions. But since it is compiler dependent, the demo provides the possibility to move the template instantiations to a specific unique `cpp` file.
+And when you have generated all graphs, use:
 
-To enable this code optimizations you need:
-* Generate the graphs by passing the `--size` option
-
-It will add several `extern template` so that the templates are not instantiated in each scheduler.
-
-Then, you need to call the `generate.py` script and list all the apps:
-```python
-src/streamgraph/python/generate.py appa appb
+```shell
+python ./src/streamgraph/python/generate.py appa appb
 ```
+It will generate `src/streamgraph/common/template_instantiations.cpp`  containing instantiations of all templates used in all graphs.
+The templates will no more be instantiated in each graph.
 
-It will generate `src/streamgraph/common/template_instantiations.cpp`. 
+You'll also need `CONFIG_TEMPLATE_INSTANTIATIONS=y` in your `prj.conf` file to build this additional file.
 
-This file instantiates the C++ template used in all the graphs without duplication.
 
-Finally, this file must be included in the build by changing an option in `prj.conf`:
+If code size optimization is not enabled, you rely on the linker to remove duplicate C++ template instantiations (and link time optimizations should be enabled. They are not enabled in this demo).
 
-`CONFIG_TEMPLATE_INSTANTIATIONS=y`
+
+## Context switching
+
+This demo allows to switch between several applications by using command `switch` in the Zephyr shell.
+Context switching between different graphs is not a feature of CMSIS Stream. It is something built on top of it. But to make this use case easier, the Zephyr module for CMSIS Stream is exposing a tentative API.
+
+Assumptions for context switching are:
+  * Several apps in memory
+    - We not not destroy / create graphs to context switch.
+    - Graph remain in memory
+    - It is not as bad as it looks from memory usage point of view since big buffers like display framebuffer of tensor arena are shared between graphs
+  * Threads are reused
+    - Threads are not linked to a given graph
+    - Instead a graph is deployed on existing threads
+  * Context switch is cooperative
+    - Easier to implement with no constraint on how the drivers (audio, camera ...) have to behave when shared between graphs
+    - It should not be a problem : for a real-time demo, node / event processing should not take too much time
+
+More details about the use of the context switching API is [here](doc/switch.md)
 
 # Build issues
 Use sdk-alif Commit  1e1d38883a59e121592c1f23f3d4185453587cbe of

@@ -10,6 +10,7 @@ extern "C"
 #include "arm_vec_math.h"
 #include "dsp/fast_math_functions.h"
 #include "dsp/statistics_functions.h"
+#include "node_settings_datatype.h"
 }
 
 using namespace arm_cmsis_stream;
@@ -34,10 +35,10 @@ class KWSClassify : public StreamNode
     };
 
   public:
-    KWSClassify(EventQueue *queue,size_t historySize = KWSClassify::historySizeDefault)
-        : StreamNode(), ev0(queue),historySize_(historySize)
+    KWSClassify(EventQueue *queue,const struct classifyParams &params)
+        : StreamNode(), ev0(queue),historySize_(params.historyLength)
     {
-        history.resize(historySize+1);
+        history.resize(params.historyLength+1);
         for (auto &v : history)
         {
             v.resize(nbLabels, 0.0f);

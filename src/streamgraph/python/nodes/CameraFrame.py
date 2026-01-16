@@ -5,7 +5,7 @@ from nodes import *
 class CameraFrame(GenericSink):
     COUNT = 0
     def __init__(self,name):
-        GenericSink.__init__(self,name)
+        GenericSink.__init__(self,name,identified=False)
         CameraFrame.COUNT = CameraFrame.COUNT + 1
         if (CameraFrame.COUNT > 1):
             raise Exception("Only one CameraFrame node can be instantiated")

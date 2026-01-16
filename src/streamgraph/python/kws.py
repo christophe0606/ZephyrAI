@@ -40,7 +40,7 @@ mfccWin=SlidingBuffer("mfccWin",CType(F32),MFCC_FEATURES*NN_FEATURES,MFCC_FEATUR
 
 send = SendToNetwork("send",F32_SCALAR,MFCC_FEATURES*NN_FEATURES)
 
-kws = KWS("kws",addr="GetModelPointer()",size="GetModelLen()")
+kws = KWS("kws")
 display = KWSDisplay("display") 
 
 classify = KWSClassify("classify")

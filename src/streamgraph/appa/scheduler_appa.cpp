@@ -236,7 +236,7 @@ int init_scheduler_appa(void *evtQueue_,AppaParams *params)
     CG_BEFORE_NODE_INIT;
     cg_status initError;
 
-    nodes.audioSource = new (std::nothrow) ZephyrAudioSource<sq15,320>(*(fifos.fifo0));
+    nodes.audioSource = new (std::nothrow) ZephyrAudioSource<sq15,320>(*(fifos.fifo0),params->audioSource);
     if (nodes.audioSource==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
@@ -249,64 +249,48 @@ int init_scheduler_appa(void *evtQueue_,AppaParams *params)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPA_AUDIOWIN_ID]=createStreamNode(*nodes.audioWin);
-    nodes.audioWin->setID(STREAM_APPA_AUDIOWIN_ID);
 
     nodes.deinterleave = new (std::nothrow) DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>(*(fifos.fifo0),*(fifos.fifo1),*(fifos.fifo6));
     if (nodes.deinterleave==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPA_DEINTERLEAVE_ID]=createStreamNode(*nodes.deinterleave);
-    nodes.deinterleave->setID(STREAM_APPA_DEINTERLEAVE_ID);
 
     nodes.mfcc = new (std::nothrow) MFCC<float,640,float,10>(*(fifos.fifo3),*(fifos.fifo4));
     if (nodes.mfcc==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPA_MFCC_ID]=createStreamNode(*nodes.mfcc);
-    nodes.mfcc->setID(STREAM_APPA_MFCC_ID);
 
     nodes.mfccWin = new (std::nothrow) SlidingBuffer<float,490,480>(*(fifos.fifo4),*(fifos.fifo5));
     if (nodes.mfccWin==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPA_MFCCWIN_ID]=createStreamNode(*nodes.mfccWin);
-    nodes.mfccWin->setID(STREAM_APPA_MFCCWIN_ID);
 
     nodes.nullRight = new (std::nothrow) NullSink<q15_t,320>(*(fifos.fifo6),evtQueue);
     if (nodes.nullRight==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPA_NULLRIGHT_ID]=createStreamNode(*nodes.nullRight);
-    nodes.nullRight->setID(STREAM_APPA_NULLRIGHT_ID);
 
     nodes.send = new (std::nothrow) SendToNetwork<float,490>(*(fifos.fifo5),evtQueue);
     if (nodes.send==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPA_SEND_ID]=createStreamNode(*nodes.send);
-    nodes.send->setID(STREAM_APPA_SEND_ID);
 
     nodes.to_f32 = new (std::nothrow) Convert<q15_t,320,float,320>(*(fifos.fifo1),*(fifos.fifo2));
     if (nodes.to_f32==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPA_TO_F32_ID]=createStreamNode(*nodes.to_f32);
-    nodes.to_f32->setID(STREAM_APPA_TO_F32_ID);
 
-    nodes.classify = new (std::nothrow) KWSClassify(evtQueue,params->classify.historyLength);
+    nodes.classify = new (std::nothrow) KWSClassify(evtQueue,params->classify);
     if (nodes.classify==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPA_CLASSIFY_ID]=createStreamNode(*nodes.classify);
-    nodes.classify->setID(STREAM_APPA_CLASSIFY_ID);
 
     nodes.display = new (std::nothrow) KWSDisplay(evtQueue);
     if (nodes.display==NULL)
@@ -316,13 +300,11 @@ int init_scheduler_appa(void *evtQueue_,AppaParams *params)
     identifiedNodes[STREAM_APPA_DISPLAY_ID]=createStreamNode(*nodes.display);
     nodes.display->setID(STREAM_APPA_DISPLAY_ID);
 
-    nodes.kws = new (std::nothrow) KWS(evtQueue,params->kws.modelAddr,params->kws.modelSize);
+    nodes.kws = new (std::nothrow) KWS(evtQueue,params->kws);
     if (nodes.kws==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
-    identifiedNodes[STREAM_APPA_KWS_ID]=createStreamNode(*nodes.kws);
-    nodes.kws->setID(STREAM_APPA_KWS_ID);
 
 
 /* Subscribe nodes for the event system*/

@@ -4,7 +4,7 @@ from .NodeTypes import *
 
 class RealToComplex(GenericNode):
     def __init__(self,name,theType,outLength):
-        GenericNode.__init__(self,name)
+        GenericNode.__init__(self,name,identified=False)
         if theType == F32:
             inputType = F32_SCALAR
             outputType = F32_COMPLEX

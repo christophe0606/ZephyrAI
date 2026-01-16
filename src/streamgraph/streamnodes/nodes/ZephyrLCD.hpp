@@ -11,36 +11,28 @@ extern "C"
    #include "dbuf_display/display.h"
 }
 
-#define DISPLAY_IMAGE_SIZE (DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(uint16_t))
 
 using namespace arm_cmsis_stream;
 
-class ZephyrLCD : public StreamNode
+class ZephyrLCD : public StreamNode, public HardwareConnection
 {
     public:
+	static constexpr size_t DISPLAY_IMAGE_SIZE = (DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(uint16_t));
+
 	ZephyrLCD() : StreamNode()
 	{
 	};
 
-    cg_status init() override
+	int pause() final
 	{
-		void *buf = display_active_buffer();
-		memset(buf,0,DISPLAY_IMAGE_SIZE);
+		return 0;
+	}
 
-		buf = display_inactive_buffer();
-		memset(buf,0,DISPLAY_IMAGE_SIZE);
-
-		int err = display_init();
-        if (err != 0) {
-            return CG_INIT_FAILURE;
-        }
-
-		this->drawFrame();
-		display_next_frame();
-
-		return CG_SUCCESS;
-	};
-
+	int resume() final
+	{
+		clear_display();
+		return 0;
+	}
 
 	void *renderingFrame() const
 	{
@@ -57,7 +49,6 @@ class ZephyrLCD : public StreamNode
 	bool renderNewFrame()
 	{
 		if (inRender.load()) {
-			LOG_DBG("Already in render\n");
 			return false;
 		}
 

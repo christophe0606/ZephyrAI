@@ -261,7 +261,6 @@ class TFLite : public StreamNode
         // If all inputs have been received
         if ((int)inputReceived == ((1 << nb) - 1))
         {
-            LOG_DBG("Inference\n");
             inputReceived = 0;
             TfLiteStatus invoke_status = this->m_pInterpreter->Invoke();
             if (invoke_status != kTfLiteOk)
@@ -389,7 +388,6 @@ class TFLite : public StreamNode
 
     void processEvent(int dstPort, Event &&evt) final override
     {
-        LOG_DBG("TFLite: Event %d received on port %d\n", evt.event_id, dstPort);
 
         if (evt.event_id == kValue)
         {

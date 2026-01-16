@@ -25,7 +25,6 @@ class SendToNetwork : public GenericSink<IN, inputSamples>
         IN *in = this->getReadBuffer();
         if (ready.load())
         {
-            LOG_DBG("SendToNetwork: send buffer\n");
 
             UniquePtr<IN> tensorData(inputSamples);
             memcpy(tensorData.get(), in, inputSamples * sizeof(IN));
@@ -37,7 +36,7 @@ class SendToNetwork : public GenericSink<IN, inputSamples>
 
             if (!status)
             {
-                LOG_ERR("SendToNetwork: Failed to send event to network\n");
+                //LOG_ERR("SendToNetwork: Failed to send event to network\n");
             }
             else 
             {
@@ -50,7 +49,6 @@ class SendToNetwork : public GenericSink<IN, inputSamples>
 
     void processEvent(int dstPort, Event &&evt) final override
     {
-        LOG_DBG("SendToNetwork: Event %d received on port %d\n", evt.event_id, dstPort);
         if (dstPort == 0)
         {
             if (evt.event_id == kDo)

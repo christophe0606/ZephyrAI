@@ -4,7 +4,7 @@ from nodes import *
     
 class Spectrogram(GenericSink):
     def __init__(self,name,nbSamples):
-        GenericSink.__init__(self,name)
+        GenericSink.__init__(self,name,identified=False)
         self.addInput("i",F32_COMPLEX,nbSamples)
         self.addEventOutput()
 

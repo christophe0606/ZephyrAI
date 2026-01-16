@@ -1,0 +1,72 @@
+{
+    "ZephyrAudioSource<sq15,320>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<sq15,320>",
+        "typename": "ZephyrAudioSource",
+        "isIdentified": true
+    },
+    "SlidingBuffer<float,640,320>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<float,640,320>",
+        "typename": "SlidingBuffer",
+        "isIdentified": false
+    },
+    "DeinterleaveStereo<sf32,320,float,320,float,320>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<sf32,320,float,320,float,320>",
+        "typename": "DeinterleaveStereo",
+        "isIdentified": false
+    },
+    "CFFT<cf32,1024,cf32,1024>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<cf32,1024,cf32,1024>",
+        "typename": "CFFT",
+        "isIdentified": false
+    },
+    "Gain<sq15,320,sq15,320>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<sq15,320,sq15,320>",
+        "typename": "Gain",
+        "isIdentified": false
+    },
+    "Spectrogram<cf32,1024>": {
+        "folder": "appnodes/",
+        "isTemplate": true,
+        "templateArgs": "<cf32,1024>",
+        "typename": "Spectrogram",
+        "isIdentified": false
+    },
+    "RealToComplex<float,1024,cf32,1024>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<float,1024,cf32,1024>",
+        "typename": "RealToComplex",
+        "isIdentified": false
+    },
+    "Convert<sq15,320,sf32,320>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<sq15,320,sf32,320>",
+        "typename": "Convert",
+        "isIdentified": false
+    },
+    "Hanning<float,640,float,1024>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<float,640,float,1024>",
+        "typename": "Hanning",
+        "isIdentified": false
+    },
+    "SpectrogramDisplay": {
+        "folder": "appnodes/",
+        "isTemplate": false,
+        "templateArgs": "",
+        "typename": "SpectrogramDisplay",
+        "isIdentified": true
+    }
+}

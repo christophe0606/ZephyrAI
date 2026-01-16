@@ -11,5 +11,8 @@ struct AppaParams appaParams = {
     .kws = {
         .modelAddr = NULL, // To be set to the model address
         .modelSize = 0       // To be set to the model size
+    },
+    .audioSource = {
+        .i2s_mic = NULL // To be set to the I2S device
     }
 };  

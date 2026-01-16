@@ -35,7 +35,11 @@ extern "C"
 
 struct CStreamNode;
 
-struct StreamNodeInterface
+/**
+ * @brief C interface to access standard StreamNode API shared by all nodes
+ * 
+ */
+ struct StreamNodeInterface
 {
     int (*nodeID)(const void *self);
     int (*needsAsynchronousInit)(const void *self);
@@ -43,10 +47,30 @@ struct StreamNodeInterface
     cg_status (*init)(void *self);
 };
 
+/**
+ * @brief C interface to access HardwareConnection API
+ * This interface is implemented by nodes that source data from hardware peripherals
+ * 
+ */
+struct HardwareConnectionInterface
+{
+    int (*pause)(void *self);
+    int (*resume)(void *self);
+};
+/**
+ * @brief C structure to hold a pointer to a C++ object and its interfaces
+ * If the object does not implement a given interface, the corresponding pointer is set to NULL
+ * This interface is generated only for nodes marked as identified in the Python description
+ * of the graph.
+ * If you don't need to interact with a node from outside of the graph, you don't need to
+ * generate an interface for this node.
+ * 
+ */
 struct CStreamNode
 {
     void *obj;
     const struct StreamNodeInterface *stream_intf;
+    const struct HardwareConnectionInterface *hw_conn_intf;
 };
 
 

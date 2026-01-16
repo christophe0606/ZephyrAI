@@ -4,7 +4,7 @@ from nodes import *
 
 class KWSClassify(GenericSink):
     def __init__(self,name):
-        GenericSink.__init__(self,name)
+        GenericSink.__init__(self,name,identified=False)
         self.addEventInput(1)
         self.addEventOutput(1)
         # The Python script somewhere should generate
@@ -12,7 +12,7 @@ class KWSClassify(GenericSink):
         # structure with initial settings.
         # The settings would come from the instantiation of the nodes
         # in the Python.
-        self.addVariableArg(f"params->{name}.historyLength")
+        self.addVariableArg(f"params->{name}")
 
     @property
     def folder(self):

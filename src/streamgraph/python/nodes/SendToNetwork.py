@@ -3,7 +3,7 @@ from nodes import *
     
 class SendToNetwork(GenericSink):
     def __init__(self,name,theType,nbSamples):
-        GenericSink.__init__(self,name)
+        GenericSink.__init__(self,name,identified=False)
         self.addInput("i",theType,nbSamples)
         self.addEventInput()
         self.addEventOutput()

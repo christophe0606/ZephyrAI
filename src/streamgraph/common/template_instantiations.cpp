@@ -11,54 +11,39 @@
 #include "GenericNodes.hpp"
 
 
-#include "nodes/SlidingBuffer.hpp"
-#include "appnodes/Spectrogram.hpp"
-#include "nodes/RealToComplex.hpp"
 #include "nodes/ZephyrAudioSource.hpp"
-#include "appnodes/KWSClassify.hpp"
-#include "nodes/Gain.hpp"
+#include "nodes/SlidingBuffer.hpp"
+#include "nodes/DeinterleaveStereo.hpp"
+#include "appnodes/MFCC.hpp"
+#include "nodes/SlidingBuffer.hpp"
+#include "nodes/NullSink.hpp"
 #include "nodes/SendToNetwork.hpp"
 #include "nodes/Convert.hpp"
-#include "appnodes/SpectrogramDisplay.hpp"
-#include "nodes/CFFT.hpp"
 #include "appnodes/KWSDisplay.hpp"
-#include "nodes/Hanning.hpp"
-#include "appnodes/MFCC.hpp"
 #include "nodes/DeinterleaveStereo.hpp"
-#include "appnodes/KWS.hpp"
-#include "nodes/NullSink.hpp"
+#include "nodes/CFFT.hpp"
+#include "nodes/Gain.hpp"
+#include "appnodes/Spectrogram.hpp"
+#include "nodes/RealToComplex.hpp"
+#include "nodes/Convert.hpp"
+#include "nodes/Hanning.hpp"
+#include "appnodes/SpectrogramDisplay.hpp"
 
 template class ZephyrAudioSource<sq15,320>;
 template CStreamNode createStreamNode(ZephyrAudioSource<sq15,320> &obj) ;
 template class SlidingBuffer<float,640,320>;
-template CStreamNode createStreamNode(SlidingBuffer<float,640,320> &obj) ;
 template class DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>;
-template CStreamNode createStreamNode(DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320> &obj) ;
 template class MFCC<float,640,float,10>;
-template CStreamNode createStreamNode(MFCC<float,640,float,10> &obj) ;
 template class SlidingBuffer<float,490,480>;
-template CStreamNode createStreamNode(SlidingBuffer<float,490,480> &obj) ;
 template class NullSink<q15_t,320>;
-template CStreamNode createStreamNode(NullSink<q15_t,320> &obj) ;
 template class SendToNetwork<float,490>;
-template CStreamNode createStreamNode(SendToNetwork<float,490> &obj) ;
 template class Convert<q15_t,320,float,320>;
-template CStreamNode createStreamNode(Convert<q15_t,320,float,320> &obj) ;
-template CStreamNode createStreamNode(KWSClassify &obj) ;
 template CStreamNode createStreamNode(KWSDisplay &obj) ;
-template CStreamNode createStreamNode(KWS &obj) ;
 template class DeinterleaveStereo<sf32,320,float,320,float,320>;
-template CStreamNode createStreamNode(DeinterleaveStereo<sf32,320,float,320,float,320> &obj) ;
 template class CFFT<cf32,1024,cf32,1024>;
-template CStreamNode createStreamNode(CFFT<cf32,1024,cf32,1024> &obj) ;
 template class Gain<sq15,320,sq15,320>;
-template CStreamNode createStreamNode(Gain<sq15,320,sq15,320> &obj) ;
 template class Spectrogram<cf32,1024>;
-template CStreamNode createStreamNode(Spectrogram<cf32,1024> &obj) ;
 template class RealToComplex<float,1024,cf32,1024>;
-template CStreamNode createStreamNode(RealToComplex<float,1024,cf32,1024> &obj) ;
 template class Convert<sq15,320,sf32,320>;
-template CStreamNode createStreamNode(Convert<sq15,320,sf32,320> &obj) ;
 template class Hanning<float,640,float,1024>;
-template CStreamNode createStreamNode(Hanning<float,640,float,1024> &obj) ;
 template CStreamNode createStreamNode(SpectrogramDisplay &obj) ;

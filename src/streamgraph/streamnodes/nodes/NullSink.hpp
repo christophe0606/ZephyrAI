@@ -41,7 +41,6 @@ class NullSink: public GenericSink<OUT, outputSamples>
 
     void processValue(uint32_t v)
     {
-       LOG_DBG("NullSink received value: %u\n", v);
     }
 
     void processEvent(int dstPort, Event &&evt) final override

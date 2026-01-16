@@ -3,7 +3,7 @@ from .NodeTypes import *
 
 class SpeexPreprocess(GenericNode):
     def __init__(self,name):
-        GenericNode.__init__(self,name)
+        GenericNode.__init__(self,name,identified=False)
         # Size of FFT is hardcoded into spx_fft_init
         self.addInput("i",CType(Q15),256)
         self.addOutput("o",CType(Q15),256)

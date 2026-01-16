@@ -4,7 +4,7 @@ from .NodeTypes import *
 
 class NullSink(GenericSink):
     def __init__(self,name,theType,outLength):
-        GenericSink.__init__(self,name)
+        GenericSink.__init__(self,name,identified=False)
         # Stereo output
         self.addInput("i",theType,outLength)
         self.addEventInput()

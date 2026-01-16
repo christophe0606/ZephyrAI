@@ -1,13 +1,4 @@
 {
   "audioSource": 0,
-  "audioWin": 1,
-  "deinterleave": 2,
-  "mfcc": 3,
-  "mfccWin": 4,
-  "nullRight": 5,
-  "send": 6,
-  "to_f32": 7,
-  "classify": 8,
-  "display": 9,
-  "kws": 10
+  "display": 1
 }

@@ -7,7 +7,7 @@ def _is_power_of_two(n: int) -> bool:
 
 class Hanning(GenericNode):
     def __init__(self,name,inLength,outLength):
-        GenericNode.__init__(self,name)
+        GenericNode.__init__(self,name,identified=False)
         assert _is_power_of_two(outLength), "Output length must be a power of two"
         self.addInput("i",F32_SCALAR,inLength)
         self.addOutput("o",F32_SCALAR,outLength)

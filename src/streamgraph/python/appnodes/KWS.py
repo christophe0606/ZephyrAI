@@ -3,10 +3,9 @@ from cmsis_stream.cg.scheduler import GenericSink
 from nodes import *
 
 class KWS(TFLite):
-    def __init__(self,name,addr="nullptr" ,size="0"):
+    def __init__(self,name):
         TFLite.__init__(self,name,
-                        addr=f"params->{name}.modelAddr",
-                        size=f"params->{name}.modelSize")
+                        params=f"params->{name}")
 
     @property
     def folder(self):

@@ -4,7 +4,7 @@ from nodes import *
 
 class Mixer(GenericNode):
     def __init__(self,name,outLength):
-        GenericNode.__init__(self,name)
+        GenericNode.__init__(self,name,identified=False)
         self.addInput("inl",F32_SCALAR,outLength)
         self.addInput("inr",F32_SCALAR,outLength)
         self.addOutput("oul",F32_SCALAR,outLength)

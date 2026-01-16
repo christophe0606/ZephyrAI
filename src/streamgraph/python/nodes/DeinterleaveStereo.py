@@ -4,7 +4,7 @@ from .NodeTypes import *
 
 class DeinterleaveStereo(GenericNode):
     def __init__(self,name,theType,outLength):
-        GenericNode.__init__(self,name)
+        GenericNode.__init__(self,name,identified=False)
         if theType == F32 or theType == F32_STEREO:
             inputType = F32_STEREO
             outputType = F32_SCALAR

@@ -4,7 +4,7 @@ from .NodeTypes import *
 
 class Gain(GenericNode):
     def __init__(self,name,theType,outLength,gain=1.0):
-        GenericNode.__init__(self,name)
+        GenericNode.__init__(self,name,identified=False)
         self.addInput("i",theType,outLength)
         self.addOutput("o",theType,outLength)
         self.addLiteralArg(gain)

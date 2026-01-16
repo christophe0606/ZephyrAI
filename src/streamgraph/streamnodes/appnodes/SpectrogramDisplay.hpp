@@ -27,21 +27,6 @@ class SpectrogramDisplay : public ZephyrLCD
 	{
 	}
 
-	cg_status init() final override
-	{
-        last_ms_ = k_cyc_to_ms_near32(CG_GET_TIME_STAMP());
-		cg_status err = ZephyrLCD::init();
-        if (err != CG_SUCCESS) {
-            return err;
-        }
-
-        //Event evt(kDo, kNormalPriority);
-        //evt.setTTL(refresh);
-        //EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));
-  
-		return CG_SUCCESS;
-	}
-
 	virtual ~SpectrogramDisplay() {};
 	
 
@@ -66,7 +51,7 @@ class SpectrogramDisplay : public ZephyrLCD
                             v = 1.0f;
                         if (v < 0.0f)
                             v = 0.0f;
-                        fillRectangle(renderingFrame, pos,
+                        ::fillRectangle(renderingFrame, pos,
                                       (int)(PADDING_TOP + p),
                                       (int)(boxWidth * v),
                                       delta,
@@ -109,10 +94,10 @@ class SpectrogramDisplay : public ZephyrLCD
         // For debugging.
         #if 0
         if (color != 0)
-           fillRectangle(renderingFrame,10, 10, 100, 50, color); // Green rectangle
+           ::fillRectangle(renderingFrame,10, 10, 100, 50, color); // Green rectangle
         #endif
-        strokeRectangle(renderingFrame,PADDING_LEFT, PADDING_TOP, boxWidth, boxHeight, 0xFFFF);
-        strokeRectangle(renderingFrame,PADDING_LEFT + boxWidth + HORIZONTAL_SEPARATION, PADDING_TOP, boxWidth, boxHeight, 0xFFFF);
+        ::strokeRectangle(renderingFrame,PADDING_LEFT, PADDING_TOP, boxWidth, boxHeight, 0xFFFF);
+        ::strokeRectangle(renderingFrame,PADDING_LEFT + boxWidth + HORIZONTAL_SEPARATION, PADDING_TOP, boxWidth, boxHeight, 0xFFFF);
 
     }
 

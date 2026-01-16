@@ -1,12 +1,15 @@
 #pragma once
 #include "nodes/TFLite.hpp"
-
+extern "C"
+{
+#include "node_settings_datatype.h"
+}
 
 class KWS : public TFLite
 {
   public:
-    KWS(EventQueue *queue,const uint8_t *nnModelAddr, uint32_t nnModelSize)
-        : TFLite(queue,nnModelAddr, nnModelSize,1),mNbOutputs(1) {
+    KWS(EventQueue *queue,const struct tfliteNodeParams &params)
+        : TFLite(queue,params.modelAddr, params.modelSize,1),mNbOutputs(1) {
           };
 
     virtual ~KWS()

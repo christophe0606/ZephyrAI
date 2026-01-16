@@ -16,9 +16,18 @@ add_subdirectory(src/streamgraph/streamnodes)
 target_sources(app PRIVATE src/main.cpp
   src/streamgraph/nodes_src/kws_img.c 
   src/streamgraph/nodes_src/kws_mfcc.c
+  
+  src/streamgraph/nodes_src/init_drv_src.cpp
   src/networks/kws_micronet_m_vela_H128.tflite.cpp
   src/networks/network.cpp
 )
+
+if (CONFIG_DISPLAY)
+  target_sources(app PRIVATE
+    src/streamgraph/nodes_src/img_utils.cpp
+  )
+endif()
+
 
 target_include_directories(app PUBLIC 
   src/streamgraph/streamnodes
@@ -41,6 +50,7 @@ target_include_directories(app PUBLIC
 # AppB
 target_sources(app PRIVATE 
   src/streamgraph/appb/scheduler_appb.cpp
+  src/streamgraph/appb/appb_params.c
   )
 
 target_include_directories(app PUBLIC 

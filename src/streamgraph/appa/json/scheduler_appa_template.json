@@ -1,0 +1,79 @@
+{
+    "ZephyrAudioSource<sq15,320>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<sq15,320>",
+        "typename": "ZephyrAudioSource",
+        "isIdentified": true
+    },
+    "SlidingBuffer<float,640,320>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<float,640,320>",
+        "typename": "SlidingBuffer",
+        "isIdentified": false
+    },
+    "DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<sq15,320,q15_t,320,q15_t,320>",
+        "typename": "DeinterleaveStereo",
+        "isIdentified": false
+    },
+    "MFCC<float,640,float,10>": {
+        "folder": "appnodes/",
+        "isTemplate": true,
+        "templateArgs": "<float,640,float,10>",
+        "typename": "MFCC",
+        "isIdentified": false
+    },
+    "SlidingBuffer<float,490,480>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<float,490,480>",
+        "typename": "SlidingBuffer",
+        "isIdentified": false
+    },
+    "NullSink<q15_t,320>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<q15_t,320>",
+        "typename": "NullSink",
+        "isIdentified": false
+    },
+    "SendToNetwork<float,490>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<float,490>",
+        "typename": "SendToNetwork",
+        "isIdentified": false
+    },
+    "Convert<q15_t,320,float,320>": {
+        "folder": "nodes/",
+        "isTemplate": true,
+        "templateArgs": "<q15_t,320,float,320>",
+        "typename": "Convert",
+        "isIdentified": false
+    },
+    "KWSClassify": {
+        "folder": "appnodes/",
+        "isTemplate": false,
+        "templateArgs": "",
+        "typename": "KWSClassify",
+        "isIdentified": false
+    },
+    "KWSDisplay": {
+        "folder": "appnodes/",
+        "isTemplate": false,
+        "templateArgs": "",
+        "typename": "KWSDisplay",
+        "isIdentified": true
+    },
+    "KWS": {
+        "folder": "appnodes/",
+        "isTemplate": false,
+        "templateArgs": "",
+        "typename": "KWS",
+        "isIdentified": false
+    }
+}

@@ -3,7 +3,7 @@ from nodes import *
 
 class DebugSource(GenericSource):
     def __init__(self,name,theType,outLength,frequency=440,samplingFreq=16000,master=False):
-        GenericSource.__init__(self,name)
+        GenericSource.__init__(self,name,identified=False)
         # Stereo output
         self.addOutput("o",theType,outLength)
         self.addLiteralArg(frequency)

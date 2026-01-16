@@ -3,7 +3,7 @@ from .NodeTypes import *
 
 class StereoToMono(GenericNode):
     def __init__(self,name,theType,ioLength):
-        GenericNode.__init__(self,name)
+        GenericNode.__init__(self,name,identified=False)
         self.addInput("l",theType,ioLength)
         self.addInput("r",theType,ioLength)
         self.addOutput("o",theType,ioLength)

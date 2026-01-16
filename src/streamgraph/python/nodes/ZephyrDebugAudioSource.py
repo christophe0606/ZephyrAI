@@ -5,7 +5,7 @@ from .NodeTypes import *
 class ZephyrDebugAudioSource(GenericSource):
     COUNT = 0
     def __init__(self,name,outLength):
-        GenericSource.__init__(self,name)
+        GenericSource.__init__(self,name,identified=False)
         ZephyrDebugAudioSource.COUNT = ZephyrDebugAudioSource.COUNT + 1
         if (ZephyrDebugAudioSource.COUNT > 1):
             raise Exception("Only one ZephyrDebugAudioSource node can be instantiated")

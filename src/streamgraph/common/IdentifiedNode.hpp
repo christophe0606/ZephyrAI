@@ -31,9 +31,17 @@ extern "C" {
 
 #include "StreamNode.hpp"
 
+/**
+ * @brief Template function to create a CStreamNode from a C++ object
+ * This function checks at compile time if the object implements the StreamNode and/or HardwareConnection interfaces
+ * and fills the corresponding interface pointers in the CStreamNode structure.
+ * If the object does not implement a given interface, the corresponding pointer is set to NULL.
+ */
 template <typename T>
 CStreamNode createStreamNode(T &obj)
 {
+    const StreamNodeInterface *stream_intf_current = nullptr;
+    const HardwareConnectionInterface *hw_conn_intf_current = nullptr;
     if constexpr (std::is_base_of<arm_cmsis_stream::StreamNode, T>::value)
     {
         static const StreamNodeInterface stream_intf = {
@@ -53,11 +61,23 @@ CStreamNode createStreamNode(T &obj)
                 return(static_cast<T *>(self)->init());
             },
         };
-        return CStreamNode{&obj, &stream_intf};
+        stream_intf_current = &stream_intf;
     }
-    else
+
+    if constexpr (std::is_base_of<HardwareConnection, T>::value)
     {
-       return  CStreamNode {&obj,nullptr};
+        static const HardwareConnectionInterface hw_conn_intf = {
+            [](void *self) -> int {
+                return(static_cast<T *>(self)->pause());
+            },
+            [](void *self) -> int {
+                return(static_cast<T *>(self)->resume());
+            }
+        };
+        hw_conn_intf_current = &hw_conn_intf;
     }
+
+    return CStreamNode {&obj,stream_intf_current,hw_conn_intf_current};
+    
 };
 

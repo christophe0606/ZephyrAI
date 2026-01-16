@@ -70,3 +70,6 @@
 &mipi_dsi {
 	status = "okay";
 };
+
+
+
