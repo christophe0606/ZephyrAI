@@ -22,9 +22,11 @@ extern "C"
 
 
 /* Node identifiers */
-#define STREAM_APPA_NB_IDENTIFIED_NODES 2
+#define STREAM_APPA_NB_IDENTIFIED_NODES 4
 #define STREAM_APPA_AUDIOSOURCE_ID 0
-#define STREAM_APPA_DISPLAY_ID 1
+#define STREAM_APPA_AUDIOWIN_ID 1
+#define STREAM_APPA_MFCCWIN_ID 2
+#define STREAM_APPA_DISPLAY_ID 3
 
 
 extern CStreamNode* get_scheduler_appa_node(int32_t nodeID);

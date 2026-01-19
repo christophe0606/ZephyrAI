@@ -1,4 +1,6 @@
 {
   "audioSource": 0,
-  "display": 1
+  "audioWin": 1,
+  "mfccWin": 2,
+  "display": 3
 }

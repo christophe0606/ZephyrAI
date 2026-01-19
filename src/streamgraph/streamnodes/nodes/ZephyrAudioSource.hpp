@@ -34,7 +34,7 @@ using namespace arm_cmsis_stream;
 template <typename OUT, int outputSize> class ZephyrAudioSource;
 
 template <int outputSamples>
-class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, outputSamples>, public HardwareConnection
+class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, outputSamples>, public ContextSwitch
 {
 	static_assert(CONFIG_I2S_SAMPLES == outputSamples,
 		      "The audio source output size must match CONFIG_I2S_SAMPLES");

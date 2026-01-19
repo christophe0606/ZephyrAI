@@ -43,10 +43,10 @@ extern struct k_event cg_streamEvent;
         }                                                                         \
    }
 
-class HardwareConnection
+class ContextSwitch
 {
       public:
-    virtual ~HardwareConnection()
+    virtual ~ContextSwitch()
     {
     }
     virtual int pause() = 0;

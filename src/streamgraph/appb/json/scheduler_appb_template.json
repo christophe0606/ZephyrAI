@@ -11,7 +11,7 @@
         "isTemplate": true,
         "templateArgs": "<float,640,320>",
         "typename": "SlidingBuffer",
-        "isIdentified": false
+        "isIdentified": true
     },
     "DeinterleaveStereo<sf32,320,float,320,float,320>": {
         "folder": "nodes/",

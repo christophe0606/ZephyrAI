@@ -249,6 +249,8 @@ int init_scheduler_appa(void *evtQueue_,AppaParams *params)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
+    identifiedNodes[STREAM_APPA_AUDIOWIN_ID]=createStreamNode(*nodes.audioWin);
+    nodes.audioWin->setID(STREAM_APPA_AUDIOWIN_ID);
 
     nodes.deinterleave = new (std::nothrow) DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>(*(fifos.fifo0),*(fifos.fifo1),*(fifos.fifo6));
     if (nodes.deinterleave==NULL)
@@ -267,6 +269,8 @@ int init_scheduler_appa(void *evtQueue_,AppaParams *params)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
+    identifiedNodes[STREAM_APPA_MFCCWIN_ID]=createStreamNode(*nodes.mfccWin);
+    nodes.mfccWin->setID(STREAM_APPA_MFCCWIN_ID);
 
     nodes.nullRight = new (std::nothrow) NullSink<q15_t,320>(*(fifos.fifo6),evtQueue);
     if (nodes.nullRight==NULL)

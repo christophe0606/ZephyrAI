@@ -22,9 +22,11 @@ extern "C"
 
 
 /* Node identifiers */
-#define STREAM_APPB_NB_IDENTIFIED_NODES 2
+#define STREAM_APPB_NB_IDENTIFIED_NODES 4
 #define STREAM_APPB_AUDIO_ID 0
-#define STREAM_APPB_DISPLAY_ID 1
+#define STREAM_APPB_AUDIOWINLEFT_ID 1
+#define STREAM_APPB_AUDIOWINRIGHT_ID 2
+#define STREAM_APPB_DISPLAY_ID 3
 
 
 extern CStreamNode* get_scheduler_appb_node(int32_t nodeID);

@@ -3,6 +3,7 @@
 extern template class ZephyrAudioSource<sq15,320>;
 extern template CStreamNode createStreamNode(ZephyrAudioSource<sq15,320> &obj) ;
 extern template class SlidingBuffer<float,640,320>;
+extern template CStreamNode createStreamNode(SlidingBuffer<float,640,320> &obj) ;
 extern template class DeinterleaveStereo<sf32,320,float,320,float,320>;
 extern template class CFFT<cf32,1024,cf32,1024>;
 extern template class Gain<sq15,320,sq15,320>;

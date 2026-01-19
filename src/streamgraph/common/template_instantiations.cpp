@@ -32,9 +32,11 @@
 template class ZephyrAudioSource<sq15,320>;
 template CStreamNode createStreamNode(ZephyrAudioSource<sq15,320> &obj) ;
 template class SlidingBuffer<float,640,320>;
+template CStreamNode createStreamNode(SlidingBuffer<float,640,320> &obj) ;
 template class DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>;
 template class MFCC<float,640,float,10>;
 template class SlidingBuffer<float,490,480>;
+template CStreamNode createStreamNode(SlidingBuffer<float,490,480> &obj) ;
 template class NullSink<q15_t,320>;
 template class SendToNetwork<float,490>;
 template class Convert<q15_t,320,float,320>;

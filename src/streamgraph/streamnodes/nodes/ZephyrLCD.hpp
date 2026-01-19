@@ -14,7 +14,7 @@ extern "C"
 
 using namespace arm_cmsis_stream;
 
-class ZephyrLCD : public StreamNode, public HardwareConnection
+class ZephyrLCD : public StreamNode, public ContextSwitch
 {
     public:
 	static constexpr size_t DISPLAY_IMAGE_SIZE = (DISPLAY_WIDTH * DISPLAY_HEIGHT * sizeof(uint16_t));

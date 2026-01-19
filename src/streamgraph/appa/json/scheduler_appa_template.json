@@ -11,7 +11,7 @@
         "isTemplate": true,
         "templateArgs": "<float,640,320>",
         "typename": "SlidingBuffer",
-        "isIdentified": false
+        "isIdentified": true
     },
     "DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>": {
         "folder": "nodes/",
@@ -32,7 +32,7 @@
         "isTemplate": true,
         "templateArgs": "<float,490,480>",
         "typename": "SlidingBuffer",
-        "isIdentified": false
+        "isIdentified": true
     },
     "NullSink<q15_t,320>": {
         "folder": "nodes/",

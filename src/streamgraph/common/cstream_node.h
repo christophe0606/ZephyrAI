@@ -48,11 +48,11 @@ struct CStreamNode;
 };
 
 /**
- * @brief C interface to access HardwareConnection API
+ * @brief C interface to access ContextSwitch API
  * This interface is implemented by nodes that source data from hardware peripherals
  * 
  */
-struct HardwareConnectionInterface
+struct ContextSwitchInterface
 {
     int (*pause)(void *self);
     int (*resume)(void *self);
@@ -70,7 +70,7 @@ struct CStreamNode
 {
     void *obj;
     const struct StreamNodeInterface *stream_intf;
-    const struct HardwareConnectionInterface *hw_conn_intf;
+    const struct ContextSwitchInterface *context_switch_intf;
 };
 
 

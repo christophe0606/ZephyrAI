@@ -31,7 +31,7 @@
 using namespace arm_cmsis_stream;
 
 template<typename IN,int windowSize, int overlap>
-class SlidingBuffer: public GenericNode<IN,windowSize-overlap,IN,windowSize>
+class SlidingBuffer: public GenericNode<IN,windowSize-overlap,IN,windowSize>, public ContextSwitch
 {
 public:
     SlidingBuffer(FIFOBase<IN> &src,FIFOBase<IN> &dst):GenericNode<IN,windowSize-overlap,IN,windowSize>(src,dst)
@@ -39,6 +39,18 @@ public:
         static_assert((windowSize-overlap)>0, "Overlap is too big");
         memory.resize(overlap);
     };
+
+    int pause()
+    {
+        memset(memory.data(),0,overlap*sizeof(IN));
+        return(0);
+    }
+
+    int resume()
+    {
+        return(0);
+    }
+
 
 
     int run() final

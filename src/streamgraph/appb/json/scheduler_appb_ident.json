@@ -1,4 +1,6 @@
 {
   "audio": 0,
-  "display": 1
+  "audioWinLeft": 1,
+  "audioWinRight": 2,
+  "display": 3
 }

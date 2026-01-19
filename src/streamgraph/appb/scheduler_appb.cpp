@@ -299,12 +299,16 @@ int init_scheduler_appb(void *evtQueue_,AppbParams *params)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
+    identifiedNodes[STREAM_APPB_AUDIOWINLEFT_ID]=createStreamNode(*nodes.audioWinLeft);
+    nodes.audioWinLeft->setID(STREAM_APPB_AUDIOWINLEFT_ID);
 
     nodes.audioWinRight = new (std::nothrow) SlidingBuffer<float,640,320>(*(fifos.fifo8),*(fifos.fifo9));
     if (nodes.audioWinRight==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
+    identifiedNodes[STREAM_APPB_AUDIOWINRIGHT_ID]=createStreamNode(*nodes.audioWinRight);
+    nodes.audioWinRight->setID(STREAM_APPB_AUDIOWINRIGHT_ID);
 
     nodes.deinterleave = new (std::nothrow) DeinterleaveStereo<sf32,320,float,320,float,320>(*(fifos.fifo2),*(fifos.fifo3),*(fifos.fifo8));
     if (nodes.deinterleave==NULL)

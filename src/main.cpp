@@ -96,10 +96,10 @@ static void pause_scheduler_app(const stream_execution_context_t* context)
 		CStreamNode *cnode = static_cast<CStreamNode *>(context->get_node_by_id(nodeid));
 		if (cnode != nullptr) 
 		{
-			// If the node implements the hardware connection interface, pause it
-			if ((cnode->obj != nullptr) && (cnode->hw_conn_intf != nullptr))
+			// If the node implements the context switch interface, pause it
+			if ((cnode->obj != nullptr) && (cnode->context_switch_intf != nullptr))
 			{
-				cnode->hw_conn_intf->pause(cnode->obj);
+				cnode->context_switch_intf->pause(cnode->obj);
 			}
 		}
 	}
@@ -112,9 +112,9 @@ static void resume_scheduler_app(const stream_execution_context_t* context)
 		if (cnode != nullptr) 
 		{
 			// If the node implements the hardware connection interface, resume it
-			if ((cnode->obj != nullptr) && (cnode->hw_conn_intf != nullptr))
+			if ((cnode->obj != nullptr) && (cnode->context_switch_intf != nullptr))
 			{
-				cnode->hw_conn_intf->resume(cnode->obj);
+				cnode->context_switch_intf->resume(cnode->obj);
 			}
 		}
 	}
@@ -139,7 +139,7 @@ int main(void)
 	Initialize memory slab for audio buffers
 
 	Instead of hardcoding initialization of HW peripheral here,
-	one could extend the HardwareConnection interface to query what
+	one could extend the ContextSwitch interface to query what
 	is the need of a node.
 	Then, we could ask all nodes in each graph what they need.
 	And we would only initialize the HW peripherals needed by the nodes
