@@ -40,7 +40,7 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 		      "The audio source output size must match CONFIG_I2S_SAMPLES");
 
       public:
-	ZephyrAudioSource(FIFOBase<sq15> &dst, const struct zephyrAudioSourceParams &settings)
+	ZephyrAudioSource(FIFOBase<sq15> &dst, const struct hardwareParams &settings)
 		: GenericSource<sq15, outputSamples>(dst), settings_(settings)
 	{
 		
@@ -109,5 +109,5 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 		started_ = false;
 	}
 	bool started_ = false;
-	const struct zephyrAudioSourceParams &settings_;
+	const struct hardwareParams &settings_;
 };

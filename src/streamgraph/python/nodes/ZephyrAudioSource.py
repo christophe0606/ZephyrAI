@@ -11,7 +11,8 @@ class ZephyrAudioSource(GenericSource):
             raise Exception("Only one ZephyrAudioSource node can be instantiated")
         # Stereo output
         self.addOutput("o",Q15_STEREO,outLength)
-        self.addVariableArg(f"params->{name}")
+        # hw_ is common to all node and does not name a specific node
+        self.addVariableArg(f"params->hw_")
 
     @property
     def typeName(self):

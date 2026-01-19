@@ -52,7 +52,17 @@ static int currentNetwork = 0;
 
 #define SWITCH_EVENT (1 << 0)
 
+/**
+ * @brief Array of stream execution contexts, one per network.
+ */
 static stream_execution_context_t contexts[NB_NETWORKS];
+
+/**
+ * @brief Parameters for appa and appb networks.
+ * By convention, each parameter structs starts with a hardwareParams member
+ * named 'hw_' that holds hardware connection parameters.
+ */
+static hardwareParams *params[NB_NETWORKS];
 
 
 static int cmd_switch(const struct shell *shell,
@@ -177,16 +187,24 @@ int main(void)
 	*/
     appaParams.kws.modelAddr = (uint8_t *)GetModelPointer();
 	appaParams.kws.modelSize = GetModelLen();
-	appaParams.audioSource.i2s_mic = i2s_mic;
-	appaParams.audioSource.mem_slab = mem_slab;
+	params[0] = reinterpret_cast<hardwareParams *>(&appaParams);
 
 	/*
 	
 	Init settings for appb scheduler
 	
 	*/
-	appbParams.audio.i2s_mic = i2s_mic;
-	appbParams.audio.mem_slab = mem_slab;
+	params[1] = reinterpret_cast<hardwareParams *>(&appbParams);
+
+	/**
+	 * @brief Populate hardwareParams for each network
+	 * by setting the i2s_mic and mem_slab members.
+	 */
+	for(int network=0; network < NB_NETWORKS; network++) 
+	{
+		params[network]->i2s_mic = i2s_mic;
+	    params[network]->mem_slab = mem_slab;
+	}
 
 	err = stream_init_memory();
 	if (err != 0)

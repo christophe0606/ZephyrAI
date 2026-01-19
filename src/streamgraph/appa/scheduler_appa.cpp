@@ -236,7 +236,7 @@ int init_scheduler_appa(void *evtQueue_,AppaParams *params)
     CG_BEFORE_NODE_INIT;
     cg_status initError;
 
-    nodes.audioSource = new (std::nothrow) ZephyrAudioSource<sq15,320>(*(fifos.fifo0),params->audioSource);
+    nodes.audioSource = new (std::nothrow) ZephyrAudioSource<sq15,320>(*(fifos.fifo0),params->hw_);
     if (nodes.audioSource==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);

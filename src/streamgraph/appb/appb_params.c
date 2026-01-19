@@ -3,7 +3,8 @@
 #include "appb_params.h"
 
 struct AppbParams appbParams = {
-    .audio = {
-        .i2s_mic = NULL // To be set to the I2S device
+    .hw_ = {
+        .i2s_mic = NULL, // To be set to the I2S device
+        .mem_slab = NULL // To be set to the memory slab
     }
 }; 

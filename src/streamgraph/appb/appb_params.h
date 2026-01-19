@@ -11,7 +11,7 @@ extern "C"
 
 struct AppbParams
 {
-    struct zephyrAudioSourceParams audio;
+    struct hardwareParams hw_;
 };
 
 extern struct AppbParams appbParams;
