@@ -47,7 +47,7 @@ static K_THREAD_STACK_DEFINE(interrupt_thread_stack, 4096);
 
 using namespace arm_cmsis_stream;
 
-#define NB_NETWORKS 2
+#define NB_APPS 2
 static int currentNetwork = 0;
 
 #define SWITCH_EVENT (1 << 0)
@@ -55,14 +55,14 @@ static int currentNetwork = 0;
 /**
  * @brief Array of stream execution contexts, one per network.
  */
-static stream_execution_context_t contexts[NB_NETWORKS];
+static stream_execution_context_t contexts[NB_APPS];
 
 /**
  * @brief Parameters for appa and appb networks.
  * By convention, each parameter structs starts with a hardwareParams member
  * named 'hw_' that holds hardware connection parameters.
  */
-static hardwareParams *params[NB_NETWORKS];
+static hardwareParams *params[NB_APPS];
 
 
 static int cmd_switch(const struct shell *shell,
@@ -90,7 +90,7 @@ void interrupt_thread_function(void *, void *, void *)
 	{
 		k_event_clear(&cg_interruptEvent, SWITCH_EVENT);
 		LOG_DBG("Received Switching network event\n");
-		currentNetwork = (currentNetwork + 1) % NB_NETWORKS;
+		currentNetwork = (currentNetwork + 1) % NB_APPS;
 		stream_pause_current_scheduler();
 	    stream_resume_scheduler(&contexts[currentNetwork]);
 		LOG_DBG("Context switch done\n");
@@ -158,7 +158,7 @@ int main(void)
 	*/
 
 	int err;
-	EventQueue *queue_app[NB_NETWORKS];
+	EventQueue *queue_app[NB_APPS];
 #if defined(CONFIG_I2S)
 	k_mem_slab *mem_slab = nullptr;
 	const struct device *i2s_mic = init_audio_source(&mem_slab);
@@ -225,7 +225,7 @@ int main(void)
 	 * @brief Populate hardwareParams for each network
 	 * by setting the i2s_mic and mem_slab members.
 	 */
-	for(int network=0; network < NB_NETWORKS; network++) 
+	for(int network=0; network < NB_APPS; network++) 
 	{
 		params[network]->i2s_mic = i2s_mic;
 	    params[network]->mem_slab = mem_slab;
@@ -239,7 +239,7 @@ int main(void)
 	}
 
 	/* Event queue init */
-	for(int network=0; network < NB_NETWORKS; network++) 
+	for(int network=0; network < NB_APPS; network++) 
 	{
 		queue_app[network] = stream_new_event_queue();
 
@@ -304,7 +304,7 @@ int main(void)
 	free_scheduler_appa();
 	free_scheduler_appb();
 
-	for(int network=0; network < NB_NETWORKS; network++) 
+	for(int network=0; network < NB_APPS; network++) 
 	{
 		delete queue_app[network];
 	}
