@@ -1,12 +1,12 @@
 # README
 
-* streamnodes : The C++ templates for the CMSIS Stream nodes in the applications
-* nodes_csrc : Some C++ templates rely on code in this C folder and other use external libraries (CMSIS-DSP, TFLite ...)
+* streamnodes : The C++ templates for the CMSIS Stream nodes in the applications. In general light wrappers and implementation is in `nodes_src`
+* nodes_src : Some C++ templates rely on code in this C folder
 * common : headers used by all app
 * appa : A first app using CMSIS Stream
 * appb : A second app using CMSIS Stream
+* python : python scripts describing the graphs for each sub applications (keyword spotting, spectrogram ...)
 
-Current version of the demo only launch appa.
 
 ## appa
 
@@ -32,6 +32,13 @@ python ./src/streamgraph/python/spectrogram.py
 ### `app_config.h`
 
 It is a global configuration file for all the apps. 
+It is used to define datatypes:
+
+* Sample datatypes to be used in data flow graph
+* Parameter datatypes to initialize the nodes
+* New interfaces implemented by some nodes
+* RTOS events used to communicate / synchronize with threads
+* Some code injected in CMSIS Stream dataflow state machine to be able to pause / stop the graph
 
 ### `rtos_events.hpp`
 
@@ -63,3 +70,4 @@ hidden and the node can be interacted with from C side.
 
 `IdentifiedNode.hpp` and `cstream_node.h` should be customized to expose more interfaces if required by the application.
 
+In current demo, some nodes implement a `ContextSwitch` API. It is used during context switching from one graph to another.

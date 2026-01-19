@@ -5,6 +5,7 @@
 This demo uses the microphone. The recognized keyword will be displayed on the LCD and slowly fade out unless it is replaced by another recognized words.
 
 The words recognized by the demo are :
+
 * down
 * go
 * left
@@ -22,9 +23,9 @@ The graph implemented for this demo (appa) is:
 
 ## Stereo Audio spectrogram
 
-This demo displays two audio spectrogram on the LCD in realtime.
+This demo displays two audio spectrograms on the LCD in realtime.
 The audio comes from the microphone.
 
-The graph implemented for this demo (appa) is:
+The graph implemented for this demo (appb) is:
 
 ![Spectrogram Graph](appb.png)

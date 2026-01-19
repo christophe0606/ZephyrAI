@@ -158,8 +158,7 @@ int main(void)
 	*/
 
 	int err;
-	EventQueue *queue_appa;
-	EventQueue *queue_appb;
+	EventQueue *queue_app[NB_NETWORKS];
 #if defined(CONFIG_I2S)
 	k_mem_slab *mem_slab = nullptr;
 	const struct device *i2s_mic = init_audio_source(&mem_slab);
@@ -179,6 +178,32 @@ int main(void)
 		goto error;
 	}
 #endif
+
+    /** 
+	 * @brief Network parameter initialization
+	 * Most settings could come from a YAML file. The YAML
+	 * file could be used to generate the appa_params.c and
+	 * appb_params.c files.
+	 * 
+	 * The parameters related to hardware connections are set here 
+	 * in main.cpp. They are common to all graphs so a generic loop
+	 * can be used. The convention has been imposed that each
+	 * prameter structure for each graph starts with a hardwareParams
+	 * member named 'hw_'.
+	 * 
+	 * The TensorFlow Lite model pointer and size are also set here
+	 * in main.cpp for the appa graph. 
+	 * It would probaby be better to put this in a YAML file too
+	 * (name of variable containing the model pointer and size).
+	 * Or have another mechanism to select the model from yaml.
+	 * Here we have to hardcode the initialization of the node.
+	 * So it is not generic. If the network contains multiple TFLite
+	 * nodes with different models, this approach would not work.
+	 * We would need to change the initialization.
+	 * It would be better if the initialization in this
+	 * file could work with any network and don't have to be changed.
+	 * If is possible but require to define some conventions
+	 */
     
 	/*
 	
@@ -214,30 +239,24 @@ int main(void)
 	}
 
 	/* Event queue init */
-	queue_appa = stream_new_event_queue();
+	for(int network=0; network < NB_NETWORKS; network++) 
+	{
+		queue_app[network] = stream_new_event_queue();
 
-	if (queue_appa == nullptr) {
-		LOG_ERR("Can't create CMSIS Stream Event Queue for appa\n");
-		goto error;
-	}
-
-	queue_appb = stream_new_event_queue();
-
-	if (queue_appb == nullptr) {
-		LOG_ERR("Can't create CMSIS Stream Event Queue for appb\n");
-		goto error;
+		if (queue_app[network] == nullptr) {
+			LOG_ERR("Can't create CMSIS Stream Event Queue for network %d\n",network);
+			goto error;
+		}
 	}
 	
-	
-
 	// Init nodes
-	err = init_scheduler_appa(queue_appa,&appaParams);
+	err = init_scheduler_appa(queue_app[0],&appaParams);
 	if (err != CG_SUCCESS) {
 		LOG_ERR("Error: Failure during scheduler initialization for appa.\n");
 		goto error;
 	}
 
-	err = init_scheduler_appb(queue_appb,&appbParams);
+	err = init_scheduler_appb(queue_app[1],&appbParams);
 	if (err != CG_SUCCESS) {
 		LOG_ERR("Error: Failure during scheduler initialization for appb.\n");
 		goto error;
@@ -262,7 +281,7 @@ int main(void)
 		.pause_all_nodes = pause_scheduler_app,
 		.resume_all_nodes = resume_scheduler_app,
 		.get_node_by_id = get_appa_node,
-		.evtQueue = queue_appa,
+		.evtQueue = queue_app[0],
 		.nb_identified_nodes = STREAM_APPA_NB_IDENTIFIED_NODES
 	};
 
@@ -272,7 +291,7 @@ int main(void)
 		.pause_all_nodes = pause_scheduler_app,
 		.resume_all_nodes = resume_scheduler_app,
 		.get_node_by_id = get_appb_node,
-		.evtQueue = queue_appb,
+		.evtQueue = queue_app[1],
 		.nb_identified_nodes = STREAM_APPB_NB_IDENTIFIED_NODES
 	};
 
@@ -285,8 +304,10 @@ int main(void)
 	free_scheduler_appa();
 	free_scheduler_appb();
 
-	delete queue_appa;
-	delete queue_appb;
+	for(int network=0; network < NB_NETWORKS; network++) 
+	{
+		delete queue_app[network];
+	}
 
 	stream_free_memory();
 
