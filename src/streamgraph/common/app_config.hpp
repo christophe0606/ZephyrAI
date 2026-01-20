@@ -26,6 +26,9 @@ LOG_MODULE_DECLARE(streamapps,CONFIG_STREAMAPPS_LOG_LEVEL);
 
 extern struct k_event cg_streamEvent;
 
+// Because memory optimization is enabled in Python scripts, the alignment is NEEDED
+#define CG_BEFORE_BUFFER __aligned(16)__attribute__((section(".alif_sram0.stream_fifo"))) 
+
 #define CG_BEFORE_NODE_EXECUTION(id)                                              \
     {                                                                             \
         uint32_t res =                                                            \
