@@ -27,6 +27,10 @@ LOG_MODULE_DECLARE(streamapps,CONFIG_STREAMAPPS_LOG_LEVEL);
 extern struct k_event cg_streamEvent;
 
 // Because memory optimization is enabled in Python scripts, the alignment is NEEDED
+//
+// To use a memory overlay for the graph FIFOs, the section must be different for each graph
+// Python scripts can be customized so that each generated scheduler includes a different
+// configuration file where the macro could have different definitions
 #define CG_BEFORE_BUFFER __aligned(16)__attribute__((section(".alif_sram0.stream_fifo"))) 
 
 #define CG_BEFORE_NODE_EXECUTION(id)                                              \
