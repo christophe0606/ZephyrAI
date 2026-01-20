@@ -282,7 +282,8 @@ int main(void)
 		.resume_all_nodes = resume_scheduler_app,
 		.get_node_by_id = get_appa_node,
 		.evtQueue = queue_app[0],
-		.nb_identified_nodes = STREAM_APPA_NB_IDENTIFIED_NODES
+		.nb_identified_nodes = STREAM_APPA_NB_IDENTIFIED_NODES,
+		.scheduler_length = STREAM_APPA_SCHED_LEN
 	};
 
 	contexts[1] = {
@@ -292,7 +293,8 @@ int main(void)
 		.resume_all_nodes = resume_scheduler_app,
 		.get_node_by_id = get_appb_node,
 		.evtQueue = queue_app[1],
-		.nb_identified_nodes = STREAM_APPB_NB_IDENTIFIED_NODES
+		.nb_identified_nodes = STREAM_APPB_NB_IDENTIFIED_NODES,
+		.scheduler_length = STREAM_APPB_SCHED_LEN
 	};
 
 	LOG_INF("Try to start first network");

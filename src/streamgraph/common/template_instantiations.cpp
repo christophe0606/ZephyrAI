@@ -49,3 +49,5 @@ template class RealToComplex<float,1024,cf32,1024>;
 template class Convert<sq15,320,sf32,320>;
 template class Hanning<float,640,float,1024>;
 template CStreamNode createStreamNode(SpectrogramDisplay &obj) ;
+
+// Selector initializations

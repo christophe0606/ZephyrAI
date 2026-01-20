@@ -28,6 +28,8 @@ extern "C"
 #define STREAM_APPB_AUDIOWINRIGHT_ID 2
 #define STREAM_APPB_DISPLAY_ID 3
 
+#define STREAM_APPB_SCHED_LEN 14
+
 
 extern CStreamNode* get_scheduler_appb_node(int32_t nodeID);
 

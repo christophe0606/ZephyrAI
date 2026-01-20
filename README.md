@@ -22,7 +22,7 @@ to regenerate the KWS example in folder `src/streamgraph/appa`
 The Python script `src/streamgraph/python/spectrogram.py` can be used
 to regenerate the stereo audio spectrogram example in folder `src/streamgraph/appb`
 
-You need version at least `3.0.0` of the CMSIS Stream Python package. It was recently updated so do a:
+You need version at least `3.1.0` of the CMSIS Stream Python package. It was recently updated so do a:
 
 ```
 pip install cmsis-stream --upgrade

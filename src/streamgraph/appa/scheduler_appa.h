@@ -28,6 +28,8 @@ extern "C"
 #define STREAM_APPA_MFCCWIN_ID 2
 #define STREAM_APPA_DISPLAY_ID 3
 
+#define STREAM_APPA_SCHED_LEN 8
+
 
 extern CStreamNode* get_scheduler_appa_node(int32_t nodeID);
 

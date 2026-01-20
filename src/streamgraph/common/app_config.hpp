@@ -19,6 +19,8 @@ LOG_MODULE_DECLARE(streamapps,CONFIG_STREAMAPPS_LOG_LEVEL);
 
 #include "datatypes.hpp"
 
+#include "selector_ids.h"
+
 #include "appa_params.h"
 #include "appb_params.h"
 

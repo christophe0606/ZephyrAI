@@ -58,7 +58,6 @@ The assumptions are:
 * Threads are reused to execute different graphs
 * Context switching is cooperative
 * HW peripherals may be shared between graphs and are initialized outside of graphs.
-* Some dataflow nodes must exist. For a pure event graph, context switching is not yet fully supported
 
 ### All graphs in memory
 
@@ -80,8 +79,6 @@ So, it looks like the big consumer of memory are not a problem. If some other no
 We do not need to run several graphs at same time. So the Zephyr module is assuming only one graph is running a a given time and reuse the same thread
 
 ## Cooperative context switching
-
-
 
 Context switching between graph only occurs when a node has finished executing its dataflow processing or its events.
 
@@ -140,8 +137,6 @@ Then the `stream_pause_current_scheduler` is cleaning all events remaining in th
 
 Pausing the data flow stream is done by sending an RTOS event to the thread. The data flow scheduler is returning and the data flow thread is paused.
 
-
-
 Resuming an execution with a new context means:
 
 * We store the new current context
@@ -154,29 +149,11 @@ So context switching only occurs when:
 * Both threads are paused
 * Event queue has been cleaned of all events
 
-
-
 When data flow graph is paused:
 
-* All FIFOs are reset to their initial state and buffer cleaned to zero.
 * `pause` function called on all graphs implementing it
 
 When data flow graph is resumed:
 
+* All FIFOs are reset to their initial state and buffer cleaned to zero.
 * `resume` function called on all graphs implementing it
-
-
-
-In case of memory overlay of FIFOs for different graphs:
-
-* Resetting FIFOs should occur during resume
-* If there is no data flow graph, the data flow thread will go into pause automatically and it is not right since nodes with a `pause` function will be paused although the full graph is not paused (events are still enabled).
-
-We need to export an additional information (schedule length) from the Python script and it is simpler if it is done from the CMSIS Stream Python package. So it will have to be updated.
-
-If it was done from the demo, a new header would have to be generated with this information.
-
-So context switching needs some improvement.
-
-
-
