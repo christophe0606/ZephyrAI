@@ -1,0 +1,10 @@
+{
+  "CameraFrame": {
+    "isTemplate": false,
+    "selectors": []
+  },
+  "ZephyrDebugVideoSource": {
+    "isTemplate": false,
+    "selectors": []
+  }
+}

@@ -23,6 +23,7 @@ LOG_MODULE_DECLARE(streamapps,CONFIG_STREAMAPPS_LOG_LEVEL);
 
 #include "appa_params.h"
 #include "appb_params.h"
+#include "appc_params.h"
 
 extern struct k_event cg_streamEvent;
 

@@ -36,9 +36,11 @@ LOG_MODULE_REGISTER(streamapps,CONFIG_STREAMAPPS_LOG_LEVEL);
 #include "cstream_node.h"
 #include "appa_params.h"
 #include "appb_params.h"
+#include "appc_params.h"
 
 #include "scheduler_appa.h"
 #include "scheduler_appb.h"
+#include "scheduler_appc.h"
 
 #include "EventQueue.hpp"
 #include "StreamNode.hpp"
@@ -65,7 +67,11 @@ static K_THREAD_STACK_DEFINE(interrupt_thread_stack, 4096);
 
 using namespace arm_cmsis_stream;
 
-#define NB_APPS 2
+#define NB_APPS 3
+// Start with KWS demo
+// 0 : KWS
+// 1 : Spectrogram
+// 2 : To experiment with camera support
 static int currentNetwork = 0;
 
 #define SWITCH_EVENT (1 << 0)
@@ -109,6 +115,7 @@ void interrupt_thread_function(void *, void *, void *)
 		k_event_clear(&cg_interruptEvent, SWITCH_EVENT);
 		LOG_DBG("Received Switching network event\n");
 		currentNetwork = (currentNetwork + 1) % NB_APPS;
+		LOG_DBG("Switching to network %d\n", currentNetwork);
 		stream_pause_current_scheduler();
 	    stream_resume_scheduler(&contexts[currentNetwork]);
 		LOG_DBG("Context switch done\n");
@@ -137,9 +144,10 @@ static void resume_scheduler_app(const stream_execution_context_t* context)
 {
 	for(int32_t nodeid=0 ; nodeid < (int32_t)context->nb_identified_nodes ; nodeid++) {
 		CStreamNode *cnode = static_cast<CStreamNode *>(context->get_node_by_id(nodeid));
+
 		if (cnode != nullptr) 
 		{
-			// If the node implements the hardware connection interface, resume it
+			// If the node implements the context switching interface, resume it
 			if ((cnode->obj != nullptr) && (cnode->context_switch_intf != nullptr))
 			{
 				cnode->context_switch_intf->resume(cnode->obj);
@@ -147,6 +155,7 @@ static void resume_scheduler_app(const stream_execution_context_t* context)
 		}
 	}
 }
+
 
 static void* get_appa_node(int32_t nodeID)
 {
@@ -156,6 +165,11 @@ static void* get_appa_node(int32_t nodeID)
 static void* get_appb_node(int32_t nodeID)
 {
 	return static_cast<void *>(get_scheduler_appb_node(nodeID));
+}
+
+static void* get_appc_node(int32_t nodeID)
+{
+	return static_cast<void *>(get_scheduler_appc_node(nodeID));
 }
 
 int main(void)
@@ -242,6 +256,13 @@ int main(void)
 	*/
 	params[1] = reinterpret_cast<hardwareParams *>(&appbParams);
 
+	/*
+	
+	Init settings for appc scheduler
+	
+	*/
+	params[2] = reinterpret_cast<hardwareParams *>(&appcParams);
+
 	/**
 	 * @brief Populate hardwareParams for each network
 	 * by setting the i2s_mic and mem_slab members.
@@ -283,6 +304,12 @@ int main(void)
 		goto error;
 	}
 
+	err = init_scheduler_appc(queue_app[2],&appcParams);
+	if (err != CG_SUCCESS) {
+		LOG_ERR("Error: Failure during scheduler initialization for appc.\n");
+		goto error;
+	}
+
 
 	k_event_init(&cg_interruptEvent);
 
@@ -318,15 +345,30 @@ int main(void)
 		.scheduler_length = STREAM_APPB_SCHED_LEN
 	};
 
+	
+	contexts[2] = {
+		.dataflow_scheduler = scheduler_appc,
+		.reset_fifos = reset_fifos_scheduler_appc,
+		.pause_all_nodes = pause_scheduler_app,
+		.resume_all_nodes = resume_scheduler_app,
+		.get_node_by_id = get_appc_node,
+		.evtQueue = queue_app[2],
+		.nb_identified_nodes = STREAM_APPC_NB_IDENTIFIED_NODES,
+		.scheduler_length = STREAM_APPC_SCHED_LEN
+	};
+	
+
 	LOG_INF("Try to start first network");
 
+	
 	stream_start_threads(&contexts[currentNetwork]);
 
 	stream_wait_for_threads_end();
 
 	free_scheduler_appa();
 	free_scheduler_appb();
-
+	free_scheduler_appc();
+	
 	for(int network=0; network < NB_APPS; network++) 
 	{
 		delete queue_app[network];

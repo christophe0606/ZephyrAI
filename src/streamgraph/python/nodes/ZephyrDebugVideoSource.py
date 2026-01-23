@@ -5,7 +5,7 @@ from .NodeTypes import *
 class ZephyrDebugVideoSource(GenericSource):
     COUNT = 0
     def __init__(self,name):
-        GenericSource.__init__(self,name,identified=False)
+        GenericSource.__init__(self,name,identified=True)
         ZephyrDebugVideoSource.COUNT = ZephyrDebugVideoSource.COUNT + 1
         if (ZephyrDebugVideoSource.COUNT > 1):
             raise Exception("Only one ZephyrDebugVideoSource node can be instantiated")

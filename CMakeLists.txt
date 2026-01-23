@@ -57,6 +57,17 @@ target_include_directories(app PUBLIC
   src/streamgraph/appb
   )
 
+#######################
+# AppC
+target_sources(app PRIVATE 
+  src/streamgraph/appc/scheduler_appc.cpp
+  src/streamgraph/appc/appc_params.c
+  )
+
+target_include_directories(app PUBLIC 
+  src/streamgraph/appc
+  )
+
 if (CONFIG_TEMPLATE_INSTANTIATIONS)
     message(STATUS "Including template instantiations for code size optimization")
     target_sources(app PRIVATE src/streamgraph/common/template_instantiations.cpp)

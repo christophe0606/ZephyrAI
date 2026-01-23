@@ -28,6 +28,8 @@
 #include "nodes/Convert.hpp"
 #include "nodes/Hanning.hpp"
 #include "appnodes/SpectrogramDisplay.hpp"
+#include "appnodes/CameraFrame.hpp"
+#include "nodes/ZephyrDebugVideoSource.hpp"
 
 template class ZephyrAudioSource<sq15,320>;
 template CStreamNode createStreamNode(ZephyrAudioSource<sq15,320> &obj) ;
@@ -49,5 +51,7 @@ template class RealToComplex<float,1024,cf32,1024>;
 template class Convert<sq15,320,sf32,320>;
 template class Hanning<float,640,float,1024>;
 template CStreamNode createStreamNode(SpectrogramDisplay &obj) ;
+template CStreamNode createStreamNode(CameraFrame &obj) ;
+template CStreamNode createStreamNode(ZephyrDebugVideoSource &obj) ;
 
 // Selector initializations

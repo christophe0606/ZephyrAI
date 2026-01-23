@@ -11,6 +11,7 @@ extern "C"
    #include "dbuf_display/display.h"
 }
 
+#include "init_drv_src.hpp"
 
 using namespace arm_cmsis_stream;
 

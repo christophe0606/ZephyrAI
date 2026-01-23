@@ -29,3 +29,8 @@ The audio comes from the microphone.
 The graph implemented for this demo (appb) is:
 
 ![Spectrogram Graph](appb.png)
+
+## Appc
+
+It is a debug app to experiment with camera
+(Work in progress)

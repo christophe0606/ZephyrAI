@@ -29,6 +29,8 @@ extern "C" {
 
 #include "init_drv_src.hpp"
 
+#include <atomic>
+
 using namespace arm_cmsis_stream;
 
 template <typename OUT, int outputSize> class ZephyrAudioSource;
@@ -49,11 +51,15 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 	int pause() final
 	{
 		// Implementation of pause
+		if (started_.load() == false) {
+			// If it was never started, nothing to do
+			return 0;
+		}
 		int rc = i2s_trigger(settings_.i2s_mic, I2S_DIR_RX, I2S_TRIGGER_STOP);
 		if (rc < 0) {
 			LOG_ERR("I2S_TRIGGER_STOP failed: %i", rc);
 		}
-		started_ = false;
+		started_.store(false);
 		return 0;
 	}
 
@@ -67,7 +73,7 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 	int run() final
 	{
 		size_t size;
-		if (!started_) {
+		if (!started_.load()) {
 			LOG_DBG("Starting RX");
 			
 			int rc = i2s_trigger(settings_.i2s_mic, I2S_DIR_RX, I2S_TRIGGER_START);
@@ -76,7 +82,7 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 				LOG_ERR("i2s_trigger start failed: %i", rc);
 				return (CG_INIT_FAILURE);
 			}
-			started_ = true;
+			started_.store(true);
 		}
 
 		sq15 *out = this->getWriteBuffer();
@@ -106,8 +112,8 @@ class ZephyrAudioSource<sq15, outputSamples> : public GenericSource<sq15, output
 		if (rc < 0) {
 			LOG_ERR("I2S_TRIGGER_DROP failed: %i", rc);
 		}
-		started_ = false;
+		started_.store(false);
 	}
-	bool started_ = false;
+	std::atomic<bool> started_ = false;
 	const struct hardwareParams &settings_;
 };

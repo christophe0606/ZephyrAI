@@ -9,7 +9,7 @@ from generate import generate
 
 the_graph = Graph()
 
-src = ZephyrVideoSource("video")
+src = ZephyrDebugVideoSource("video")
 gain = CameraFrame("lcd")
 
 the_graph.connect(src["oev0"],gain["iev0"])
@@ -30,4 +30,4 @@ class MyStyle(Style):
                 return("orange")
             return(super().edge_color(edge))
 
-generate(the_graph,Style())
+generate("appc",the_graph,MyStyle())

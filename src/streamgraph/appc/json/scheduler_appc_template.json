@@ -1,0 +1,16 @@
+{
+    "CameraFrame": {
+        "folder": "appnodes/",
+        "isTemplate": false,
+        "templateArgs": "",
+        "typename": "CameraFrame",
+        "isIdentified": true
+    },
+    "ZephyrDebugVideoSource": {
+        "folder": "nodes/",
+        "isTemplate": false,
+        "templateArgs": "",
+        "typename": "ZephyrDebugVideoSource",
+        "isIdentified": true
+    }
+}

@@ -81,3 +81,6 @@ build/
 RTE/
 __pycache__/
 log.txt
+
+
+ram_report.html

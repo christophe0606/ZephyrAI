@@ -8,7 +8,6 @@ using namespace arm_cmsis_stream;
 class CameraFrame : public ZephyrLCD
 
 {
-    static constexpr uint16_t refresh = 40; // ms
 
    
       public:
@@ -16,24 +15,10 @@ class CameraFrame : public ZephyrLCD
 	{
 	}
 
-	cg_status init() final override
-	{
-		cg_status err = ZephyrLCD::init();
-        if (err != CG_SUCCESS) {
-            return err;
-        }
-
-        //Event evt(kDo, kNormalPriority);
-        //evt.setTTL(refresh);
-        //EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));
-  
-		return CG_SUCCESS;
-	}
 
 	virtual ~CameraFrame() {};
 	
 
-    
     void drawImage(const uint16_t *renderingFrame)
     {
         bool lockError;
@@ -75,10 +60,6 @@ class CameraFrame : public ZephyrLCD
         // generate a new frame
         bool canRender = this->renderNewFrame();
         (void)canRender;
-        // Ask for a new frame to be rendered
-        //Event evt(kDo, kNormalPriority);
-        //evt.setTTL(refresh);
-        //EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));
     }
 
     void processEvent(int dstPort, Event &&evt) final override
