@@ -160,6 +160,10 @@ static void* get_appb_node(int32_t nodeID)
 
 int main(void)
 {   
+	int err;
+	EventQueue *queue_app[NB_APPS];
+
+
 	LOG_DBG("Starting main\n");
 
 	/*
@@ -175,11 +179,10 @@ int main(void)
 	
 	*/
 
-	int err;
-	EventQueue *queue_app[NB_APPS];
 #if defined(CONFIG_I2S)
 	k_mem_slab *mem_slab = nullptr;
 	const struct device *i2s_mic = init_audio_source(&mem_slab);
+	
 	if (i2s_mic == nullptr) {
 		LOG_ERR("Error initializing audio source\n");
 		goto error;

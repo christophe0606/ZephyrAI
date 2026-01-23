@@ -13,7 +13,7 @@ project(hello_world)
 add_subdirectory(src/streamgraph/common)
 add_subdirectory(src/streamgraph/streamnodes)
 
-target_sources(app PRIVATE src/main.cpp
+target_sources(app PRIVATE src/main.cpp src/startup.c
   src/streamgraph/nodes_src/kws_img.c 
   src/streamgraph/nodes_src/kws_mfcc.c
   

@@ -20,7 +20,7 @@ solution:
       device: Alif Semiconductor::AE722F80F55D5LS
       variables:
         # west board selection
-        - west-board: alif_e7_dk_rtss
+        - west-board: alif_e7_dk/ae722f80f55d5xx/rtss
       target-set:
         - set:
           debugger:

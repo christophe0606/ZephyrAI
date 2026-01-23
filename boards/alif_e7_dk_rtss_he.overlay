@@ -14,8 +14,8 @@
 		lcd = &cdc200;
 	};
 
-    soc {
-		cdc200: cdc200@49031000 {
+	soc {
+      cdc200: cdc200@49031000 {
 			width = <480>;
 			height = <800>;
 			hfront-porch = <5>;
@@ -50,8 +50,11 @@
 			blend-factor2-l2 = <7>;
 			const-alpha-l2 = <0xff>;
 		};
+	  
 	};
-};
+
+
+  };
 
 
 
@@ -68,6 +71,14 @@
 
 
 &mipi_dsi {
+	status = "okay";
+};
+
+&gpio14 {
+	status = "okay";
+};
+
+&ethosu0 {
 	status = "okay";
 };
 
