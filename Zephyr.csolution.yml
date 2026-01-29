@@ -40,21 +40,19 @@ solution:
         # west defines
         - CONFIG_DEBUG: y
         - CONFIG_DEBUG_THREAD_INFO: y
-        - SE_SERVICES: OFF
         - CMAKE_BUILD_TYPE: Debug
 
     - type: Release
       optimize: balanced
       west-defs:
         # west defines
-        - SE_SERVICES: OFF
         - CMAKE_BUILD_TYPE: Release
 
   # List related projects.
   projects:
     - west:
         project-id: Zephyr_M55_HE
-        app-path: .
+        app-path: ./
         board: $west-board$_he
         device: :M55_HE
 

@@ -13,5 +13,10 @@
         "utility": "cpp",
         "xiosbase": "cpp"
     },
-    "cmsis-csolution.autoDebugLaunch": false
+    "cmsis-csolution.autoDebugLaunch": false,
+    "cmsis-csolution.environmentVariables": {    
+        "ZEPHYR_BASE": "$HOME/benchresults/sdk-alif/zephyr",
+        "VIRTUAL_ENV": "$HOME/benchresults/PythonWrapperTests/devenv",
+        "PATH":"$HOME/benchresults/PythonWrapperTests/devenv/Scripts"
+    }
 }
