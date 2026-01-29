@@ -85,8 +85,8 @@ static K_THREAD_STACK_DEFINE(interrupt_thread_stack, 4096);
 
 using namespace arm_cmsis_stream;
 
+// Number of applications/networks available in this demo
 #define NB_APPS 3
-// Start with KWS demo
 // 0 : KWS
 // 1 : Spectrogram
 // 2 : To experiment with camera support
@@ -342,6 +342,15 @@ int main(void)
 #endif
 
 
+
+#if defined(CONFIG_MODEL_IN_EXT_FLASH)
+   err = validate_network_description("c147eeaf87c900ff230950424d07ca07");
+   if (err) {
+	   LOG_ERR("Invalid network description in external flash\n");
+	   goto error;
+   }
+#endif
+
     /** 
 	 * @brief Network parameter initialization
 	 * Most settings could come from a YAML file. The YAML
@@ -488,8 +497,9 @@ int main(void)
 
 	LOG_INF("Try to start first network");
 
+
 	/*
-	
+
 	resume is called (like in a context switch) to allow
 	the nodes to publish events before starting if they need to.
 	event queue accepts events when resume is called.

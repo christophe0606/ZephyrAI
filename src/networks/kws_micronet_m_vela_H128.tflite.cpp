@@ -27,16 +27,22 @@
 
 #include <zephyr/devicetree.h>
 
+// When network model is in ext flash we no more generate the
+// bin by compiling the C
+// It is time consuming and we do not need to regenerate
+// the network each time the application is updated
+#ifndef CONFIG_MODEL_IN_EXT_FLASH
+
+
 #define BYTE_ALIGNMENT         16
 #define ALIGNMENT_REQ          aligned(BYTE_ALIGNMENT)
 #define ACTIVATION_BUF_SECTION section(CONFIG_ACTIVATION_BUF_SECTION)
 
-#if CONFIG_MODEL_IN_EXT_FLASH
-#define MODEL_SECTION                                                                              \
-	section(".alif_extflash_" DT_PROP(DT_NODELABEL(ext_flash_xip), zephyr_memory_region))
-#else
+//#if CONFIG_MODEL_IN_EXT_FLASH
+//#define MODEL_SECTION section(".alif_extflash_" DT_PROP(DT_NODELABEL(ext_flash_xip), zephyr_memory_region))
+//#else
 #define MODEL_SECTION section(CONFIG_MODEL_SECTION)
-#endif
+//#endif
 
 #define MAKE_ATTRIBUTE(x)        __attribute__((ALIGNMENT_REQ, x))
 #define MODEL_TFLITE_ATTRIBUTE   MAKE_ATTRIBUTE(MODEL_SECTION)
@@ -4975,3 +4981,6 @@ size_t GetModelLen()
 } /* namespace arm */
 } /* namespace app */
 } /* namespace kws */
+
+
+#endif

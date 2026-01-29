@@ -1,0 +1,80 @@
+
+&gpio7 {
+   status = "okay";
+};
+
+&gpio9 {
+   status = "okay";
+};
+
+&i2c1 {
+	status = "okay";
+
+	mt9m114: mt9m114@48{
+		compatible = "aptina,mt9m114";
+		reg = <0x48>;
+		status = "okay";
+
+		port {
+			mt9m114_ep_out: endpoint {
+				remote-endpoint-label = "lpcam_ep_in";
+			};
+		};
+	};
+};
+
+&lpcam {
+	status = "okay";
+	cpi-interface = "parallel";
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		/* Camera Input Endpoint. For LP-CAM it is only camera */
+		port@0 {
+			reg = <0>;
+			lpcam_ep_in: endpoint {
+				remote-endpoint-label = "mt9m114_ep_out";
+			};
+		};
+
+		/* Video buffer output endpoint (Memory). */
+		port@1 {
+			reg = <1>;
+			lpcam_mem_ep_out: endpoint {
+				remote-endpoint-label = "application";
+			};
+		};
+	};
+};
+
+/ {
+	camera_pwr: camera-pwr {
+		compatible = "gpio-leds";
+		cam_pwr_gpio: cam-pwr-gpio {
+			gpios = <&gpio7 5 GPIO_ACTIVE_HIGH>;
+			label = "CAM_PWR_EN";
+		};
+	};
+
+	aliases {
+		cam-pwr = &cam_pwr_gpio;
+	};
+};
+
+
+/ {
+	camera_reset: camera-reset {
+		compatible = "gpio-leds";
+		cam_reset_gpio: cam-reset-gpio {
+			gpios = <&gpio9 1 GPIO_ACTIVE_LOW>;
+			label = "CAM_RESET_N";
+		};
+	};
+
+	aliases {
+		cam-reset = &cam_reset_gpio;
+	};
+};
+
+

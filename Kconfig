@@ -32,7 +32,6 @@ config TOUCH_SCREEN_DELAY
 config MODEL_IN_EXT_FLASH
 	bool "Put ML model to external flash"
 	select FLASH
-	select BUILD_OUTPUT_BIN
 	select ALIF_OSPI_FLASH_XIP
 	help
 		Initialize OSPI controller to XIP mode. Initialize the onboard flash device. Link ML model data to external flash address space.
