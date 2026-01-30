@@ -11,7 +11,7 @@
 // Model description header
 typedef struct {
     uint32_t nn_model_size;
-    uint8_t *nn_model_data;
+    const uint8_t *nn_model_data;
 } nn_model_t;
 
 // List of models
@@ -31,7 +31,7 @@ size_t GetModelLen();
 
 #if defined(CONFIG_MODEL_IN_EXT_FLASH)
 // Get the network description header from external flash
-nn_header_t *get_network_description();
+const nn_header_t *get_network_description();
 // Compute a MD5 checksum of the network description and compare it to the expected one
 // It includes the header and all the models
 int validate_network_description(const char *expected_md5_hex);

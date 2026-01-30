@@ -13,12 +13,16 @@ extern "C" {
 
 #define OSPI1_NODE DT_NODELABEL(ospi1)
 
+#if !DT_NODE_HAS_STATUS(OSPI1_NODE, okay)
+#error "ospi1 node is not defined or not okay"
+#endif
+
 #define XIP_ADDR_HE DT_PROP_BY_IDX(OSPI1_NODE, xip_base_address, 0)
 
-const nn_header_t *nn_header=reinterpret_cast<nn_header_t *>(reinterpret_cast<uint8_t*>(XIP_ADDR_HE));
+const nn_header_t *nn_header=reinterpret_cast<const nn_header_t *>(reinterpret_cast<const uint8_t*>(XIP_ADDR_HE));
 
 
-nn_header_t *get_network_description()
+const nn_header_t *get_network_description()
 {
     return nn_header;
 }
