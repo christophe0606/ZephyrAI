@@ -28,17 +28,23 @@ if args.command == "flash":
     print("Not yet implemented")
     exit(0)
 
-if args.all:
-    args.apps = APPS
-    apps = sorted(APPS.keys())
-    for app in apps:
-        f = APPS[app]
-        print(f"Generating {app}...")
-        f(codeSizeOptimization=args.size)
-    if args.size:
-        print("Regenerating all common files for code size optimization...")
-        generate_common_files(all_apps=apps)
+ALL_APPS = sorted(APPS.keys())
 
+if args.all:
+    args.apps = ALL_APPS
+else:
+    args.apps = sorted(args.apps)
+    
+apps = sorted(args.apps)
+for app in apps:
+    f = APPS[app]
+    print(f"=== Generating {app}...")
+    f(codeSizeOptimization=args.size)
+    print("")
+if args.size:
+    print("Regenerating all common files for code size optimization...")
+    print(ALL_APPS)
+    generate_common_files(all_apps=ALL_APPS)
 
 
 

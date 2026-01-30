@@ -133,10 +133,7 @@ def generate(app,the_graph,myStyle,codeSizeOptimization=False):
                    print(f"extern template CStreamNode createStreamNode({type_desc} &obj) ;",file=f)
                    
 # Generate common template and selector files used by all apps
-def generate_common_files(all_apps=[]):
-    # When used as a command line tool, it generates a cpp file to instantiate all templates
-    # for all the apps (all the graphs) listed on the command line.
-    print("Generate template definition file")
+def generate_common_files(all_apps=[]): 
     #
     # Read all JSON file to get the list of headers to include
     # and avoid duplicate includes
@@ -238,4 +235,14 @@ extern "C"
   
 
 if __name__ == "__main__":
-    generate_common_files(["appa","appb","appc"])
+    parser = argparse.ArgumentParser(
+                    prog='generate',
+                    description='Regenerate common files for some apps')
+
+    parser.add_argument('apps', nargs="*",choices=["appa","appb","appc"], help='Applications to regenerate')
+
+
+    args = parser.parse_args()
+    print("Generate template definition files")
+    print(args.apps)
+    generate_common_files(args.apps)

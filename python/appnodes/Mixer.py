@@ -1,5 +1,6 @@
 from cmsis_stream.cg.scheduler import GenericNode
 
+from ..nodes.NodeTypes import F32_SCALAR
 
 class Mixer(GenericNode):
     def __init__(self,name,outLength):

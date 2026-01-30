@@ -1,6 +1,6 @@
 from cmsis_stream.cg.scheduler import GenericSink
 
-    
+from ..nodes.NodeTypes import F32_COMPLEX
 class Spectrogram(GenericSink):
     def __init__(self,name,nbSamples):
         GenericSink.__init__(self,name,identified=False)
