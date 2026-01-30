@@ -1,6 +1,6 @@
 from cmsis_stream.cg.scheduler import GenericSink
 
-from nodes import *
+from ..nodes import TFLite
 
 class KWS(TFLite):
     def __init__(self,name):

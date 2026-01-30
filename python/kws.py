@@ -1,0 +1,102 @@
+from cmsis_stream.cg.scheduler import Graph,SlidingBuffer,CType,F32
+from cmsis_stream.cg.scheduler.graphviz import Style
+
+from .nodes import *
+from .appnodes import *
+
+from .generate import generate
+
+def generate_kws(codeSizeOptimization=False ):
+    the_graph = Graph()
+    
+    SAMPLING_FREQ_HZ = 16000
+    AUDIO_PACKET_DURATION = 20 # ms 
+    OVERLAP_DURATION = 20 
+    WINDOWS_DURATION = 40 
+    
+    NB_AUDIO_SAMPLES = int(1e-3 * AUDIO_PACKET_DURATION * SAMPLING_FREQ_HZ)
+    NB_OVERLAP_SAMPLES = int(1e-3 * OVERLAP_DURATION * SAMPLING_FREQ_HZ)
+    NB_WINDOW_SAMPLES = int(1e-3 * WINDOWS_DURATION * SAMPLING_FREQ_HZ)
+    
+    
+    NB = NB_AUDIO_SAMPLES
+    MFCC_FEATURES = 10
+    NN_FEATURES = 49
+    
+    # Every new "audio" block of 20ms a new full tensor input is generated
+    # If it is too often, the overlap can be decreased
+    MFCC_OVERLAP = NN_FEATURES-1
+    
+    # Use CMSIS VStream to connect to microphones
+    src = ZephyrAudioSource("audioSource",NB)
+    gain = Gain("gain",Q15_STEREO,NB,10)
+    
+    deinterleave = DeinterleaveStereo("deinterleave",Q15_STEREO,NB)
+    to_f32 = Convert("to_f32",Q15_SCALAR,F32_SCALAR,NB)
+    
+    audioWin=SlidingBuffer("audioWin",CType(F32),NB_WINDOW_SAMPLES,NB_OVERLAP_SAMPLES)
+    mfcc=MFCC("mfcc",NB_WINDOW_SAMPLES,MFCC_FEATURES)
+    
+    mfccWin=SlidingBuffer("mfccWin",CType(F32),MFCC_FEATURES*NN_FEATURES,MFCC_FEATURES*MFCC_OVERLAP)
+    
+    send = SendToNetwork("send",F32_SCALAR,MFCC_FEATURES*NN_FEATURES)
+    
+    kws = KWS("kws")
+    display = KWSDisplay("display") 
+    
+    classify = KWSClassify("classify")
+    
+    nullRight = NullSink("nullRight",Q15_SCALAR,NB)
+    
+    
+    #the_graph.connect(src.o,gain.i)
+    #the_graph.connect(gain.o,deinterleave.i)
+    
+    the_graph.connect(src.o,deinterleave.i)
+    the_graph.connect(deinterleave.l,to_f32.i)
+    the_graph.connect(to_f32.o,audioWin.i)
+    the_graph.connect(audioWin.o,mfcc.i)
+    the_graph.connect(mfcc.o,mfccWin.i)
+    the_graph.connect(mfccWin.o,send.i)
+    the_graph.connect(deinterleave.r,nullRight.i)
+    
+    the_graph.connect(send["oev0"],kws["iev0"])
+    the_graph.connect(kws["oev0"],send["iev0"])
+    the_graph.connect(kws["oev1"],classify["iev0"])
+    
+    the_graph.connect(classify["oev0"],display["iev0"])
+    
+    class MyStyle(Style):
+        
+        def edge_color(self,edge):
+            nb = self.fifoLength(edge) 
+            if nb is None:
+                nb = 0
+            s = self.edgeSrcNode(edge)
+            d = self.edgeDstNode(edge)
+            
+            if d.nodeName ==  "display":
+               return("magenta")
+            else: 
+                if (nb > 512):
+                    return("orange")
+                return(super().edge_color(edge))
+    
+    myStyle = MyStyle()
+    
+    
+    generate("appa",the_graph,myStyle,codeSizeOptimization=codeSizeOptimization)
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(
+                    prog='kws',
+                    description='Regenerate kws demo')
+    parser.add_argument("--size", help="Code size optimization enabled", action='store_true')
+    args = parser.parse_args()
+
+    generate_kws(codeSizeOptimization=args.size)
+    if args.size:
+        print("KWS demo generated with code size optimization")
+        print("You need to call the generate script to regenerate the common files")
+        print("shared between all applications.")

@@ -1,5 +1,4 @@
 from cmsis_stream.cg.scheduler import GenericSink
-from nodes import *
 
     
 class Spectrogram(GenericSink):

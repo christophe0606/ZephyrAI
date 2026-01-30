@@ -1,6 +1,5 @@
 from cmsis_stream.cg.scheduler import GenericSink
 
-from nodes import *
 
 class KWSClassify(GenericSink):
     def __init__(self,name):

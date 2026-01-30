@@ -1,5 +1,4 @@
 from cmsis_stream.cg.scheduler import GenericNode
-from nodes import *
 
 
 class Mixer(GenericNode):

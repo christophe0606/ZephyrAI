@@ -1,15 +1,12 @@
 from cmsis_stream.cg.scheduler import GenericSink
 
-from nodes import *
+from . import ZephyrLCD
 
-class KWSDisplay(ZephyrLCD):
+class CameraFrame(ZephyrLCD):
+    COUNT = 0
     def __init__(self,name):
         ZephyrLCD.__init__(self,name)
         self.addEventInput(1)
-        # eventQueue is needed because this node can send
-        # event to itself so it needs the eventQueue
-        # to do it
-        self.addVariableArg("evtQueue")
 
 
     @property
@@ -20,4 +17,4 @@ class KWSDisplay(ZephyrLCD):
     @property
     def typeName(self):
         """The name of the C++ class implementing this node"""
-        return "KWSDisplay"
+        return "CameraFrame"

@@ -1,5 +1,4 @@
 from cmsis_stream.cg.scheduler import GenericSink
-from nodes import *
     
 class SendToNetwork(GenericSink):
     def __init__(self,name,theType,nbSamples):
