@@ -111,6 +111,15 @@ class KWSDisplay : public ZephyrLCD
         }
     }
 
+    int pause() final
+    {
+       displayLast = false;
+       alpha = 0;
+       currentImg = nullptr;
+       return ZephyrLCD::pause();
+    }
+
+
     void genNewFrame()
     {
         uint32_t currentMs = getTime();

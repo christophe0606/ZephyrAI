@@ -31,6 +31,8 @@
 #include <zephyr/shell/shell.h>
 #include <zephyr/drivers/i2s.h>
 #include <zephyr/drivers/gpio.h>
+#include <zephyr/input/input.h>
+
 
 LOG_MODULE_REGISTER(streamapps,CONFIG_STREAMAPPS_LOG_LEVEL);
 
@@ -65,6 +67,11 @@ extern "C"
 static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(SW_NODE, gpios,
 							      {0});
 static struct gpio_callback button_cb_data;
+#endif
+
+#if DT_NODE_EXISTS(DT_CHOSEN(zephyr_touch))
+static const struct device *const touch_dev = DEVICE_DT_GET(DT_CHOSEN(zephyr_touch));
+
 #endif
 
 // Event to the interrupt thread
@@ -108,6 +115,24 @@ void button_pressed(const struct device *dev, struct gpio_callback *cb,
 	
 }
 #endif 
+
+#if DT_NODE_EXISTS(DT_CHOSEN(zephyr_touch))
+static int64_t last_sync_ms=0;
+
+static void touch_event_callback(struct input_event *evt, void *user_data)
+{
+	if (evt->sync) {
+		int64_t now = k_uptime_get();
+		if (now - last_sync_ms > 1000) {
+            uint32_t old = k_event_post(&cg_interruptEvent, SWITCH_EVENT);
+	        LOG_DBG("Posted SWITCH_EVENT, old events=0x%08x\n",old);
+			last_sync_ms = now;
+        }
+		
+	}
+}
+INPUT_CALLBACK_DEFINE(touch_dev, touch_event_callback, NULL);
+#endif
 
 static int cmd_switch(const struct shell *shell,
                      size_t argc, char **argv)
@@ -223,6 +248,19 @@ static int config_button()
 }
 #endif 
 
+#if DT_NODE_EXISTS(DT_CHOSEN(zephyr_touch))
+static int config_touch()
+{
+	if (!device_is_ready(touch_dev)) {
+		LOG_ERR("Device %s not found. Aborting sample.", touch_dev->name);
+		return -1;
+	}
+
+
+	return(0);
+}
+#endif
+
 int main(void)
 {   
 	int err;
@@ -265,6 +303,14 @@ int main(void)
   }
 #endif 
 
+#if DT_NODE_EXISTS(DT_CHOSEN(zephyr_touch))
+  err = config_touch();
+  if (err != 0) {
+	  LOG_ERR("Error configuring touch\n");
+	  goto error;
+  }
+#endif
+
 #if defined(CONFIG_DISPLAY)
 	err = init_display();
 	if (err != 0) {
@@ -272,6 +318,7 @@ int main(void)
 		goto error;
 	}
 #endif
+
 
     /** 
 	 * @brief Network parameter initialization

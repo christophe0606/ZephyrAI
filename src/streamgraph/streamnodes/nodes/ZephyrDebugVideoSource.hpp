@@ -69,6 +69,7 @@ class ZephyrDebugVideoSource: public StreamNode, public ContextSwitch
 
 	int resume() final
 	{
+		val = 0.0f;
 		must_refresh_.store(true);
 		k_work_schedule(&ctx_.dwork, K_MSEC(100));
 		return 0;

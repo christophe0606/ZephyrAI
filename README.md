@@ -6,7 +6,7 @@ Example of use of CMSIS Stream to implement AI + audio + video apps on Alif E7 A
 
 Several demos are implemented in this application and you can read more details about them [here](doc/demos.md).
 
-It is possible to context switch between the demos by using the Zephyr shell command `switch` or by pressing the button.
+It is possible to context switch between the demos by using the Zephyr shell command `switch`, or by pressing the button, or by touching the screen.
 
 
 Technical details about the demo are [here](doc/tech_details.md).

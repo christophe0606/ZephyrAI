@@ -24,12 +24,12 @@ class ZephyrLCD : public StreamNode, public ContextSwitch
 	{
 	};
 
-	int pause() final
+	int pause()
 	{
 		return 0;
 	}
 
-	int resume() final
+	int resume()
 	{
 		clear_display();
 		return 0;
