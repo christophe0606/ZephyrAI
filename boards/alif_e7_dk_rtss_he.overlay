@@ -12,7 +12,7 @@
 	aliases {
 		i2s-mic = &i2s3;
 		lcd = &cdc200;
-		sw5 = &button5;
+		sw0 = &button5;
 	};
 
 	soc {

@@ -60,13 +60,12 @@ extern "C"
 /*
  * Get button configuration from the devicetree sw0 alias. This is mandatory.
  */
-#define SW5_NODE	DT_ALIAS(sw5)
-#if !DT_NODE_HAS_STATUS_OKAY(SW5_NODE)
-#error "Unsupported board: sw5 devicetree alias is not defined"
-#endif
-static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(SW5_NODE, gpios,
+#define SW_NODE	DT_ALIAS(sw0)
+#if DT_NODE_HAS_STATUS_OKAY(SW_NODE)
+static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(SW_NODE, gpios,
 							      {0});
 static struct gpio_callback button_cb_data;
+#endif
 
 // Event to the interrupt thread
 struct k_event cg_interruptEvent;
@@ -100,6 +99,7 @@ static stream_execution_context_t contexts[NB_APPS];
  */
 static hardwareParams *params[NB_APPS];
 
+#if DT_NODE_HAS_STATUS_OKAY(SW_NODE)
 void button_pressed(const struct device *dev, struct gpio_callback *cb,
 		    uint32_t pins)
 {
@@ -107,6 +107,7 @@ void button_pressed(const struct device *dev, struct gpio_callback *cb,
 	LOG_DBG("Posted SWITCH_EVENT, old events=0x%08x\n",old);
 	
 }
+#endif 
 
 static int cmd_switch(const struct shell *shell,
                      size_t argc, char **argv)
@@ -191,6 +192,7 @@ static void* get_appc_node(int32_t nodeID)
 	return static_cast<void *>(get_scheduler_appc_node(nodeID));
 }
 
+#if DT_NODE_HAS_STATUS_OKAY(SW_NODE)
 static int config_button()
 {
 	if (!gpio_is_ready_dt(&button)) {
@@ -219,6 +221,7 @@ static int config_button()
 
 	return(0);
 }
+#endif 
 
 int main(void)
 {   
@@ -254,11 +257,13 @@ int main(void)
    const struct device *i2s_mic = nullptr;
 #endif
 
+#if DT_NODE_HAS_STATUS_OKAY(SW_NODE)
   err = config_button();
   if (err != 0) {
 	  LOG_ERR("Error configuring button\n");
 	  goto error;
   }
+#endif 
 
 #if defined(CONFIG_DISPLAY)
 	err = init_display();
