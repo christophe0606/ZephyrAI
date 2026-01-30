@@ -12,6 +12,7 @@
 	aliases {
 		i2s-mic = &i2s3;
 		lcd = &cdc200;
+		sw5 = &button5;
 	};
 
 	soc {
@@ -82,5 +83,27 @@
 	status = "okay";
 };
 
+
+&pinctrl_lpgpio {
+	group0 {
+		pinmux = < PIN_P15_4__LPGPIO >;
+		read-enable = < 0x1 >;
+		driver-state-control = <1>;
+	};
+};
+
+&lpgpio{
+	status = "okay";
+};
+
+/ {
+	buttons {
+		compatible = "gpio-keys";
+		button5: button_5 {
+			gpios = < &lpgpio 0x4 0x0 >;
+			label = "SW5";
+		};
+	};
+};
 
 

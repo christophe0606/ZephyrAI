@@ -30,6 +30,7 @@
 #include <zephyr/logging/log.h>
 #include <zephyr/shell/shell.h>
 #include <zephyr/drivers/i2s.h>
+#include <zephyr/drivers/gpio.h>
 
 LOG_MODULE_REGISTER(streamapps,CONFIG_STREAMAPPS_LOG_LEVEL);
 
@@ -55,6 +56,17 @@ extern "C"
 }
 
 #include "init_drv_src.hpp"
+
+/*
+ * Get button configuration from the devicetree sw0 alias. This is mandatory.
+ */
+#define SW5_NODE	DT_ALIAS(sw5)
+#if !DT_NODE_HAS_STATUS_OKAY(SW5_NODE)
+#error "Unsupported board: sw5 devicetree alias is not defined"
+#endif
+static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(SW5_NODE, gpios,
+							      {0});
+static struct gpio_callback button_cb_data;
 
 // Event to the interrupt thread
 struct k_event cg_interruptEvent;
@@ -88,6 +100,13 @@ static stream_execution_context_t contexts[NB_APPS];
  */
 static hardwareParams *params[NB_APPS];
 
+void button_pressed(const struct device *dev, struct gpio_callback *cb,
+		    uint32_t pins)
+{
+    uint32_t old = k_event_post(&cg_interruptEvent, SWITCH_EVENT);
+	LOG_DBG("Posted SWITCH_EVENT, old events=0x%08x\n",old);
+	
+}
 
 static int cmd_switch(const struct shell *shell,
                      size_t argc, char **argv)
@@ -172,6 +191,35 @@ static void* get_appc_node(int32_t nodeID)
 	return static_cast<void *>(get_scheduler_appc_node(nodeID));
 }
 
+static int config_button()
+{
+	if (!gpio_is_ready_dt(&button)) {
+		printk("Error: button device %s is not ready\n",
+		       button.port->name);
+		return -1;
+	}
+
+	int ret = gpio_pin_configure_dt(&button, GPIO_INPUT);
+	if (ret != 0) {
+		printk("Error %d: failed to configure %s pin %d\n",
+		       ret, button.port->name, button.pin);
+		return ret;
+	}
+
+	ret = gpio_pin_interrupt_configure_dt(&button,
+					      GPIO_INT_EDGE_TO_ACTIVE);
+	if (ret != 0) {
+		printk("Error %d: failed to configure interrupt on %s pin %d\n",
+			ret, button.port->name, button.pin);
+		return ret;
+	}
+
+	gpio_init_callback(&button_cb_data, button_pressed, BIT(button.pin));
+	gpio_add_callback(button.port, &button_cb_data);
+
+	return(0);
+}
+
 int main(void)
 {   
 	int err;
@@ -205,6 +253,12 @@ int main(void)
    k_mem_slab *mem_slab = nullptr;
    const struct device *i2s_mic = nullptr;
 #endif
+
+  err = config_button();
+  if (err != 0) {
+	  LOG_ERR("Error configuring button\n");
+	  goto error;
+  }
 
 #if defined(CONFIG_DISPLAY)
 	err = init_display();
