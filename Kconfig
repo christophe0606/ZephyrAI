@@ -39,7 +39,6 @@ config MODEL_IN_EXT_FLASH
 
 config MODEL_SECTION
 	string "Linker section where ML model is placed"
-	depends on !MODEL_IN_EXT_FLASH
 	default ".rodata.tflm_model"
 
 config ETHOS_U_AXI0_ONLY

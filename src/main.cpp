@@ -349,6 +349,7 @@ int main(void)
 	   LOG_ERR("Invalid network description in external flash\n");
 	   goto error;
    }
+   LOG_INF("Network description in external flash validated\n");
 #endif
 
     /** 

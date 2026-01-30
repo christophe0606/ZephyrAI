@@ -63,6 +63,7 @@ int validate_network_description(const char *expected_md5_hex)
     return 0; // Valid description
 }
 
+#if defined(USE_FLASH)
 namespace arm {
 namespace app {
 namespace kws {
@@ -88,4 +89,5 @@ size_t GetModelLen()
 } /* namespace arm */
 } /* namespace app */
 } 
+#endif
 #endif

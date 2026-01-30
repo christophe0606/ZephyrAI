@@ -26,12 +26,16 @@
 #include <cstdint>
 
 #include <zephyr/devicetree.h>
+extern "C"
+{
+#include "network.h"
+}
 
 // When network model is in ext flash we no more generate the
 // bin by compiling the C
 // It is time consuming and we do not need to regenerate
 // the network each time the application is updated
-#ifndef CONFIG_MODEL_IN_EXT_FLASH
+#if !defined(CONFIG_MODEL_IN_EXT_FLASH) || !defined(USE_FLASH)
 
 
 #define BYTE_ALIGNMENT         16

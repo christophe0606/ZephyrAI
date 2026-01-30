@@ -8,6 +8,7 @@
  *
  */
 
+
 / {
 	aliases {
 		i2s-mic = &i2s3;
@@ -65,6 +66,7 @@
 
 &ospi1 {
 	bus-speed = <100000000>;
+	pinctrl-0 = <&pinctrl_flash>;
 	status = "okay";
 };
 
