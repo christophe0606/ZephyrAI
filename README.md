@@ -76,7 +76,7 @@ Code size optimization is enabled with the `--size` option.
 When enabled, and if the `aidemo` script is not used, you should not forget to regenerate the common parts shared between all apps in the demo.
 
 This common part is `src/streamgraph/common/template_instantiations.cpp`  containing instantiations of all templates used in all graphs.
-And the templates are no more be instantiated in each graph.
+And the templates are no more instantiated in each graph.
 
 You'll also need `CONFIG_TEMPLATE_INSTANTIATIONS=y` in your `prj.conf` file to build this additional file.
 
@@ -86,7 +86,8 @@ If code size optimization is not enabled, you rely on the linker to remove dupli
 
 ## Context switching
 
-This demo allows to switch between several applications by using command `switch` in the Zephyr shell.
+This demo allows to switch between several applications by using command `switch` in the Zephyr shell or by pressing the button on the board.
+
 Context switching between different graphs is not a feature of CMSIS Stream. It is something built on top of it. But to make this use case easier, the Zephyr module for CMSIS Stream is exposing a tentative API.
 
 Assumptions for context switching are:
