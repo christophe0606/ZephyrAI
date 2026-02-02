@@ -12,7 +12,7 @@
 using namespace arm_cmsis_stream;
 
 template <typename IN, int inputSamples>
-class SendToNetwork : public GenericSink<IN, inputSamples>
+class SendToNetwork : public GenericSink<IN, inputSamples>, public ContextSwitch
 {
   public:
     SendToNetwork(FIFOBase<IN> &src, EventQueue *queue)
@@ -46,6 +46,19 @@ class SendToNetwork : public GenericSink<IN, inputSamples>
 
         return (CG_SUCCESS);
     };
+
+    int pause() final override
+	{
+        // So that a new frame can be sent after resume
+        ready.store(true);
+		return 0;
+	}
+
+	int resume() final override
+	{
+
+		return 0;
+	}
 
     void processEvent(int dstPort, Event &&evt) final override
     {

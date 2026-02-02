@@ -59,6 +59,21 @@ class ContextSwitch
     virtual ~ContextSwitch()
     {
     }
+    /*
+    
+    Event queue running but posting event disabled.
+    Run from data flow thread except for pure event graphs.
+    In that case, it is run from event thread.
+
+    */
     virtual int pause() = 0;
+
+    /*
+    
+    Run from data  flow thread.
+    Posting events is possible but event thread is not yet
+    restarted.
+    
+    */
     virtual int resume() = 0;
 };

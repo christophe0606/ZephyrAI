@@ -10,5 +10,7 @@ extern template class SlidingBuffer<float,490,480>;
 extern template CStreamNode createStreamNode(SlidingBuffer<float,490,480> &obj) ;
 extern template class NullSink<q15_t,320>;
 extern template class SendToNetwork<float,490>;
+extern template CStreamNode createStreamNode(SendToNetwork<float,490> &obj) ;
 extern template class Convert<q15_t,320,float,320>;
+extern template CStreamNode createStreamNode(KWSClassify &obj) ;
 extern template CStreamNode createStreamNode(KWSDisplay &obj) ;

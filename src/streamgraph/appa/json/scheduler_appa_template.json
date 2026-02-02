@@ -46,7 +46,7 @@
         "isTemplate": true,
         "templateArgs": "<float,490>",
         "typename": "SendToNetwork",
-        "isIdentified": false
+        "isIdentified": true
     },
     "Convert<q15_t,320,float,320>": {
         "folder": "nodes/",
@@ -60,7 +60,7 @@
         "isTemplate": false,
         "templateArgs": "",
         "typename": "KWSClassify",
-        "isIdentified": false
+        "isIdentified": true
     },
     "KWSDisplay": {
         "folder": "appnodes/",

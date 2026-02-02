@@ -111,7 +111,7 @@ class KWSDisplay : public ZephyrLCD
         }
     }
 
-    int pause() final
+    int pause() final override
     {
        displayLast = false;
        alpha = 0;
@@ -125,7 +125,7 @@ class KWSDisplay : public ZephyrLCD
         uint32_t currentMs = getTime();
         uint32_t delta = (0x7FFF * (currentMs - startMs)/1000/duration);
         alpha = 0;
-        if ((delta <= 0x7FFF) || displayLast)
+        if (currentImg && ((delta <= 0x7FFF) || displayLast))
         {
             if (delta > 0x7FFF)
             {

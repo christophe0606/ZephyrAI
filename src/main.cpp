@@ -90,7 +90,7 @@ using namespace arm_cmsis_stream;
 // 0 : KWS
 // 1 : Spectrogram
 // 2 : To experiment with camera support
-static int currentNetwork = 0;
+static int currentNetwork = 2;
 
 #define SWITCH_EVENT (1 << 0)
 
@@ -123,7 +123,7 @@ static void touch_event_callback(struct input_event *evt, void *user_data)
 {
 	if (evt->sync) {
 		int64_t now = k_uptime_get();
-		if (now - last_sync_ms > 1000) {
+		if (now - last_sync_ms > CONFIG_TOUCH_SCREEN_DELAY) {
             uint32_t old = k_event_post(&cg_interruptEvent, SWITCH_EVENT);
 	        LOG_DBG("Posted SWITCH_EVENT, old events=0x%08x\n",old);
 			last_sync_ms = now;
@@ -467,6 +467,7 @@ int main(void)
 	LOG_INF("Try to start first network");
 
 	
+	resume_scheduler_app(&contexts[currentNetwork]);
 	stream_start_threads(&contexts[currentNetwork]);
 
 	stream_wait_for_threads_end();

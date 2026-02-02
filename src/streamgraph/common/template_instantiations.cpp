@@ -19,6 +19,7 @@
 #include "nodes/NullSink.hpp"
 #include "nodes/SendToNetwork.hpp"
 #include "nodes/Convert.hpp"
+#include "appnodes/KWSClassify.hpp"
 #include "appnodes/KWSDisplay.hpp"
 #include "nodes/DeinterleaveStereo.hpp"
 #include "nodes/CFFT.hpp"
@@ -41,7 +42,9 @@ template class SlidingBuffer<float,490,480>;
 template CStreamNode createStreamNode(SlidingBuffer<float,490,480> &obj) ;
 template class NullSink<q15_t,320>;
 template class SendToNetwork<float,490>;
+template CStreamNode createStreamNode(SendToNetwork<float,490> &obj) ;
 template class Convert<q15_t,320,float,320>;
+template CStreamNode createStreamNode(KWSClassify &obj) ;
 template CStreamNode createStreamNode(KWSDisplay &obj) ;
 template class DeinterleaveStereo<sf32,320,float,320,float,320>;
 template class CFFT<cf32,1024,cf32,1024>;

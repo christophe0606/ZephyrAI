@@ -35,15 +35,15 @@ class KWSClassify: public StreamNode, public ContextSwitch
 
 	int pause() final override
 	{
-		for (auto &v : history) {
-			std::fill(v.begin(), v.end(), 0.0f);
-		}
 		return 0;
 	}
 
 	int resume() final override
 	{
-
+		for (auto &v : history) {
+			std::fill(v.begin(), v.end(), 0.0f);
+		}
+		lastRec = 11;
 		return 0;
 	}
 
@@ -110,7 +110,8 @@ class KWSClassify: public StreamNode, public ContextSwitch
 			}
 			lastRec = label_idx;
 			ev0.sendSync(kNormalPriority, kValue,
-				     (uint32_t)label_idx); // Send the event to the subscribed nodes
+					     (uint32_t)label_idx); // Send the event to the
+								   // subscribed nodes
 		}
 	}
 

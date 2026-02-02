@@ -2,7 +2,7 @@ from cmsis_stream.cg.scheduler import GenericSink
     
 class SendToNetwork(GenericSink):
     def __init__(self,name,theType,nbSamples):
-        GenericSink.__init__(self,name,identified=False)
+        GenericSink.__init__(self,name,identified=True)
         self.addInput("i",theType,nbSamples)
         self.addEventInput()
         self.addEventOutput()

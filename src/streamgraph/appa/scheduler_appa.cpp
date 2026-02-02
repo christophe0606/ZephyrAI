@@ -283,6 +283,8 @@ int init_scheduler_appa(void *evtQueue_,AppaParams *params)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
+    identifiedNodes[STREAM_APPA_SEND_ID]=createStreamNode(*nodes.send);
+    nodes.send->setID(STREAM_APPA_SEND_ID);
 
     nodes.to_f32 = new (std::nothrow) Convert<q15_t,320,float,320>(*(fifos.fifo1),*(fifos.fifo2));
     if (nodes.to_f32==NULL)
@@ -295,6 +297,8 @@ int init_scheduler_appa(void *evtQueue_,AppaParams *params)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);
     }
+    identifiedNodes[STREAM_APPA_CLASSIFY_ID]=createStreamNode(*nodes.classify);
+    nodes.classify->setID(STREAM_APPA_CLASSIFY_ID);
 
     nodes.display = new (std::nothrow) KWSDisplay(evtQueue);
     if (nodes.display==NULL)

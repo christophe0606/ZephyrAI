@@ -3,7 +3,7 @@ from cmsis_stream.cg.scheduler import GenericSink
 
 class KWSClassify(GenericSink):
     def __init__(self,name):
-        GenericSink.__init__(self,name,identified=False)
+        GenericSink.__init__(self,name,identified=True)
         self.addEventInput(1)
         self.addEventOutput(1)
         # The Python script somewhere should generate
