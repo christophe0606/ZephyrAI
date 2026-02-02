@@ -466,7 +466,19 @@ int main(void)
 
 	LOG_INF("Try to start first network");
 
+	/*
 	
+	resume is called (like in a context switch) to allow
+	the nodes to publish events before starting if they need to.
+	event queue accepts events when resume is called.
+
+	We cannot do it in init function of the node since in init we 
+	do not know if the graph is going to be run or if it is paused.
+
+	If there is a need to distinguish start from resume then 
+	it has to be done in each node with a state variable.
+	
+	*/
 	resume_scheduler_app(&contexts[currentNetwork]);
 	stream_start_threads(&contexts[currentNetwork]);
 
