@@ -170,6 +170,21 @@ void interrupt_thread_function(void *, void *, void *)
 
 }
 
+/*
+
+ Pause and resume all nodes in a given graph.
+ Those are not defined in the CMSIS STream Zephyr module because the
+ CStreamNode interface can be extended by the application and support new
+ interfaces.
+
+ To work with the CMSIS Stream Zephyr module, two interfaces have been defined
+ in cstream_node.h and the context_switch_intf is used in the 
+ pause / resume functions.
+
+ Those functions are called by the CMSIS Stream Zephyr module which does not
+ have any visibility on the application specific CStreamNode structure.
+
+*/
 static void pause_scheduler_app(const stream_execution_context_t* context)
 {
 	for(int32_t nodeid=0 ; nodeid < (int32_t)context->nb_identified_nodes ; nodeid++) {
@@ -201,7 +216,14 @@ static void resume_scheduler_app(const stream_execution_context_t* context)
 	}
 }
 
+/*
 
+The get_scheduler_node functions cannot be used directly by the
+CMSIS Stream Zephyr module necause they return an application dependent
+CStreamNode* pointer.
+So we need to wrap them to return a void* pointer.
+
+*/
 static void* get_appa_node(int32_t nodeID)
 {
 	return static_cast<void *>(get_scheduler_appa_node(nodeID));

@@ -49,7 +49,9 @@ struct CStreamNode;
 
 /**
  * @brief C interface to access ContextSwitch API
- * This interface is implemented by nodes that source data from hardware peripherals
+ * This interface is implemented by nodes that need to do something during
+ * context switch. Generally this is used for nodes interacting with
+ * hardware peripherals and for nodes having a memory.
  * 
  */
 struct ContextSwitchInterface
@@ -64,6 +66,8 @@ struct ContextSwitchInterface
  * of the graph.
  * If you don't need to interact with a node from outside of the graph, you don't need to
  * generate an interface for this node.
+ * Node that to implement context switching, an interaction with the node from the outside
+ * is required so those nodes must be marked as identified in the Python.
  * 
  */
 struct CStreamNode
