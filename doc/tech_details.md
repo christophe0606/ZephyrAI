@@ -174,3 +174,5 @@ Some node may inherit from the `ContextSwitch` interface defined in this demo.
 
 The `IdentifiedMode.hpp` and `cstream_node.hpp` are used for this. Refer to CMSIS Stream documentation.
 
+# Events
+Some nodes define a new "ack" event using the selector mechanism.

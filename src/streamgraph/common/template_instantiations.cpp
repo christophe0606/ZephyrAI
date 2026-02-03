@@ -21,6 +21,7 @@
 #include "nodes/Convert.hpp"
 #include "appnodes/KWSClassify.hpp"
 #include "appnodes/KWSDisplay.hpp"
+#include "appnodes/KWS.hpp"
 #include "nodes/DeinterleaveStereo.hpp"
 #include "nodes/CFFT.hpp"
 #include "nodes/Gain.hpp"
@@ -58,3 +59,6 @@ template CStreamNode createStreamNode(CameraFrame &obj) ;
 template CStreamNode createStreamNode(ZephyrDebugVideoSource &obj) ;
 
 // Selector initializations
+template<>
+std::array<uint16_t,1> SendToNetwork<float,490>::selectors = {SEL_ACK_ID};
+std::array<uint16_t,1> KWS::selectors = {SEL_ACK_ID};

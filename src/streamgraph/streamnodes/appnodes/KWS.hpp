@@ -8,6 +8,18 @@ extern "C"
 class KWS : public TFLite
 {
   public:
+    // Array used to map local selector IDs to global selector ID
+    // Global IDs are graph dependent and may change when the node is used in different graphs.
+    // Here there is only one ID for the "ack" event defined in the Python
+    enum selector {selAck=0};
+    static std::array<uint16_t,1> selectors;
+
+    int globalID(int localID) override final
+    {
+        return selectors[localID];
+    }
+
+
     KWS(EventQueue *queue,const struct tfliteNodeParams &params)
         : TFLite(queue,params.modelAddr, params.modelSize,1),mNbOutputs(1) {
           };

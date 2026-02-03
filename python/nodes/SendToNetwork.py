@@ -1,8 +1,12 @@
 from cmsis_stream.cg.scheduler import GenericSink
     
+# With selectors, the demo demonstrate how we can extend the event vocabulary.
+# Here a new event named "ack" is defined.
+# It is used for flow control between this node and the TFLite node.
+# Original demo was using the standard "do" event.
 class SendToNetwork(GenericSink):
     def __init__(self,name,theType,nbSamples):
-        GenericSink.__init__(self,name,identified=True)
+        GenericSink.__init__(self,name,identified=True,selectors=["ack"])
         self.addInput("i",theType,nbSamples)
         self.addEventInput()
         self.addEventOutput()

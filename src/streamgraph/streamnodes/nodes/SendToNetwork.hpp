@@ -15,6 +15,12 @@ template <typename IN, int inputSamples>
 class SendToNetwork : public GenericSink<IN, inputSamples>, public ContextSwitch
 {
   public:
+    // Array used to map local selector IDs to global selector ID
+    // Global IDs are graph dependent and may change when the node is used in different graphs.
+    // Here there is only one ID for the "ack" event defined in the Python
+    enum selector {selAck=0};
+    static std::array<uint16_t,1> selectors;
+
     SendToNetwork(FIFOBase<IN> &src, EventQueue *queue)
         : GenericSink<IN, inputSamples>(src), ev0(queue) {
           };
@@ -64,7 +70,8 @@ class SendToNetwork : public GenericSink<IN, inputSamples>, public ContextSwitch
     {
         if (dstPort == 0)
         {
-            if (evt.event_id == kDo)
+            // If "ack" event was received
+            if (evt.event_id == selectors[selAck])
             {
                 ready.store(true);
             }

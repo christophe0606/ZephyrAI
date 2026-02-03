@@ -31,6 +31,7 @@ using namespace arm_cmsis_stream;
 class TFLite : public StreamNode
 {
   public:
+    enum selector {selAck=0};
     TFLite(EventQueue *queue, const uint8_t *nnModelAddr, uint32_t nnModelSize,uint32_t nbOutputs=1)
         : StreamNode(),tensorArenaAddr_(tensorArena),
           tensorArenaSize_(sizeof(tensorArena)),initErrorOccured(false),
@@ -156,7 +157,7 @@ class TFLite : public StreamNode
         
         if (!ev.empty())
         {
-            ev[0].sendSync(kNormalPriority, kDo);
+            ev[0].sendSync(kNormalPriority, globalID(selAck)); // Notify that initialization is done
         }
         else {
             LOG_ERR("TFLite: Failed to create event outputs\n");
@@ -255,6 +256,9 @@ class TFLite : public StreamNode
         }
     }
 
+    // Selector array is initialized in the derived class
+    virtual int globalID(int localID) = 0;
+
     void tryInference()
     {
         uint32_t nb = this->GetNumInputs();
@@ -278,7 +282,7 @@ class TFLite : public StreamNode
             // Send acknowledge event to the producer
             if (!ev.empty())
             {
-                ev[0].sendSync(kNormalPriority, kDo);
+                ev[0].sendSync(kNormalPriority, globalID(selAck));
             }
         }
     }

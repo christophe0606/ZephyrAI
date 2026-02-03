@@ -141,6 +141,12 @@ def generate_common_files(all_apps=[]):
     cpp_classes = {}    
     node_with_selectors = {}
     selectors = set()
+    # Read all template json files generated for each app
+    # Each template json file describes the types  used for each node in the graph
+    # We use this data to know if a type is a template, if there is one node 
+    # instance of this type that is identified (thus requiring C API generation)
+    # and the folder where to find the C++ header defining the type
+    # Later we will merge selector information to know which types require selector initialization
     for app in all_apps:
         with open(template_json_file_name(app),"r") as hf:
             hdata = json.load(hf)
@@ -151,6 +157,10 @@ def generate_common_files(all_apps=[]):
                     # If the class is already listed, check if it requires C API generation
                     if hdata[h]["isIdentified"]:
                         cpp_classes[h]["isIdentified"] = True
+        # Read the selector data from the graph and merge some info inside cpp_classes
+        # to know later if the CPP class requires selector initialization
+        # It is used to know which headers to include in the global template instantiation cpp file
+        # And we also track all selectors to generate unique IDs for them
         with open(f"src/streamgraph/{app}/json/scheduler_{app}_selectors_inits.json","r") as sf:
             sdata = json.load(sf)
             for sel in sdata:
@@ -158,6 +168,8 @@ def generate_common_files(all_apps=[]):
                 if "selectors" in node_desc:
                     if not sel in node_with_selectors and node_desc["selectors"]:
                        node_with_selectors[sel] = node_desc
+                       if sel in cpp_classes:
+                           cpp_classes[sel]["hasSelectors"] = True
                     for v in node_desc["selectors"]:
                         selectors.add(v)
 
@@ -206,7 +218,7 @@ extern "C"
         # We don't list normal C++ classes here. Only templates
         print("",file=f)
         for h in cpp_classes:
-            headerNeeded = cpp_classes[h]["isTemplate"] or cpp_classes[h]["isIdentified"]
+            headerNeeded = cpp_classes[h]["isTemplate"] or cpp_classes[h]["isIdentified"] or cpp_classes[h]["hasSelectors"]
             if headerNeeded:
                print(f'#include "{cpp_classes[h]["folder"]}{cpp_classes[h]["typename"]}.hpp"',file=f)
             

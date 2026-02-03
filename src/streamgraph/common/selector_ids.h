@@ -9,6 +9,7 @@ extern "C"
 #endif
 
 
+#define SEL_ACK_ID 100
 
               
 #ifdef   __cplusplus

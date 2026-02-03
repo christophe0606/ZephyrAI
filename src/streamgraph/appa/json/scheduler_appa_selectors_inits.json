@@ -25,7 +25,9 @@
   },
   "SendToNetwork<float,490>": {
     "isTemplate": true,
-    "selectors": []
+    "selectors": [
+      "SEL_ACK_ID"
+    ]
   },
   "Convert<q15_t,320,float,320>": {
     "isTemplate": true,
@@ -41,6 +43,8 @@
   },
   "KWS": {
     "isTemplate": false,
-    "selectors": []
+    "selectors": [
+      "SEL_ACK_ID"
+    ]
   }
 }
