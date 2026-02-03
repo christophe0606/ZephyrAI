@@ -99,6 +99,7 @@ static int app_set_run_params(void)
 	sys_set_bits(CGU_CLK_ENA, BIT(23) | BIT(21));
 #endif /* defined (CONFIG_SOC_SERIES_E7) */
 
+#if 0
 	runp.power_domains = PD_SYST_MASK | PD_SSE700_AON_MASK | PD_DBSS_MASK;
 	runp.dcdc_voltage  = 825;
 	runp.dcdc_mode     = DCDC_MODE_PWM;
@@ -128,7 +129,7 @@ static int app_set_run_params(void)
 	ret = se_service_set_run_cfg(&runp);
 	__ASSERT(ret == 0, "SE: set_run_cfg failed = %d", ret);
 
-
+#endif
 
 	return ret;
 }
@@ -147,6 +148,11 @@ SYS_INIT(app_set_run_params, PRE_KERNEL_1, 46);
 
 static int camera_power(void)
 {
+	//sys_clear_bits(VBAT_PWR_CTRL, VBAT_PWR_CTRL_TX_DPHY_PWR_MASK | VBAT_PWR_CTRL_RX_DPHY_PWR_MASK |
+    //                    VBAT_PWR_CTRL_DPHY_PLL_PWR_MASK | VBAT_PWR_CTRL_DPHY_VPH_1P8_PWR_BYP_EN);
+	//sys_clear_bits(VBAT_PWR_CTRL, VBAT_PWR_CTRL_TX_DPHY_ISO | VBAT_PWR_CTRL_RX_DPHY_ISO | VBAT_PWR_CTRL_DPHY_PLL_ISO);
+
+
 	/* Camera configuration */
 #if defined(CONFIG_VIDEO)
 
@@ -156,17 +162,16 @@ static int camera_power(void)
 	gpio_pin_set_dt(&cam_pwr, GPIO_OUTPUT_ACTIVE);
 	gpio_pin_set_dt(&cam_reset, GPIO_OUTPUT_ACTIVE);
 	k_sleep(K_MSEC(5));
-	sys_write32(0x140001, M55HE_CFG_HE_CAMERA_PIXCLK);
+	//sys_write32(0x140001, M55HE_CFG_HE_CAMERA_PIXCLK);
 	gpio_pin_set_dt(&cam_reset, GPIO_OUTPUT_INACTIVE);
+	gpio_pin_set_dt(&cam_pwr, GPIO_OUTPUT_ACTIVE);
+
 
 	k_sleep(K_MSEC(50));
 
 
 
-	//sys_clear_bits(VBAT_PWR_CTRL, VBAT_PWR_CTRL_TX_DPHY_PWR_MASK | VBAT_PWR_CTRL_RX_DPHY_PWR_MASK |
-    //                    VBAT_PWR_CTRL_DPHY_PLL_PWR_MASK | VBAT_PWR_CTRL_DPHY_VPH_1P8_PWR_BYP_EN);
-	//sys_clear_bits(VBAT_PWR_CTRL, VBAT_PWR_CTRL_TX_DPHY_ISO | VBAT_PWR_CTRL_RX_DPHY_ISO | VBAT_PWR_CTRL_DPHY_PLL_ISO);
-
+	
 #endif
 
 	return 0;

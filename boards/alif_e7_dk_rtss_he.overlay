@@ -139,7 +139,7 @@
 &pinctrl_gpio9 {
 	group0 {
 		/* Enable only Port-9 Pin-4 */
-		pinmux = <PIN_P9_4__GPIO>;
+		pinmux = <PIN_P9_4__GPIO>,<PIN_P9_1__GPIO>;
 	};
 };
 
