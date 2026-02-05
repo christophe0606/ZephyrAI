@@ -1,6 +1,6 @@
 cbuild-run:
   generated-by: csolution version 2.12.0+p41-gfeadfc5e
-  solution: ../AudioTest.csolution.yml
+  solution: ../Zephyr.csolution.yml
   target-type: AE722F80F55D5LS
   target-set: <default>
   compiler: AC6
@@ -9,7 +9,7 @@ cbuild-run:
   device: Alif Semiconductor::AE722F80F55D5LS
   device-pack: AlifSemiconductor::Ensemble@2.0.2
   output:
-    - file: src/networks/networks.bin
+    - file: assets/container.bin
       info: network to program
       type: bin
       load-offset: 0xC0000000

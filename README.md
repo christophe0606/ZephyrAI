@@ -107,11 +107,67 @@ Assumptions for context switching are:
 
 ## Issues
 
+
 Zephyr cmakefile for cmsis-dsp module must be changed : `zephyr/modules/cmsis-dsp/CMakeLists.txt`
 
-(since Alif version not yet using the latest Zephyr).
+since Alif sdk is not yet using the latest Zephyr version.
+
+Add this line:
 
 `  zephyr_library_compile_definitions(ZEPHYR_INCLUDE_TOOLCHAIN_STDINT_H_)
-` must be added before the `zephyr_library_compile_definitions_ifdef`
+` 
+
+It must be added before the `zephyr_library_compile_definitions_ifdef`
 to be able to compile with Helium.
 
+You can also directly use the CMSIS-DSP repository to get the CMSIS-DSP Zephyr module instead of getting it through Zephyr.
+
+Add this to the west file __before__ the zephyr definition. Remove `cmsis-dsp` from the Zephyr `name-allowlist`.
+
+```
+ - name: cmsis-dsp
+      url: https://github.com/ARM-software/CMSIS-DSP
+      revision: main
+      path: modules/lib/cmsis-dsp
+```
+
+Remove the `modules/lib/cmsis-dsp` before doing a `west update` to get the library from the CMSIS-DSP repository and the right remote.
+
+Note that the CMSIS-DSP Zephyr module on the repo is not tested. CMSIS-DSP is tested but independently of Zephyr.
+If you want a tested module, get it from Zephyr.
+
+# Flash
+
+It is possible to put the networks and other assets (like pictures) in the external flash.
+
+The demo provides a container format that you can use from the C source to get access to objects written in flash.
+
+To generate the container you can do:
+
+```python
+python -m python.tools.create_bin ./src/networks/kws_micronet_m_vela_H128.tflite.cpp
+```
+You can also pass additional `.bin` files and the binary files do not have to be networks.
+
+The script will generate a md5 hash. This hash must be copied into `main.cpp` since a check is done at startup to validate the content of the flash.
+
+
+To generate binaries for pictures, you can do:
+
+```python
+python -m python.tools.gen_img -b
+```
+
+You can package all bins with:
+```python
+python -m python.tools.create_bin ./src/networks/kws_micronet_m_vela_H128.tflite.cpp assets/down.bin assets/go.bin assets/left.bin  assets/no.bin  assets/off.bin  assets/on.bin  assets/right.bin  assets/stop.bin  assets/up.bin  assets/yes.bin 
+```
+
+## Flash with vscode and CMSIS debugger
+
+You can use the vscode run task : `Update flash container`. 
+
+The flash must not be enabled in the Zephyr `prj.conf` when using this task.
+
+Enable the flash in the configuration file only after the flash has been
+programmed with your content.

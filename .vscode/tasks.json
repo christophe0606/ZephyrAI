@@ -107,7 +107,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Update network",
+            "label": "Update flash container",
             "type": "shell",
             "command": "pyocd",
             "options": {
@@ -125,7 +125,7 @@
                 "--probe",
                 "cmsisdap:",
                 "--cbuild-run",
-                "${workspaceFolder}/network.cbuild-run.yml"
+                "${workspaceFolder}/flash.cbuild-run.yml"
             ],
             "problemMatcher": []
         },

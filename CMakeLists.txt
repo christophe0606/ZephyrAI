@@ -20,9 +20,9 @@ target_sources(app PRIVATE src/main.cpp src/startup.c
   
   src/streamgraph/nodes_src/init_drv_src.cpp
   src/networks/kws_micronet_m_vela_H128.tflite.cpp
+  src/container.c
+  src/md5.c
   src/networks/network.cpp
-  src/networks/external.cpp
-  src/networks/md5.c
 )
 
 if (CONFIG_DISPLAY)
@@ -36,6 +36,7 @@ target_include_directories(app PUBLIC
   src/streamgraph/streamnodes
   src/streamgraph/streamnodes/appnodes
   src/networks
+  src
   )
 
 #######################

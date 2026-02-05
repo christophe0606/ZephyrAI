@@ -65,6 +65,4 @@
 
 extern const uint32_t kws_widths[10];
 extern const uint32_t kws_heights[10];
-extern const uint8_t* kws_imgs[10];
-
 #endif // KWS_IMG_H

@@ -99,7 +99,6 @@ static int app_set_run_params(void)
 	sys_set_bits(CGU_CLK_ENA, BIT(23) | BIT(21));
 #endif /* defined (CONFIG_SOC_SERIES_E7) */
 
-#if 0
 	runp.power_domains = PD_SYST_MASK | PD_SSE700_AON_MASK | PD_DBSS_MASK;
 	runp.dcdc_voltage  = 825;
 	runp.dcdc_mode     = DCDC_MODE_PWM;
@@ -129,7 +128,6 @@ static int app_set_run_params(void)
 	ret = se_service_set_run_cfg(&runp);
 	__ASSERT(ret == 0, "SE: set_run_cfg failed = %d", ret);
 
-#endif
 
 	return ret;
 }
