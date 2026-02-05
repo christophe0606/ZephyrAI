@@ -1,15 +1,5 @@
 
-&pinctrl_gpio7 {
-	group0 {
-		pinmux = <PIN_P7_5__GPIO>;
-	};
-};
 
-&pinctrl_gpio9 {
-	group0 {
-		pinmux = <PIN_P9_4__GPIO>,<PIN_P9_1__GPIO>;
-	};
-};
 
 &gpio7 {
    status = "okay";
