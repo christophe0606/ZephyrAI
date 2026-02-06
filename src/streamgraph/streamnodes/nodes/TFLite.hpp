@@ -27,7 +27,6 @@ static uint8_t tensorArena[CONFIG_ACTIVATION_BUF_SZ] ACTIVATION_BUF_ATTRIBUTE;
 
 using namespace arm_cmsis_stream;
 
-
 class TFLite : public StreamNode
 {
   public:

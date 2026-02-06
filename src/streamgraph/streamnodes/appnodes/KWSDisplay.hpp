@@ -5,6 +5,7 @@
 extern "C"
 {
 #include "kws_img.h"
+#include "container.h"
 }
 
 using namespace arm_cmsis_stream;
@@ -93,7 +94,12 @@ class KWSDisplay : public ZephyrLCD
     {
         if (i >= 0 && i < 10)
         {
+#if defined(CONFIG_MODEL_IN_EXT_FLASH)
+            // 0 is reserved for the model
+            currentImg = get_binary(i+1);
+#else
             currentImg = kws_imgs[i];
+#endif
             width = kws_widths[i];
             height = kws_heights[i];
             startMs = getTime();

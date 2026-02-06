@@ -107,6 +107,29 @@
             "problemMatcher": []
         },
         {
+            "label": "Update flash container",
+            "type": "shell",
+            "command": "pyocd",
+            "options": {
+                "cwd": "${workspaceFolder}/",
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": [
+                        "/d",
+                        "/c"
+                    ]
+                }
+            },
+            "args": [
+                "load",
+                "--probe",
+                "cmsisdap:",
+                "--cbuild-run",
+                "${workspaceFolder}/flash.cbuild-run.yml"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "CMSIS Erase",
             "type": "shell",
             "command": "pyocd",

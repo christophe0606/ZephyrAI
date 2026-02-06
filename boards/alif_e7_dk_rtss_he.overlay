@@ -8,6 +8,7 @@
  *
  */
 
+
 / {
 	aliases {
 		i2s-mic = &i2s3;
@@ -65,6 +66,7 @@
 
 &ospi1 {
 	bus-speed = <100000000>;
+	pinctrl-0 = <&pinctrl_flash>;
 	status = "okay";
 };
 
@@ -88,13 +90,6 @@
 };
 
 
-&pinctrl_lpgpio {
-	group0 {
-		pinmux = < PIN_P15_4__LPGPIO >;
-		read-enable = < 0x1 >;
-		driver-state-control = <1>;
-	};
-};
 
 &lpgpio{
 	status = "okay";
@@ -121,12 +116,7 @@
 	};
 };
 
-&pinctrl_gpio4 {
-	group0 {
-		/* Enable only Port-4 Pin-0 */
-		pinmux = <PIN_P4_0__GPIO>;
-	};
-};
+
 
 &gpio4 {
 	pinctrl-0	= <&pinctrl_gpio4>;
@@ -134,12 +124,6 @@
 	status          = "okay";
 };
 
-&pinctrl_gpio9 {
-	group0 {
-		/* Enable only Port-9 Pin-4 */
-		pinmux = <PIN_P9_4__GPIO>;
-	};
-};
 
 &gpio9 {
 	pinctrl-0	= <&pinctrl_gpio9>;

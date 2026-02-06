@@ -10,6 +10,7 @@ cmake_minimum_required(VERSION 3.20.0)
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(hello_world)
 
+
 add_subdirectory(src/streamgraph/common)
 add_subdirectory(src/streamgraph/streamnodes)
 
@@ -19,6 +20,8 @@ target_sources(app PRIVATE src/main.cpp src/startup.c
   
   src/streamgraph/nodes_src/init_drv_src.cpp
   src/networks/kws_micronet_m_vela_H128.tflite.cpp
+  src/container.c
+  src/md5.c
   src/networks/network.cpp
 )
 
@@ -33,6 +36,7 @@ target_include_directories(app PUBLIC
   src/streamgraph/streamnodes
   src/streamgraph/streamnodes/appnodes
   src/networks
+  src
   )
 
 #######################
@@ -74,3 +78,4 @@ if (CONFIG_TEMPLATE_INSTANTIATIONS)
 endif()
 
 target_link_libraries(app PRIVATE stream_nodes appcommon)
+

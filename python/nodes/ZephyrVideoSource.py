@@ -4,8 +4,8 @@ from .NodeTypes import *
 
 class ZephyrVideoSource(GenericSource):
     def __init__(self,name):
-        GenericSource.__init__(self,name,identified=False)
-        # Stereo output
+        GenericSource.__init__(self,name,identified=True)
+              # Stereo output
         self.addEventOutput()
 
     @property

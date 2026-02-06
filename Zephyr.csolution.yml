@@ -41,12 +41,16 @@ solution:
         - CONFIG_DEBUG: y
         - CONFIG_DEBUG_THREAD_INFO: y
         - CMAKE_BUILD_TYPE: Debug
+        - EXTRA_DTC_OVERLAY_FILE: boards/pinmux.overlay
+        #- EXTRA_DTC_OVERLAY_FILE: boards/camera.overlay
 
     - type: Release
-      optimize: balanced
+      optimize: speed
       west-defs:
         # west defines
         - CMAKE_BUILD_TYPE: Release
+        - EXTRA_DTC_OVERLAY_FILE: boards/pinmux.overlay
+        #- EXTRA_DTC_OVERLAY_FILE: boards/camera.overlay
 
   # List related projects.
   projects:

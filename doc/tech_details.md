@@ -20,7 +20,7 @@ But for the TensorFlow Lite for Micro (TFLM) node, we need to pass the pointer t
 
 Then we initialize in a generic way the information related to hardware peripheral.
 
-Each parameter structure is beginning with a field named `hw_` (underscore is to avoid conflict with the names of the nodes) and of type `hardwareParams`.
+Each parameter structure is beginning with a field named `hw_` (underscore is to avoid conflict with the names of the nodes). The type of this `hw_` field is `hardwareParams`.
 
 With this convention, we can initialize the hardware peripheral params although each parameter structure is of a different type. But they can all be casted to `hardwareParams`.
 
@@ -36,9 +36,12 @@ Then, we initialize each graph with its event queue and its parameters. The para
 
 This can't be generic because each graph use a different parameter structure of different type. As consequence, if you need to add new applications to the demo, you'll need to add new initializations.
 
-Then, the demo is initializing an "interrupt" thread. It is a bit a miscellaneous thread and its purpose is to translate some events occurring in the RTOS to CMSIS Stream events. Here we translate the Zephyr shell new `switch` command to a context switch between two graphs. One could also send CMSIS Events in reaction to interrupts etc ...
+Then, the demo is initializing an "interrupt" thread. It is a bit a miscellaneous thread and its purpose is to translate some events occurring in the RTOS to CMSIS Stream events. Here we use it to context switch between two graphs in reaction to some RTOS events : switch command, button press, touching the screen.
+
 
 Then we initialize some CMSIS Stream execution context. It is a datatype defined by the CMSIS Stream Zephyr module. It is used for the context switch and contain all the information needed.
+
+Then we resume the graph before starting it. 
 
 Finally, we start the CMSIS Stream execution using one context with `stream_start_threads`.
 
@@ -67,11 +70,11 @@ If the graphs were not all in memory, we would have to destroy / re-create graph
 
 A graph is very general with nodes than can be anything. As consequence, the memory allocator also has to be general.
 
-With all graphs in memory, we have an other problem of memory consumption.
+With all graphs in memory, we have to consider problems of memory consumption.
 
 * Display buffers are shared between the graphs
 * Audio memory slab is shared between graphs
-* Tensor arena is shared between graphs
+* Tensor arena is shared between graphs 
 * CMSIS FIFOs could be shared by using memory overlays at linker level since the memory sections for each graph are never used at same time and FIFO are cleared when switching
 
 So, it looks like the big consumers of memory are not a problem. If some other nodes were also allocating lot of memory then we should look at how it could be 
@@ -129,7 +132,7 @@ During the pause / resume, the function will call the pause / resume from the ex
 
 The pause / resume functions are provided by `main.cpp`. We scan the graph to know which nodes are implementing the `ContextSwitch` interface. If the interface is implemented, the `pause` or `resume` function is called.
 
-Some nodes may use this to disable / enable interrupts from an HW peripheral. Some other nodes may use this to clear internal state or memory.
+Some nodes may use this to disable / enable interrupts from an HW peripheral. Some other nodes may use this to clear internal state or memory. Some nodes could generate events during the resume.
 
 Pausing the event thread  in the CMSIS Stream Zephyr module is done by pausing the event queue.
 
@@ -172,7 +175,14 @@ In current demo, all nodes inherit from the `StreamNode`  class that is the base
 
 Some node may inherit from the `ContextSwitch` interface defined in this demo.
 
-The `IdentifiedMode.hpp` and `cstream_node.hpp` are used for this. Refer to CMSIS Stream documentation.
+The `IdentifiedNode.hpp` and `cstream_node.hpp` are used for this. Refer to CMSIS Stream documentation.
+
+The APIs are application dependent. An application may define new APIs. That's why those headers are not provided by the CMSIS Stream zephyr module but come from the application.
+
+The CMSIS Stream Zephyr module does not know anything about those headers and just need a way to pause / resume all the nodes.
+
+Note that for the very first run of a graph (so not a context switch), resume is called to give a chance to a graph to do what is needed before running. 
 
 # Events
 Some nodes define a new "ack" event using the selector mechanism.
+It is to illustrate how event names can be extended.

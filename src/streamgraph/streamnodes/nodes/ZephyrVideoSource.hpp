@@ -35,7 +35,7 @@ using namespace arm_cmsis_stream;
 #define MAX_HEIGHT        272
 
 // RGB565
-class ZephyrVideoSource : public StreamNode
+class ZephyrVideoSource : public StreamNode, public ContextSwitch
 {
       public:
 	ZephyrVideoSource(EventQueue *queue) : StreamNode(), ev(queue)
@@ -46,7 +46,7 @@ class ZephyrVideoSource : public StreamNode
 
 	cg_status init() final override
 	{
-		int i = 0;
+		uint32_t i = 0;
 		int ret;
 		size_t bsize;
 
@@ -68,6 +68,7 @@ class ZephyrVideoSource : public StreamNode
 		while (caps.format_caps[i].pixelformat) {
 			const struct video_format_cap *fcap = &caps.format_caps[i];
 
+			/*
 			LOG_INF("  %c%c%c%c width (min, max, step)[%u; %u; %u] "
 			"height (min, max, step)[%u; %u; %u]\n",
 		       (char)fcap->pixelformat,
@@ -76,6 +77,7 @@ class ZephyrVideoSource : public StreamNode
 		       (char)(fcap->pixelformat >> 24),
 		       fcap->width_min, fcap->width_max, fcap->width_step,
 		       fcap->height_min, fcap->height_max, fcap->height_step);
+*/
 
 			if (fcap->pixelformat == FORMAT_TO_CAPTURE) {
 				if (MAX_WIDTH == fcap->width_max  &&
@@ -135,7 +137,7 @@ class ZephyrVideoSource : public StreamNode
 
 		/* Alloc video buffers and enqueue for capture */
 		for (i = 0; i < ARRAY_SIZE(buffers); i++) {
-			buffers[i] = video_buffer_alloc(bsize);
+			buffers[i] = video_buffer_alloc(bsize,K_NO_WAIT);
 			if (buffers[i] == NULL) {
 				LOG_ERR("Unable to alloc video buffer");
 				return (CG_INIT_FAILURE);
@@ -165,46 +167,26 @@ class ZephyrVideoSource : public StreamNode
 		return (CG_SUCCESS);
 	}
 
+	int pause() final
+	{		
+		
+		return 0;
+	}
+
+	int resume() final
+	{
+		
+		return 0;
+	}
+
 	static void release_video_frame(void *frame)
 	{
 	}
 
 	void processEvent(int dstPort, Event &&evt) final override
 	{
-		if (evt.event_id == kDo) {
-
-			uint16_t *frameBuffer_ = nullptr;
-			// k_mem_slab_alloc(&video_slab, (void **)&frameBuffer_, K_NO_WAIT);
-			if (frameBuffer_ != nullptr) {
-				val += dt;
-				if (val >= 1.0f) {
-					val -= 1.0f;
-				}
-
-				uint16_t color = static_cast<uint16_t>((1.0f - val) * 0x1F);
-				if (color > 0x1F) {
-					color = 0x1F;
-				}
-				color = color << 11; // Red channel
-
-				// Fill the frame with a test pattern
-				for (uint32_t y = 0; y < fmt.height; ++y) {
-					for (uint32_t x = 0; x < fmt.width; ++x) {
-						((uint16_t *)frameBuffer_)[y * fmt.width + x] =
-							color;
-					}
-				}
-
-				UniquePtr<const uint16_t> tensorData((const uint16_t *)frameBuffer_,
-								     release_video_frame);
-				TensorPtr<const uint16_t> t =
-					TensorPtr<const uint16_t>::create_with(
-						(uint8_t)2, cg_tensor_dims_t{fmt.height, fmt.width},
-						std::move(tensorData));
-
-				ev.sendSync(kHighPriority, kValue, std::move(t));
-			}
-		}
+		
+		
 	};
 
 	void subscribe(int outputPort, StreamNode &dst, int dstPort) final override
