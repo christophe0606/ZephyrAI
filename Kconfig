@@ -49,6 +49,10 @@ config TEMPLATE_INSTANTIATIONS
 	bool "Code size optimization with template instantiations"
 	default false
 
+config PREBUILT_ET
+	bool "Prebuilt executorch library"
+	default false
+
 module = STREAMAPPS
 module-str = streamapps
 source "subsys/logging/Kconfig.template.log_config"

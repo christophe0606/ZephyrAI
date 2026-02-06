@@ -7,6 +7,7 @@
 
 cmake_minimum_required(VERSION 3.20.0)
 
+
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(hello_world)
 
@@ -79,3 +80,8 @@ endif()
 
 target_link_libraries(app PRIVATE stream_nodes appcommon)
 
+if (CONFIG_PREBUILT_ET)
+    message(STATUS "Linking prebuilt executorch library")
+    add_subdirectory(executorch)
+    target_link_libraries(app PRIVATE executorch_runtime)
+endif()
