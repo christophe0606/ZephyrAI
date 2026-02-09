@@ -20,7 +20,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, List, Any, Optional
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 AI_LAYER = ROOT / "executorch"
 ENGINE = AI_LAYER / "executorch" /"engine"
 LIB_DIR = ENGINE / "lib"
@@ -591,12 +591,13 @@ def main():
         "## 📁 Asset Locations",
         "",
         "```",
-        "ai_layer/",
-        "├── engine/",
-        "│   ├── lib/           # Static libraries",
-        "│   ├── include/       # Header files", 
-        "│   └── model/         # Model assets",
-        "└── REPORT.md          # This report",
+        "executorch/",
+        "├───executorch/",
+        "│   ├── engine/",
+        "│   │   ├── lib/           # Static libraries",
+        "│   │   ├── include/       # Header files", 
+        "│   └── model/             # Model assets",
+        "└── REPORT.md              # This report",
         "```",
         "",
         "---",
