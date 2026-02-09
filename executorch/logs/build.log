@@ -1,0 +1,9 @@
+/__w/ZephyrAI/ZephyrAI/executorch/zephyr/scripts/generate_ai_layer_report.py:450: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  timestamp = datetime.utcnow().isoformat(timespec='seconds') + 'Z'
+Generating comprehensive AI layer build report...
+✅ Comprehensive report written to /__w/ZephyrAI/ZephyrAI/executorch/executorch/REPORT.md
+📊 Found 0 libraries and 0 model assets
+2026-02-09 08:37:35 [SUCCESS] Completed: Generate report
+2026-02-09 08:37:35 [INFO] Build summary:
+2026-02-09 08:37:35 [SUCCESS] Build completed successfully!
+📋 Build logs saved to: executorch/logs/

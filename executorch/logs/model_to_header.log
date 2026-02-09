@@ -1,0 +1,1 @@
+Input: executorch/model/ethos_u_minimal_example.pte with 3984 bytes. Output: executorch/model/model_pte.h with 24111 bytes. Section: network_model_sec.
