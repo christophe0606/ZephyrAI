@@ -2,7 +2,7 @@ import torch
 
 class Add(torch.nn.Module):
     def forward(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-        return x + y
+        return x + 2.0*y
 
 example_inputs = (torch.ones(1,1,1,1),torch.ones(1,1,1,1))
 
