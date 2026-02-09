@@ -322,11 +322,11 @@ Install the project...
 [ 11%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/abort.cpp.obj
 [ 11%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/log.cpp.obj
 [ 12%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/platform.cpp.obj
+[ 12%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/profiler.cpp.obj
 /workspace/executorch/runtime/executor/tensor_parser_exec_aten.cpp: In function 'executorch::runtime::Result<void*> executorch::runtime::deserialization::{anonymous}::getMemPlannedPtr(const executorch_flatbuffer::AllocationDetails*, size_t, executorch::runtime::HierarchicalAllocator*)':
 /workspace/executorch/runtime/executor/tensor_parser_exec_aten.cpp:66:62: warning: left shift count >= width of type [-Wshift-count-overflow]
    66 |     memory_offset |= static_cast<size_t>(memory_offset_high) << 32;
       |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-[ 12%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/profiler.cpp.obj
 [ 12%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/runtime.cpp.obj
 [ 13%] Building CXX object CMakeFiles/executorch_core.dir/schema/extended_header.cpp.obj
 [ 13%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/default/posix.cpp.obj
@@ -398,8 +398,8 @@ Install the project...
 [ 38%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_elu.cpp.obj
 [ 38%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_embedding.cpp.obj
 [ 38%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_empty.cpp.obj
-[ 40%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_eq.cpp.obj
 [ 40%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_erf.cpp.obj
+[ 40%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_eq.cpp.obj
 [ 41%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_exp.cpp.obj
 [ 41%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_expand_copy.cpp.obj
 [ 41%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_expm1.cpp.obj
