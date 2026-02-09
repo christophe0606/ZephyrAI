@@ -59,7 +59,7 @@ string(REPLACE "cortex-m85" "cortex-m55" GCC_CPU ${GCC_CPU})
 # Zephyr-compatible stdint definitions
 # Zephyr redefines __INT32_TYPE__ from 'long int' to 'int' for consistent printf behavior.
 # We must use the same definitions to avoid C++ ABI/mangling mismatches.
-set(ZEPHYR_STDINT_COMPAT_H "${CMAKE_CURRENT_LIST_DIR}/../src/zephyr_stdint_compat.h")
+set(ZEPHYR_STDINT_COMPAT_H "${CMAKE_CURRENT_LIST_DIR}/../zephyr/src/zephyr_stdint_compat.h")
 
 # Compile options
 add_compile_options(

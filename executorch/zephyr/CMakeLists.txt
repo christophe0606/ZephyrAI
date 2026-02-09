@@ -7,7 +7,7 @@
 
 if(CONFIG_EXECUTORCH)
   # Set the path to the ai_layer engine
-  set(EXECUTORCH_AI_LAYER_DIR ${CMAKE_CURRENT_LIST_DIR}/../ai_layer)
+  set(EXECUTORCH_AI_LAYER_DIR ${CMAKE_CURRENT_LIST_DIR}/../executorch)
   
   # Add include paths from the ai_layer engine
   zephyr_include_directories(
