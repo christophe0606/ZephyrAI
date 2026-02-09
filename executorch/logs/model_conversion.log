@@ -630,7 +630,7 @@ Architecture Settings:
    fast_storage_mem_area = Sram
 
 ################################################################################
-Performance for NPU Grap /tmp/tmpck510ps2/output/out
+Performance for NPU Grap /tmp/tmp5d9yyx6z/output/out
 Original Operator    NNG Operator         Target Staging Usage  Peak% (Staging)  Op Cycles Network% (cycles)        NPU    SRAM AC    DRAM AC OnFlash AC OffFlash AC  MAC Count Network% (MAC)  Util% (MAC) Name                 
 -------------------- -------------------- ------ ------------- ---------------- ---------- ----------------- ---------- ---------- ---------- ---------- ----------- ---------- -------------- ------------ -------------------- 
 Transpose            Transpose            NPU               48            33.33         32              9.17         32          1          0          0           0          0         100.00         0.00 N/A                  
