@@ -1,0 +1,7 @@
+# Copyright (c) 2025 Arm Limited and/or its affiliates.
+# SPDX-License-Identifier: Apache-2.0
+
+name: executorch
+build:
+  cmake: .
+  kconfig: Kconfig

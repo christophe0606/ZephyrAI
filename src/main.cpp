@@ -58,6 +58,8 @@ extern "C" {
 
 #include "init_drv_src.hpp"
 
+#include "runner.hpp"
+
 /*
  * Get button configuration from the devicetree sw0 alias. This is mandatory.
  */
@@ -153,6 +155,17 @@ static int cmd_switch(const struct shell *shell, size_t argc, char **argv)
 }
 
 SHELL_CMD_REGISTER(switch, NULL, "Switch between networks", cmd_switch);
+
+static int cmd_et(const struct shell *shell, size_t argc, char **argv)
+{
+   const char* argv_[] = {"executorch_runner"};
+   int result = executorch_runner_main(1, argv_);
+
+   LOG_INF("Inference completed with result: %d\n", result);
+
+   return 0;
+}
+SHELL_CMD_REGISTER(et, NULL, "Executorch test", cmd_et);
 
 // Translate interrupt events into CMSIS Stream events
 void interrupt_thread_function(void *, void *, void *)

@@ -1,0 +1,124 @@
+FROM ubuntu:24.04
+
+# Prevent interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    # Basic build tools
+    # build-essential \
+    ninja-build \
+    git \
+    curl \
+    wget \
+    unzip \
+    rsync \
+    # ARM cross-compilation toolchain
+    # gcc-arm-none-eabi \
+    # libnewlib-arm-none-eabi \
+    # Python and pip
+    python3.12 \
+    python3.12-dev \
+    python3.12-venv \
+    python3-pip \
+    # Additional build dependencies for ExecuTorch
+    pkg-config \
+    libffi-dev \
+    libssl-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    xz-utils \
+    tk-dev \
+    libxml2-dev \
+    libxmlsec1-dev \
+    libffi-dev \
+    liblzma-dev \
+    # Additional utilities
+    vim \
+    nano \
+    tree \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install current CMake (3.30.x) from Kitware's official repository
+RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null && \
+    echo 'deb https://apt.kitware.com/ubuntu/ noble main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null && \
+    apt-get update && \
+    apt-get install -y cmake && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set Python 3.12 as default python
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1 && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1
+
+    ## Create a non-root user for development
+RUN useradd -m -s /bin/bash developer && \
+    usermod -aG sudo developer && \
+    echo "developer ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Switch to non-root user
+USER developer
+
+# Clone ExecuTorch and use official installation script
+WORKDIR /workspace
+RUN git clone https://github.com/pytorch/executorch.git && \
+    cd executorch && \
+    git checkout v1.0.0 && \
+    git submodule sync && \
+    git submodule update --init --recursive
+
+# CRITICAL: Remove -fPIC flag from ExecuTorch CMakeLists.txt for bare-metal builds
+# ExecuTorch hardcodes -fPIC in _common_compile_options (line 299) which causes 
+# _GLOBAL_OFFSET_TABLE_ conflicts when linking with Zephyr (which uses -fno-pic)
+# The format is: set(_common_compile_options -Wno-deprecated-declarations -fPIC)
+RUN sed -i 's/-fPIC)$/ ) # -fPIC removed for baremetal/g' /workspace/executorch/CMakeLists.txt && \
+    sed -i 's/-fPIC -frtti/-frtti # -fPIC removed/g' /workspace/executorch/CMakeLists.txt && \
+    sed -i 's/ -fPIC$// ' /workspace/executorch/CMakeLists.txt && \
+    grep -n "fPIC" /workspace/executorch/CMakeLists.txt && \
+    echo "Patched ExecuTorch CMakeLists.txt to remove -fPIC"
+
+RUN python -m venv executorch-venv
+ENV PATH="/workspace/executorch/examples/arm/ethos-u-scratch/arm-gnu-toolchain-13.3.rel1-arm-none-eabi/bin:/workspace/executorch-venv/bin:$PATH"
+
+# Use ExecuTorch's official installation script but avoid ATen bridge conflicts
+RUN pip install --extra-index-url https://download.pytorch.org/whl/test/cpu --break-system-packages \
+                executorch==1.0.0 \
+                ethos-u-vela==4.4.1 \
+                torch==2.9.0 \
+                torchvision==0.24.0 \
+                torchao==0.14.0+cpu  \
+                torchaudio==2.9.0 
+                
+# Setup ARM environment using official script
+WORKDIR /workspace/executorch
+RUN ./examples/arm/setup.sh --i-agree-to-the-contained-eula
+
+# Rename architecture-specific toolchain folder to neutral name for multi-arch host-support
+RUN cd examples/arm/ethos-u-scratch && \
+    TOOLCHAIN_DIR=$(ls -d arm-gnu-toolchain-13.3.rel1-*-arm-none-eabi 2>/dev/null | head -1) && \
+    if [ -n "$TOOLCHAIN_DIR" ] && [ "$TOOLCHAIN_DIR" != "arm-gnu-toolchain-13.3.rel1-arm-none-eabi" ]; then \
+        echo "Renaming $TOOLCHAIN_DIR to arm-gnu-toolchain-13.3.rel1-arm-none-eabi" && \
+        mv "$TOOLCHAIN_DIR" arm-gnu-toolchain-13.3.rel1-arm-none-eabi; \
+    else \
+        echo "Toolchain already has neutral name or not found"; \
+    fi
+
+# Test if ARM setup worked correctly
+RUN if [ -f "examples/arm/ethos-u-setup/arm-none-eabi-gcc.cmake" ]; then \
+        echo "✅ ARM setup successful - toolchain file found"; \
+    else \
+        echo "❌ ARM setup failed - toolchain file missing"; \
+        exit 1; \
+    fi
+
+# Verify tools installation
+RUN python -c "import torch; print(f'PyTorch {torch.__version__} installed')" && \
+    python -c "import executorch; print('ExecuTorch installed successfully')" || echo "ExecuTorch verification failed" && \
+    arm-none-eabi-gcc --version | head -1 && \
+    cmake --version | head -1
+
+# Default command
+CMD ["bash"]
