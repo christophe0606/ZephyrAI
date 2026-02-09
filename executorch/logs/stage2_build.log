@@ -1,1 +1,44 @@
-/__w/_temp/df6fef02-6dde-43ea-ba0e-a677fa7f2feb.sh: 2: /__w/ZephyrAI/ZephyrAI/executorch/zephyr/scripts/build_stage2_selective.sh: Permission denied
+[Stage2] Using operator list from file: /__w/ZephyrAI/ZephyrAI/executorch/model/operators_minimal.txt
+[Stage2] Operators: aten::add.out,aten::mul.out,aten::relu.out,aten::view_copy.out,aten::permute_copy.out,aten::conv2d.out,aten::linear.out,aten::sigmoid.out,aten::softmax.out
+[Stage2] Configuring selective portable ops build...
+[Stage2] Strategy: Manual operator list
+-- Found ARM toolchain in ExecuTorch path: /workspace/executorch/examples/arm/ethos-u-scratch/arm-gnu-toolchain-13.3.rel1-arm-none-eabi/bin
+-- Found ARM toolchain in ExecuTorch path: /workspace/executorch/examples/arm/ethos-u-scratch/arm-gnu-toolchain-13.3.rel1-arm-none-eabi/bin
+-- The C compiler identification is GNU 13.3.1
+-- The CXX compiler identification is GNU 13.3.1
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - failed
+-- Check for working C compiler: /workspace/executorch/examples/arm/ethos-u-scratch/arm-gnu-toolchain-13.3.rel1-arm-none-eabi/bin/arm-none-eabi-gcc
+-- Check for working C compiler: /workspace/executorch/examples/arm/ethos-u-scratch/arm-gnu-toolchain-13.3.rel1-arm-none-eabi/bin/arm-none-eabi-gcc - broken
+CMake Error at /usr/share/cmake-4.2/Modules/CMakeTestCCompiler.cmake:67 (message):
+  The C compiler
+
+    "/workspace/executorch/examples/arm/ethos-u-scratch/arm-gnu-toolchain-13.3.rel1-arm-none-eabi/bin/arm-none-eabi-gcc"
+
+  is not able to compile a simple test program.
+
+  It fails with the following output:
+
+    Change Dir: '/__w/ZephyrAI/ZephyrAI/out/stage2/CMakeFiles/CMakeScratch/TryCompile-Yj5fiZ'
+    
+    Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_bce48/fast
+    /usr/bin/gmake  -f CMakeFiles/cmTC_bce48.dir/build.make CMakeFiles/cmTC_bce48.dir/build
+    gmake[1]: Entering directory '/__w/ZephyrAI/ZephyrAI/out/stage2/CMakeFiles/CMakeScratch/TryCompile-Yj5fiZ'
+    Building C object CMakeFiles/cmTC_bce48.dir/testCCompiler.c.obj
+    /workspace/executorch/examples/arm/ethos-u-scratch/arm-gnu-toolchain-13.3.rel1-arm-none-eabi/bin/arm-none-eabi-gcc -DNDEBUG  -std=gnu11 -mcpu=cortex-m55 -mthumb -fdata-sections -ffunction-sections -fno-pic -fno-pie -imacros /__w/ZephyrAI/ZephyrAI/executorch/model/../src/zephyr_stdint_compat.h -mfloat-abi=hard -Wno-error=deprecated-declarations -Wno-error=shift-count-overflow -Wno-psabi -o CMakeFiles/cmTC_bce48.dir/testCCompiler.c.obj -c /__w/ZephyrAI/ZephyrAI/out/stage2/CMakeFiles/CMakeScratch/TryCompile-Yj5fiZ/testCCompiler.c
+    <command-line>: fatal error: /__w/ZephyrAI/ZephyrAI/executorch/model/../src/zephyr_stdint_compat.h: No such file or directory
+    compilation terminated.
+    gmake[1]: *** [CMakeFiles/cmTC_bce48.dir/build.make:81: CMakeFiles/cmTC_bce48.dir/testCCompiler.c.obj] Error 1
+    gmake[1]: Leaving directory '/__w/ZephyrAI/ZephyrAI/out/stage2/CMakeFiles/CMakeScratch/TryCompile-Yj5fiZ'
+    gmake: *** [Makefile:134: cmTC_bce48/fast] Error 2
+    
+    
+
+
+
+  CMake will not be able to correctly generate this project.
+Call Stack (most recent call first):
+  CMakeLists.txt:51 (project)
+
+
+-- Configuring incomplete, errors occurred!
