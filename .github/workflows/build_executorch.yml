@@ -95,7 +95,7 @@ jobs:
     - name: Build ExecuTorch Core Libraries
       run: |
         echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] Starting: Stage1 build" | tee -a $MAIN_LOG
-        $GITHUB_WORKSPACE/executorch/zephyr/scripts/build_stage1.sh /workspace/executorch \
+        bash "$GITHUB_WORKSPACE/executorch/zephyr/scripts/build_stage1.sh" /workspace/executorch \
                                $GITHUB_WORKSPACE/out/stage1  \
                                $GITHUB_WORKSPACE/executorch/model/arm-none-eabi-gcc.cmake 2>&1 | tee $LOG_DIR/stage1_build.log $MAIN_LOG
         echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] Completed: Stage1 build" | tee -a $MAIN_LOG
@@ -103,7 +103,7 @@ jobs:
     - name: Build ExecuTorch Selective Kernel Libraries
       run: |
         echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] Starting: Stage2 build" | tee -a $MAIN_LOG
-        $GITHUB_WORKSPACE/executorch/zephyr/scripts/build_stage2_selective.sh \
+        bash "$GITHUB_WORKSPACE/executorch/zephyr/scripts/build_stage2_selective.sh" \
                                /workspace/executorch \
                                "" \
                                $GITHUB_WORKSPACE/out/stage2 \
@@ -114,7 +114,7 @@ jobs:
     - name: Collect artifacts
       run: |
         echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] Starting: Package artifacts" | tee -a $MAIN_LOG
-        cd "$GITHUB_WORKSPACE" && ./executorch/zephyr/scripts/package_sdk.sh \
+        cd "$GITHUB_WORKSPACE" && bash "./executorch/zephyr/scripts/package_sdk.sh" \
           "$GITHUB_WORKSPACE/out/stage1/assets" \
           "$GITHUB_WORKSPACE/out/stage2/assets" \
           "$GITHUB_WORKSPACE/executorch/model/ethos_u_minimal_example.pte" \
