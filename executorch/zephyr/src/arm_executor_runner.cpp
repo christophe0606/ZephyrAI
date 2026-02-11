@@ -170,7 +170,7 @@ Result<BufferCleanup> prepare_input_tensors(
 
     // If input_buffers.size <= 0, we don't have any input, fill it with 1's.
     if (input_buffers.size() <= 0) {
-      for (size_t j = 0; j < t.numel(); j++) {
+      for (ssize_t j = 0; j < t.numel(); j++) {
         switch (t.scalar_type()) {
           case ScalarType::Int:
             t.mutable_data_ptr<int>()[j] = 1;
@@ -215,14 +215,14 @@ int et_runner() {
   std::vector<std::pair<char*, size_t>> input_buffers;
   size_t pte_size = sizeof(model_pte);
 
-  ET_LOG(Info, "PTE at %p Size: %lu bytes", model_pte, pte_size);
+  ET_LOG(Info, "PTE at %p Size: %u bytes", model_pte, pte_size);
 
  
   const void* program_data = model_pte;
   size_t program_data_len = sizeof(model_pte);
 
   auto loader = BufferDataLoader(program_data, program_data_len);
-  ET_LOG(Info, "PTE Model data loaded. Size: %lu bytes.", program_data_len);
+  ET_LOG(Info, "PTE Model data loaded. Size: %u bytes.", program_data_len);
 
   // Parse the program file. This is immutable, and can also be reused
   // between multiple execution invocations across multiple threads.
@@ -230,9 +230,9 @@ int et_runner() {
   if (!program.ok()) {
     ET_LOG(
         Info,
-        "Program loading failed @ 0x%p: 0x%" PRIx32,
+        "Program loading failed @ 0x%p: 0x%" PRIu32,
         program_data,
-        program.error());
+        static_cast<uint32_t>(program.error()));
   }
 
   ET_LOG(Info, "Model buffer loaded, has %zu methods", program->num_methods());
@@ -308,9 +308,9 @@ int et_runner() {
   if (!method.ok()) {
     ET_LOG(
         Info,
-        "Loading of method %s failed with status 0x%" PRIx32,
+        "Loading of method %s failed with status 0x%" PRIu32,
         method_name,
-        method.error());
+        static_cast<uint32_t>(method.error()));
   }
   size_t method_loaded_memsize =
       method_allocator.used_size() - method_loaded_membase;
@@ -334,9 +334,9 @@ int et_runner() {
     if (!prepared_inputs.ok()) {
       ET_LOG(
           Info,
-          "Preparing inputs tensors for method %s failed with status 0x%" PRIx32,
+          "Preparing inputs tensors for method %s failed with status 0x%" PRIu32,
           method_name,
-          prepared_inputs.error());
+          static_cast<uint32_t>(prepared_inputs.error()));
     }
   }
 #if defined(ET_DUMP_INPUT)
@@ -394,8 +394,8 @@ int et_runner() {
   Error status = method->execute();
   size_t executor_memsize = method_allocator.used_size() - executor_membase;
 
-  ET_LOG(Info, "model_pte_program_size:     %lu bytes.", program_data_len);
-  ET_LOG(Info, "model_pte_loaded_size:      %lu bytes.", pte_size);
+  ET_LOG(Info, "model_pte_program_size:     %u bytes.", program_data_len);
+  ET_LOG(Info, "model_pte_loaded_size:      %u bytes.", pte_size);
   if (method_allocator.size() != 0) {
     size_t method_allocator_used = method_allocator.used_size();
     ET_LOG(
@@ -415,9 +415,9 @@ int et_runner() {
   if (status != Error::Ok) {
     ET_LOG(
         Info,
-        "Execution of method %s failed with status 0x%" PRIx32,
+        "Execution of method %s failed with status 0x%" PRIu32,
         method_name,
-        status);
+        static_cast<uint32_t>(status));
   } else {
     ET_LOG(Info, "Model executed successfully.");
   }
