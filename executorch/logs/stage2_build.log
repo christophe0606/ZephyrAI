@@ -179,7 +179,7 @@ Command - python3;-m;codegen.tools.gen_oplist;--output_path=/__w/ZephyrAI/Zephyr
 -- EXECUTORCH_XNNPACK_SHARED_WORKSPACE       : ON
 -- PYTHON_EXECUTABLE                         : python3
 -- --------------------------
--- Configuring done (1.2s)
+-- Configuring done (1.3s)
 -- Generating done (0.1s)
 CMake Warning:
   Manually-specified variables were not used by the project:
@@ -196,6 +196,18 @@ CMake Warning:
 [  1%] Performing configure step for 'flatbuffers_ep'
 CMake Warning:
   Ignoring empty string ("") provided on the command line.
+
+
+fatal: detected dubious ownership in repository at '/workspace/executorch/third-party/flatbuffers'
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory /workspace/executorch/third-party/flatbuffers
+CMake Warning at CMake/Version.cmake:32 (message):
+  git describe failed with exit code: 128
+
+  Make sure you cloned with tags or run 'git fetch --tags'.
+Call Stack (most recent call first):
+  CMakeLists.txt:5 (include)
 
 
 -- Proceeding with version: 24.3.25.0
@@ -224,7 +236,7 @@ CMake Warning:
 [ 15%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_cpp.cpp.o
 [ 18%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_csharp.cpp.o
 [ 21%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_dart.cpp.o
-[ 26%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_kotlin.cpp.o
+[ 23%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_kotlin.cpp.o
 [ 26%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_kotlin_kmp.cpp.o
 [ 28%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_go.cpp.o
 [ 31%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_java.cpp.o
@@ -311,8 +323,8 @@ Install the project...
 [  6%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/exec_aten/util/tensor_util_portable.cpp.obj
 [  6%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/portable_type/tensor_impl.cpp.obj
 [  7%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/tag.cpp.obj
-[  7%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/tensor_layout.cpp.obj
 [  7%] Building CXX object CMakeFiles/executorch_core.dir/runtime/executor/method.cpp.obj
+[  7%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/tensor_layout.cpp.obj
 [  8%] Building CXX object CMakeFiles/executorch_core.dir/runtime/executor/method_meta.cpp.obj
 [  8%] Building CXX object CMakeFiles/executorch_core.dir/runtime/executor/program.cpp.obj
 [  8%] Building CXX object CMakeFiles/executorch_core.dir/runtime/executor/pte_data_map.cpp.obj
@@ -334,8 +346,8 @@ Install the project...
 [ 13%] Built target executorch_core
 [ 13%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/activation_ops_util.cpp.obj
 [ 13%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/advanced_index_util.cpp.obj
+[ 13%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/broadcast_util.cpp.obj
 [ 14%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/arange_util.cpp.obj
-[ 14%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/broadcast_util.cpp.obj
 [ 15%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/copy_ops_util.cpp.obj
 [ 15%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/delinearize_index.cpp.obj
 [ 15%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/distance_util.cpp.obj
@@ -450,8 +462,8 @@ Install the project...
 [ 60%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_mul.cpp.obj
 [ 60%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_narrow_copy.cpp.obj
 [ 60%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_native_batch_norm.cpp.obj
-[ 61%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_native_group_norm.cpp.obj
 [ 61%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_native_dropout.cpp.obj
+[ 61%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_native_group_norm.cpp.obj
 [ 62%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_native_layer_norm.cpp.obj
 [ 62%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_ne.cpp.obj
 [ 62%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_neg.cpp.obj

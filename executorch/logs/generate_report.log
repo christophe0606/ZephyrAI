@@ -2,4 +2,4 @@
   timestamp = datetime.utcnow().isoformat(timespec='seconds') + 'Z'
 Generating comprehensive AI layer build report...
 ✅ Comprehensive report written to /__w/ZephyrAI/ZephyrAI/executorch/REPORT.md
-📊 Found 9 libraries and 1 model assets
+📊 Found 0 libraries and 1 model assets
