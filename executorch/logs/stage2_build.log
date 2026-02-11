@@ -61,7 +61,7 @@ CMake Deprecation Warning at third-party/flatcc/CMakeLists.txt:2 (cmake_minimum_
 -- Disabling GNU C compiler warnings: -Wstringop-truncation -Wno-format-overflow
 -- GCC_VERSION: 13.3.1
 
--- Configured C_FLAGS:  -DFLATCC_REFLECTION=0 -std=c11 -Wall -Wextra -Wno-stringop-truncation -Wno-format-overflow -Wno-misleading-indentation -DPORTABLE_POSIX_MEMALIGN=1 -Werror -Wno-unused-function -Wsign-conversion
+-- Configured C_FLAGS: -fno-pic -fno-pie -DFLATCC_REFLECTION=0 -std=c11 -Wall -Wextra -Wno-stringop-truncation -Wno-format-overflow -Wno-misleading-indentation -DPORTABLE_POSIX_MEMALIGN=1 -Werror -Wno-unused-function -Wsign-conversion
 CMake Deprecation Warning at backends/xnnpack/third-party/FXdiv/CMakeLists.txt:1 (CMAKE_MINIMUM_REQUIRED):
   Compatibility with CMake < 3.10 will be removed from a future version of
   CMake.
@@ -179,7 +179,7 @@ Command - python3;-m;codegen.tools.gen_oplist;--output_path=/__w/ZephyrAI/Zephyr
 -- EXECUTORCH_XNNPACK_SHARED_WORKSPACE       : ON
 -- PYTHON_EXECUTABLE                         : python3
 -- --------------------------
--- Configuring done (1.3s)
+-- Configuring done (1.2s)
 -- Generating done (0.1s)
 CMake Warning:
   Manually-specified variables were not used by the project:
@@ -224,7 +224,7 @@ CMake Warning:
 [ 15%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_cpp.cpp.o
 [ 18%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_csharp.cpp.o
 [ 21%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_dart.cpp.o
-[ 23%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_kotlin.cpp.o
+[ 26%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_kotlin.cpp.o
 [ 26%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_kotlin_kmp.cpp.o
 [ 28%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_go.cpp.o
 [ 31%] Building CXX object CMakeFiles/flatc.dir/src/idl_gen_java.cpp.o
@@ -322,11 +322,11 @@ Install the project...
 [ 11%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/abort.cpp.obj
 [ 11%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/log.cpp.obj
 [ 12%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/platform.cpp.obj
-[ 12%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/profiler.cpp.obj
 /workspace/executorch/runtime/executor/tensor_parser_exec_aten.cpp: In function 'executorch::runtime::Result<void*> executorch::runtime::deserialization::{anonymous}::getMemPlannedPtr(const executorch_flatbuffer::AllocationDetails*, size_t, executorch::runtime::HierarchicalAllocator*)':
 /workspace/executorch/runtime/executor/tensor_parser_exec_aten.cpp:66:62: warning: left shift count >= width of type [-Wshift-count-overflow]
    66 |     memory_offset |= static_cast<size_t>(memory_offset_high) << 32;
       |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+[ 12%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/profiler.cpp.obj
 [ 12%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/runtime.cpp.obj
 [ 13%] Building CXX object CMakeFiles/executorch_core.dir/schema/extended_header.cpp.obj
 [ 13%] Building CXX object CMakeFiles/executorch_core.dir/runtime/platform/default/posix.cpp.obj
@@ -398,8 +398,8 @@ Install the project...
 [ 38%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_elu.cpp.obj
 [ 38%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_embedding.cpp.obj
 [ 38%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_empty.cpp.obj
-[ 40%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_erf.cpp.obj
 [ 40%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_eq.cpp.obj
+[ 40%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_erf.cpp.obj
 [ 41%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_exp.cpp.obj
 [ 41%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_expand_copy.cpp.obj
 [ 41%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_expm1.cpp.obj
@@ -450,8 +450,8 @@ Install the project...
 [ 60%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_mul.cpp.obj
 [ 60%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_narrow_copy.cpp.obj
 [ 60%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_native_batch_norm.cpp.obj
-[ 61%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_native_dropout.cpp.obj
 [ 61%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_native_group_norm.cpp.obj
+[ 61%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_native_dropout.cpp.obj
 [ 62%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_native_layer_norm.cpp.obj
 [ 62%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_ne.cpp.obj
 [ 62%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_neg.cpp.obj
