@@ -198,18 +198,6 @@ CMake Warning:
   Ignoring empty string ("") provided on the command line.
 
 
-fatal: detected dubious ownership in repository at '/workspace/executorch/third-party/flatbuffers'
-To add an exception for this directory, call:
-
-	git config --global --add safe.directory /workspace/executorch/third-party/flatbuffers
-CMake Warning at CMake/Version.cmake:32 (message):
-  git describe failed with exit code: 128
-
-  Make sure you cloned with tags or run 'git fetch --tags'.
-Call Stack (most recent call first):
-  CMakeLists.txt:5 (include)
-
-
 -- Proceeding with version: 24.3.25.0
 -- The CXX compiler identification is GNU 13.3.0
 -- Detecting CXX compiler ABI info
@@ -317,14 +305,14 @@ Install the project...
 [  3%] Built target common_schema
 [  4%] Generating program_schema headers
 [  4%] Built target program_schema
-[  5%] Building CXX object CMakeFiles/executorch_core.dir/runtime/backend/interface.cpp.obj
 [  5%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/evalue.cpp.obj
+[  5%] Building CXX object CMakeFiles/executorch_core.dir/runtime/backend/interface.cpp.obj
 [  5%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/exec_aten/util/tensor_shape_to_c_string.cpp.obj
 [  6%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/exec_aten/util/tensor_util_portable.cpp.obj
 [  6%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/portable_type/tensor_impl.cpp.obj
 [  7%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/tag.cpp.obj
-[  7%] Building CXX object CMakeFiles/executorch_core.dir/runtime/executor/method.cpp.obj
 [  7%] Building CXX object CMakeFiles/executorch_core.dir/runtime/core/tensor_layout.cpp.obj
+[  7%] Building CXX object CMakeFiles/executorch_core.dir/runtime/executor/method.cpp.obj
 [  8%] Building CXX object CMakeFiles/executorch_core.dir/runtime/executor/method_meta.cpp.obj
 [  8%] Building CXX object CMakeFiles/executorch_core.dir/runtime/executor/program.cpp.obj
 [  8%] Building CXX object CMakeFiles/executorch_core.dir/runtime/executor/pte_data_map.cpp.obj
@@ -346,8 +334,8 @@ Install the project...
 [ 13%] Built target executorch_core
 [ 13%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/activation_ops_util.cpp.obj
 [ 13%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/advanced_index_util.cpp.obj
-[ 13%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/broadcast_util.cpp.obj
 [ 14%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/arange_util.cpp.obj
+[ 14%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/broadcast_util.cpp.obj
 [ 15%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/copy_ops_util.cpp.obj
 [ 15%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/delinearize_index.cpp.obj
 [ 15%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/distance_util.cpp.obj
@@ -364,8 +352,8 @@ Install the project...
 [ 20%] Building CXX object kernels/portable/cpu/util/CMakeFiles/kernels_util_all_deps.dir/upsample_util.cpp.obj
 [ 21%] Linking CXX static library libkernels_util_all_deps.a
 [ 21%] Built target kernels_util_all_deps
-[ 21%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op__clone_dim_order.cpp.obj
 [ 21%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op__empty_dim_order.cpp.obj
+[ 21%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op__clone_dim_order.cpp.obj
 [ 22%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op__to_dim_order_copy.cpp.obj
 [ 22%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_abs.cpp.obj
 [ 23%] Building CXX object kernels/portable/CMakeFiles/portable_kernels.dir/cpu/op_acos.cpp.obj

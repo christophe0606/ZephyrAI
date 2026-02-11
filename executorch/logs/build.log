@@ -3,14 +3,14 @@
 Generating comprehensive AI layer build report...
 ✅ Comprehensive report written to /__w/ZephyrAI/ZephyrAI/executorch/REPORT.md
 📊 Found 0 libraries and 1 model assets
-2026-02-11 08:13:52 [SUCCESS] Completed: Generate report
-2026-02-11 08:13:52 [INFO] Build summary:
+2026-02-11 08:25:50 [SUCCESS] Completed: Generate report
+2026-02-11 08:25:50 [INFO] Build summary:
 # ExecuTorch AI Layer Build Report
 
-**Generated:** 2026-02-11T08:13:52Z
-**Git Commit:** 17f395f5d3c6 on executorch
+**Generated:** 2026-02-11T08:25:50Z
+**Git Commit:** a81be1620da7 on executorch
 **Repository Status:** 🔄 Modified
-**Last Commit:** 2026-02-11 09:02:30 +0100
+**Last Commit:** 2026-02-11 09:19:27 +0100
 
 ## 📊 Build Summary
 
@@ -27,7 +27,7 @@ Generating comprehensive AI layer build report...
 
 | Asset | Type | Size | Modified | Hash |
 |-------|------|------|----------|------|
-| ethos_u_minimal_example.pte | Model | 3.8 KiB | 2026-02-11 08:04:44 | `bd7a211160a18572` |
+| ethos_u_minimal_example.pte | Model | 3.8 KiB | 2026-02-11 08:21:28 | `bd7a211160a18572` |
 
 ## ⚙️ Build Configuration
 
@@ -55,5 +55,5 @@ aten::relu.out
 aten::sigmoid.out
 aten::softmax.out
 aten::view_copy.out
-2026-02-11 08:13:52 [SUCCESS] Build completed successfully!
+2026-02-11 08:25:50 [SUCCESS] Build completed successfully!
 📋 Build logs saved to: executorch/logs/
