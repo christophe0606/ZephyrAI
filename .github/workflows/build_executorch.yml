@@ -124,7 +124,7 @@ jobs:
     - name: Debug collect via tmate
       uses: mxschmitt/action-tmate@v3
       with:
-        limit-access-to-actor: true
+        sudo: false
 
     - name: Convert the model to a header file
       run: |
@@ -176,7 +176,7 @@ jobs:
     - name: Debug before git via tmate
       uses: mxschmitt/action-tmate@v3
       with:
-        limit-access-to-actor: true
+        sudo: false
 
     - name: Commit changes including logs
       run: |
