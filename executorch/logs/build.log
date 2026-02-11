@@ -2,44 +2,32 @@
   timestamp = datetime.utcnow().isoformat(timespec='seconds') + 'Z'
 Generating comprehensive AI layer build report...
 ✅ Comprehensive report written to /__w/ZephyrAI/ZephyrAI/executorch/REPORT.md
-📊 Found 9 libraries and 1 model assets
-2026-02-11 07:06:57 [SUCCESS] Completed: Generate report
-2026-02-11 07:06:57 [INFO] Build summary:
+📊 Found 0 libraries and 1 model assets
+2026-02-11 08:13:52 [SUCCESS] Completed: Generate report
+2026-02-11 08:13:52 [INFO] Build summary:
 # ExecuTorch AI Layer Build Report
 
-**Generated:** 2026-02-11T07:06:57Z
-**Git Commit:** d10668cfc43a on executorch
+**Generated:** 2026-02-11T08:13:52Z
+**Git Commit:** 17f395f5d3c6 on executorch
 **Repository Status:** 🔄 Modified
-**Last Commit:** 2026-02-11 08:00:33 +0100
+**Last Commit:** 2026-02-11 09:02:30 +0100
 
 ## 📊 Build Summary
 
-- **Libraries:** 9 static libraries
+- **Libraries:** 0 static libraries
 - **Models:** 1 model assets
 - **Operators:** 9 selected operators
 - **Build Type:** Release
 
 ## 📚 Library Assets
 
-**Total Size:** 9.1 MiB
-
-| Library | Size | Percentage | Modified | Hash |
-|---------|------|------------|----------|------|
-| libcortex_m_kernels.a | 17.9 KiB | 0.2% | 2026-02-11 07:05:01 | `c7692ce0c22a13e6` |
-| libcortex_m_ops_lib.a | 12.0 KiB | 0.1% | 2026-02-11 07:05:01 | `f34f11da2754d623` |
-| libexecutorch.a | 45.3 KiB | 0.5% | 2026-02-11 07:05:01 | `ca531250afd20661` |
-| libexecutorch_core.a | 201.5 KiB | 2.2% | 2026-02-11 07:05:01 | `dcb29892cb81fbe1` |
-| libexecutorch_delegate_ethos_u.a | 16.1 KiB | 0.2% | 2026-02-11 07:05:01 | `84f3beba4e2a7ee7` |
-| libportable_kernels.a | 8.5 MiB | 94.1% | 2026-02-11 07:05:01 | `d1cd463105a7b162` |
-| libportable_ops_lib.a | 10.9 KiB | 0.1% | 2026-02-11 07:06:56 | `45c6af07aed888d8` |
-| libquantized_kernels.a | 216.0 KiB | 2.3% | 2026-02-11 07:05:01 | `65aca964373bcfb4` |
-| libquantized_ops_lib.a | 27.6 KiB | 0.3% | 2026-02-11 07:05:01 | `887ea963c028e336` |
+*No library assets found.*
 
 ## 🤖 Model Assets
 
 | Asset | Type | Size | Modified | Hash |
 |-------|------|------|----------|------|
-| ethos_u_minimal_example.pte | Model | 3.8 KiB | 2026-02-11 07:06:56 | `bd7a211160a18572` |
+| ethos_u_minimal_example.pte | Model | 3.8 KiB | 2026-02-11 08:04:44 | `bd7a211160a18572` |
 
 ## ⚙️ Build Configuration
 
@@ -55,5 +43,17 @@ Generating comprehensive AI layer build report...
 
 **Source:** Model file: ethos_u_minimal_example.pte (inferred)
 
-2026-02-11 07:06:57 [SUCCESS] Build completed successfully!
+**Count:** 9 operators
+
+```
+aten::add.out
+aten::conv2d.out
+aten::linear.out
+aten::mul.out
+aten::permute_copy.out
+aten::relu.out
+aten::sigmoid.out
+aten::softmax.out
+aten::view_copy.out
+2026-02-11 08:13:52 [SUCCESS] Build completed successfully!
 📋 Build logs saved to: executorch/logs/
