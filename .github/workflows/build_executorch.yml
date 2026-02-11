@@ -52,7 +52,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ needs.check-docker-image.outputs.repo-slug }}/executorch-arm-container:executorch
-      options: --user 0
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
@@ -64,10 +63,6 @@ jobs:
       GIT_COMMITTER_NAME: "GitHub Action"
 
     steps:
-    - name: Prep apt (container)
-      run: |
-        mkdir -p /var/lib/apt/lists/partial
-        apt-get update
     - name: Export lowercase repo slug env
       run: echo "REPO_SLUG=${{ needs.check-docker-image.outputs.repo-slug }}" >> $GITHUB_ENV
     - name: Checkout repository
@@ -126,11 +121,6 @@ jobs:
           "$GITHUB_WORKSPACE/executorch/" 2>&1 | tee $LOG_DIR/package_artifacts.log $MAIN_LOG
         echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] Completed: Package artifacts" | tee -a $MAIN_LOG
 
-    - name: Debug collect via tmate
-      uses: mxschmitt/action-tmate@v3
-      with:
-        sudo: false
-
     - name: Convert the model to a header file
       run: |
         echo "$(date '+%Y-%m-%d %H:%M:%S') [INFO] Starting: Model to header conversion" | tee -a $MAIN_LOG
@@ -178,14 +168,11 @@ jobs:
         echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] Build completed successfully!" | tee -a $MAIN_LOG
         echo "📋 Build logs saved to: executorch/logs/" | tee -a $MAIN_LOG
 
-    - name: Debug before git via tmate
-      uses: mxschmitt/action-tmate@v3
-      with:
-        sudo: false
-
     - name: Commit changes including logs
       run: |
+        git config --global --add safe.directory $GITHUB_WORKSPACE
         git add executorch/
+        
         git diff --staged --quiet || git commit -m "Update AI layer with new model build - Build $BUILD_TIMESTAMP
 
         Build artifacts and logs included:
