@@ -118,8 +118,13 @@ jobs:
           "$GITHUB_WORKSPACE/out/stage1/assets" \
           "$GITHUB_WORKSPACE/out/stage2/assets" \
           "$GITHUB_WORKSPACE/executorch/model/ethos_u_minimal_example.pte" \
-          "$GITHUB_WORKSPACE/executorch/executorch/engine" 2>&1 | tee $LOG_DIR/package_artifacts.log $MAIN_LOG
+          "$GITHUB_WORKSPACE/executorch/" 2>&1 | tee $LOG_DIR/package_artifacts.log $MAIN_LOG
         echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] Completed: Package artifacts" | tee -a $MAIN_LOG
+
+    - name: Debug collect via tmate
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: true
 
     - name: Convert the model to a header file
       run: |
@@ -167,6 +172,11 @@ jobs:
         
         echo "$(date '+%Y-%m-%d %H:%M:%S') [SUCCESS] Build completed successfully!" | tee -a $MAIN_LOG
         echo "📋 Build logs saved to: executorch/logs/" | tee -a $MAIN_LOG
+
+    - name: Debug before git via tmate
+      uses: mxschmitt/action-tmate@v3
+      with:
+        limit-access-to-actor: true
 
     - name: Commit changes including logs
       run: |
