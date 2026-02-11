@@ -9,9 +9,6 @@
 
 #include <executorch/runtime/core/memory_allocator.h>
 
-namespace executorch {
-namespace examples {
-namespace arm {
 
 /**
  * A simple memory allocator for ARM embedded targets that manages a static
@@ -21,7 +18,7 @@ namespace arm {
  * The allocator maintains a simple bump-pointer allocation scheme within
  * the provided buffer.
  */
-class ArmMemoryAllocator : public runtime::MemoryAllocator {
+class ArmMemoryAllocator : public executorch::runtime::MemoryAllocator {
  public:
   /**
    * Construct an ArmMemoryAllocator with the given buffer.
@@ -68,13 +65,3 @@ class ArmMemoryAllocator : public runtime::MemoryAllocator {
   uint32_t offset_;
 };
 
-} // namespace arm
-} // namespace examples
-} // namespace executorch
-
-// For backward compatibility with older include paths
-namespace torch {
-namespace executor {
-using ArmMemoryAllocator = executorch::examples::arm::ArmMemoryAllocator;
-} // namespace executor
-} // namespace torch

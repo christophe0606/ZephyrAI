@@ -35,13 +35,18 @@
 
 LOG_MODULE_REGISTER(streamapps, CONFIG_STREAMAPPS_LOG_LEVEL);
 
+
 #include "cstream_node.h"
+#if !defined(CONFIG_ONLY_LAST)
 #include "appa_params.h"
 #include "appb_params.h"
+#endif
 #include "appc_params.h"
 
+#if !defined(CONFIG_ONLY_LAST)
 #include "scheduler_appa.h"
 #include "scheduler_appb.h"
+#endif
 #include "scheduler_appc.h"
 
 #include "EventQueue.hpp"
@@ -58,7 +63,7 @@ extern "C" {
 
 #include "init_drv_src.hpp"
 
-#include "runner.hpp"
+#include "et.hpp"
 
 /*
  * Get button configuration from the devicetree sw0 alias. This is mandatory.
@@ -85,12 +90,19 @@ static K_THREAD_STACK_DEFINE(interrupt_thread_stack, 4096);
 
 using namespace arm_cmsis_stream;
 
+
+
+#if defined(CONFIG_ONLY_LAST)
+#define NB_APPS 1
+static int currentNetwork = 0;
+#else
 // Number of applications/networks available in this demo
 #define NB_APPS 3
 // 0 : KWS
 // 1 : Spectrogram
 // 2 : To experiment with camera support
 static int currentNetwork = 2;
+#endif
 
 #define SWITCH_EVENT (1 << 0)
 
@@ -158,10 +170,9 @@ SHELL_CMD_REGISTER(switch, NULL, "Switch between networks", cmd_switch);
 
 static int cmd_et(const struct shell *shell, size_t argc, char **argv)
 {
-   const char* argv_[] = {"executorch_runner"};
-   int result = executorch_runner_main(1, argv_);
+   et();
 
-   LOG_INF("Inference completed with result: %d\n", result);
+   LOG_INF("Inference completed with result\n");
 
    return 0;
 }
@@ -237,6 +248,7 @@ CStreamNode* pointer.
 So we need to wrap them to return a void* pointer.
 
 */
+#if !defined(CONFIG_ONLY_LAST)
 static void *get_appa_node(int32_t nodeID)
 {
 	return static_cast<void *>(get_scheduler_appa_node(nodeID));
@@ -246,6 +258,7 @@ static void *get_appb_node(int32_t nodeID)
 {
 	return static_cast<void *>(get_scheduler_appb_node(nodeID));
 }
+#endif 
 
 static void *get_appc_node(int32_t nodeID)
 {
@@ -394,7 +407,7 @@ int main(void)
 	Init settings for appa scheduler
 
 	*/
-#if 1
+#if !defined(CONFIG_ONLY_LAST)
     appaParams.kws.modelAddr = (uint8_t *)GetModelPointer();
 	appaParams.kws.modelSize = GetModelLen();
 	params[0] = reinterpret_cast<hardwareParams *>(&appaParams);
@@ -442,7 +455,7 @@ int main(void)
 	}
 
 	// Init nodes
-#if 1
+#if !defined(CONFIG_ONLY_LAST)
 	err = init_scheduler_appa(queue_app[0],&appaParams);
 	if (err != CG_SUCCESS) {
 		LOG_ERR("Error: Failure during scheduler initialization for appa.\n");
@@ -480,7 +493,7 @@ int main(void)
 
 	LOG_INF("Initialize contexts");
 
-#if 1
+#if !defined(CONFIG_ONLY_LAST)
 	contexts[0] = {
 		.dataflow_scheduler = scheduler_appa,
 		.reset_fifos = reset_fifos_scheduler_appa,
@@ -547,8 +560,10 @@ int main(void)
 
 	stream_wait_for_threads_end();
 
+#if !defined(CONFIG_ONLY_LAST)
 	free_scheduler_appa();
 	free_scheduler_appb();
+#endif
 	free_scheduler_appc();
 
 	for (int network = 0; network < NB_APPS; network++) {

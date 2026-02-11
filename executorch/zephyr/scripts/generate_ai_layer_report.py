@@ -22,7 +22,7 @@ from typing import Dict, List, Any, Optional
 
 ROOT = Path(__file__).resolve().parent.parent.parent.parent
 AI_LAYER = ROOT / "executorch"
-ENGINE = AI_LAYER / "executorch" /"engine"
+ENGINE = AI_LAYER 
 LIB_DIR = ENGINE / "lib"
 INCLUDE_DIR = ENGINE / "include" / "executorch"
 META_DIR = ENGINE / "meta"

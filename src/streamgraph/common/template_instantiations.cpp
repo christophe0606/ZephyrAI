@@ -11,54 +11,10 @@
 #include "GenericNodes.hpp"
 
 
-#include "nodes/ZephyrAudioSource.hpp"
-#include "nodes/SlidingBuffer.hpp"
-#include "nodes/DeinterleaveStereo.hpp"
-#include "appnodes/MFCC.hpp"
-#include "nodes/SlidingBuffer.hpp"
-#include "nodes/NullSink.hpp"
-#include "nodes/SendToNetwork.hpp"
-#include "nodes/Convert.hpp"
-#include "appnodes/KWSClassify.hpp"
-#include "appnodes/KWSDisplay.hpp"
-#include "appnodes/KWS.hpp"
-#include "nodes/DeinterleaveStereo.hpp"
-#include "nodes/CFFT.hpp"
-#include "nodes/Gain.hpp"
-#include "appnodes/Spectrogram.hpp"
-#include "nodes/RealToComplex.hpp"
-#include "nodes/Convert.hpp"
-#include "nodes/Hanning.hpp"
-#include "appnodes/SpectrogramDisplay.hpp"
 #include "appnodes/CameraFrame.hpp"
 #include "nodes/ZephyrDebugVideoSource.hpp"
 
-template class ZephyrAudioSource<sq15,320>;
-template CStreamNode createStreamNode(ZephyrAudioSource<sq15,320> &obj) ;
-template class SlidingBuffer<float,640,320>;
-template CStreamNode createStreamNode(SlidingBuffer<float,640,320> &obj) ;
-template class DeinterleaveStereo<sq15,320,q15_t,320,q15_t,320>;
-template class MFCC<float,640,float,10>;
-template class SlidingBuffer<float,490,480>;
-template CStreamNode createStreamNode(SlidingBuffer<float,490,480> &obj) ;
-template class NullSink<q15_t,320>;
-template class SendToNetwork<float,490>;
-template CStreamNode createStreamNode(SendToNetwork<float,490> &obj) ;
-template class Convert<q15_t,320,float,320>;
-template CStreamNode createStreamNode(KWSClassify &obj) ;
-template CStreamNode createStreamNode(KWSDisplay &obj) ;
-template class DeinterleaveStereo<sf32,320,float,320,float,320>;
-template class CFFT<cf32,1024,cf32,1024>;
-template class Gain<sq15,320,sq15,320>;
-template class Spectrogram<cf32,1024>;
-template class RealToComplex<float,1024,cf32,1024>;
-template class Convert<sq15,320,sf32,320>;
-template class Hanning<float,640,float,1024>;
-template CStreamNode createStreamNode(SpectrogramDisplay &obj) ;
 template CStreamNode createStreamNode(CameraFrame &obj) ;
 template CStreamNode createStreamNode(ZephyrDebugVideoSource &obj) ;
 
 // Selector initializations
-template<>
-std::array<uint16_t,1> SendToNetwork<float,490>::selectors = {SEL_ACK_ID};
-std::array<uint16_t,1> KWS::selectors = {SEL_ACK_ID};

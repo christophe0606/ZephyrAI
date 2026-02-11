@@ -53,13 +53,13 @@ parser.add_argument(
     help="Section attribute for the data array",
     type=str,
     required=False,
-    default="network_model_sec",
+    default=".rodata.et",
 )
 
 if __name__ == "__main__":
     args = parser.parse_args()
     outfile = os.path.join(args.outdir, args.outfile)
-    attr = f'__attribute__((section("{args.section}"), aligned(16))) char '
+    attr = f'__attribute__((section("{args.section}"), aligned(16))) const char '
 
     # Create output directory if it doesn't exist
     os.makedirs(args.outdir, exist_ok=True)

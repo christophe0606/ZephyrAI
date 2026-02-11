@@ -53,6 +53,45 @@ config PREBUILT_ET
 	bool "Prebuilt executorch library"
 	default false
 
+config ET_ARM_BAREMETAL_METHOD_ALLOCATOR_POOL_SIZE
+	hex "Method allocator pool size in bytes"
+	default 0x20000
+	help
+	  Size of the method allocator pool in bytes. This memory is used
+	  for allocating ExecuTorch method instances and their metadata.
+	  Default is 16KB which should be sufficient for most small models.
+	  Larger models may require more memory.
+
+config ET_ARM_BAREMETAL_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE
+	hex "Temporary allocator pool size in bytes"
+	default 0x8000
+	help
+	  Size of the temporary allocator pool in bytes. This memory is used
+	  for temporary allocations during model execution such as intermediate
+	  tensor calculations. Default is 2KB which should be sufficient for
+	  simple operations. Complex models may require more memory.
+
+config ONLY_LAST
+	bool "Only use the last network"
+	default false
+
+	
+config ET_METHOD_SECTION
+	string "Linker section method buffer is placed"
+	default ".bss.method"
+
+config ET_TENSOR_ARENA_SECTION
+	string "Linker section where activation buffer (tensor arena) is placed"
+	default ".bss.tensor_arena"
+
+config ET_ETHOSU_SCRATCH_SECTION
+	string "Fast scratch buffer section for Ethos-U."
+	default ".bss.ethosu_scratch"
+
+config ET_MODEL
+	string "Model coefficients"
+	default ".rodata.et"
+
 module = STREAMAPPS
 module-str = streamapps
 source "subsys/logging/Kconfig.template.log_config"

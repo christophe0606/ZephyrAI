@@ -10,10 +10,6 @@
 #include <cstdint>
 #include <cstring>
 
-namespace executorch {
-namespace examples {
-namespace arm {
-
 ArmMemoryAllocator::ArmMemoryAllocator(uint32_t size, uint8_t* buffer)
     : MemoryAllocator(size, buffer), buffer_(buffer), size_(size), offset_(0) {}
 
@@ -39,6 +35,3 @@ void ArmMemoryAllocator::reset() {
   offset_ = 0;
 }
 
-} // namespace arm
-} // namespace examples
-} // namespace executorch

@@ -37,8 +37,6 @@
 
 // Runtime copy of the model blob placed in ISRAM so that the Ethos-U DMA can
 // access command stream and weights. The original model_pte[] lives in flash.
-alignas(16) static unsigned char model_pte_runtime[sizeof(model_pte)];
-static bool model_pte_runtime_initialized = false;
 
 using executorch::aten::ScalarType;
 using executorch::aten::Tensor;
@@ -57,9 +55,8 @@ using executorch::runtime::Result;
 using executorch::runtime::Span;
 using executorch::runtime::Tag;
 using executorch::runtime::TensorInfo;
-using executorch::examples::arm::ArmMemoryAllocator;
 
-#if defined(CONFIG_ETHOS_U)
+#if defined(CONFIG_ARM_ETHOS_U)
 extern "C" executorch::runtime::Error
 executorch_delegate_EthosUBackend_registered(void);
 #endif
@@ -73,11 +70,10 @@ executorch_delegate_EthosUBackend_registered(void);
  * availible memory.
  */
 
-#if !defined(ET_ARM_METHOD_ALLOCATOR_POOL_SIZE)
-#define ET_ARM_METHOD_ALLOCATOR_POOL_SIZE (160 * 1024 * 1024)
-#endif
-const size_t method_allocation_pool_size = ET_ARM_METHOD_ALLOCATOR_POOL_SIZE;
-unsigned char __attribute__((
+
+const size_t method_allocation_pool_size = CONFIG_ET_ARM_BAREMETAL_METHOD_ALLOCATOR_POOL_SIZE;
+unsigned char  __attribute__((
+    section(CONFIG_ET_METHOD_SECTION),
     aligned(16))) method_allocation_pool[method_allocation_pool_size];
 
 /**
@@ -96,23 +92,16 @@ unsigned char __attribute__((
  * CONFIG_EXECUTORCH_TEMP_ALLOCATOR_POOL_SIZE
  */
 
-#if !defined(ET_ARM_BAREMETAL_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE)
-#define ET_ARM_BAREMETAL_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE 2048
-#endif
-#if !defined(ET_ARM_BAREMETAL_FAST_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE)
-#define ET_ARM_BAREMETAL_FAST_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE 0x600
-#endif
-
 const size_t temp_allocation_pool_size =
-    ET_ARM_BAREMETAL_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE;
+    CONFIG_ET_ARM_BAREMETAL_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE;
 unsigned char __attribute__((
-    section(".bss.tensor_arena"),
+    section(CONFIG_ET_TENSOR_ARENA_SECTION),
     aligned(16))) temp_allocation_pool[temp_allocation_pool_size];
-#if defined(ET_ARM_BAREMETAL_FAST_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE)
+#if defined(CONFIG_ET_ARM_BAREMETAL_FAST_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE)
 extern "C" {
 size_t ethosu_fast_scratch_size =
-    ET_ARM_BAREMETAL_FAST_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE;
-unsigned char __attribute__((section(".bss.ethosu_scratch"), aligned(16)))
+    CONFIG_ET_ARM_BAREMETAL_FAST_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE;
+unsigned char __attribute__((section(CONFIG_ET_ETHOSU_SCRATCH_SECTION), aligned(16)))
 dedicated_sram[ET_ARM_BAREMETAL_FAST_SCRATCH_TEMP_ALLOCATOR_POOL_SIZE];
 unsigned char* ethosu_fast_scratch = dedicated_sram;
 }
@@ -211,11 +200,10 @@ Result<BufferCleanup> prepare_input_tensors(
 
 } // namespace
 
-int main(int argc, const char* argv[]) {
-  (void)argc;
-  (void)argv;
+int et_runner() {
 
-#if defined(CONFIG_ETHOS_U)
+
+#if defined(CONFIG_ARM_ETHOS_U)
   if (executorch_delegate_EthosUBackend_registered() != Error::Ok) {
     ET_LOG(
         Error,
@@ -229,13 +217,9 @@ int main(int argc, const char* argv[]) {
 
   ET_LOG(Info, "PTE at %p Size: %lu bytes", model_pte, pte_size);
 
-  // Find the offset to the embedded Program.
-  if (!model_pte_runtime_initialized) {
-    std::memcpy(model_pte_runtime, model_pte, sizeof(model_pte));
-    model_pte_runtime_initialized = true;
-  }
-  const void* program_data = model_pte_runtime;
-  size_t program_data_len = pte_size;
+ 
+  const void* program_data = model_pte;
+  size_t program_data_len = sizeof(model_pte);
 
   auto loader = BufferDataLoader(program_data, program_data_len);
   ET_LOG(Info, "PTE Model data loaded. Size: %lu bytes.", program_data_len);
