@@ -95,6 +95,21 @@ else
   echo "[SDK] WARN: ${STAGE1_INSTALL}/lib not found"
 fi
 
+# Extract object files from Ethos-U delegate library for direct linking
+# The static constructor in EthosUBackend.cpp.obj must be linked directly
+# to ensure the backend registration is included in the final executable
+if [[ -f "${OUT_DIR}/lib/libexecutorch_delegate_ethos_u.a" ]]; then
+  echo "[SDK] Extracting Ethos-U delegate object files for direct linking..."
+  pushd "${OUT_DIR}/lib" > /dev/null
+  arm-none-eabi-ar x libexecutorch_delegate_ethos_u.a EthosUBackend.cpp.obj VelaBinStream.cpp.obj 2>/dev/null || \
+  ar x libexecutorch_delegate_ethos_u.a EthosUBackend.cpp.obj VelaBinStream.cpp.obj 2>/dev/null || \
+  echo "[SDK] WARN: Failed to extract Ethos-U delegate objects (ar tool not found)"
+  popd > /dev/null
+  if [[ -f "${OUT_DIR}/lib/EthosUBackend.cpp.obj" ]]; then
+    echo "[SDK] Added EthosUBackend.cpp.obj, VelaBinStream.cpp.obj"
+  fi
+fi
+
 if [[ -n "${STAGE2_INSTALL}" && -d "${STAGE2_INSTALL}" ]]; then
   echo "[SDK] Overlaying selective ops lib from Stage2..."
   SELECTIVE_COPIED=false

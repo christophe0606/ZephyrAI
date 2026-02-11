@@ -56,6 +56,9 @@ echo "[Stage1] Configuring generic runtime build..."
 CMAKE_ARGS=(
   -DCMAKE_BUILD_TYPE=Release
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+  -DCMAKE_POSITION_INDEPENDENT_CODE=OFF
+  "-DCMAKE_C_FLAGS=-fno-pic -fno-pie"
+  "-DCMAKE_CXX_FLAGS=-fno-pic -fno-pie"
   -DEXECUTORCH_BUILD_ARM_BAREMETAL=ON
   -DEXECUTORCH_BUILD_PORTABLE_OPS=ON
   -DEXECUTORCH_BUILD_KERNELS_QUANTIZED=ON
@@ -70,7 +73,6 @@ CMAKE_ARGS=(
   -DEXECUTORCH_OPTIMIZE_SIZE=ON
   -DBUILD_TESTING=OFF
   -DFETCH_ETHOS_U_CONTENT=OFF
-  -DCMAKE_POSITION_INDEPENDENT_CODE=OFF
   -DEXECUTORCH_SELECT_OPS_MODEL=  # empty => full schema based libs
 )
 
@@ -82,6 +84,14 @@ if [[ -n "${EXECUTORCH_EXTRA_CMAKE_ARGS:-}" ]]; then
   # shellcheck disable=SC2206
   EXTRA_SPLIT=(${EXECUTORCH_EXTRA_CMAKE_ARGS})
   CMAKE_ARGS+=("${EXTRA_SPLIT[@]}")
+fi
+
+# Patch ExecuTorch CMakeLists.txt to remove -fPIC from _common_compile_options
+# This is required for bare-metal builds that cannot use position-independent code
+EXECUTORCH_CMAKELISTS="${EXECUTORCH_SRC}/CMakeLists.txt"
+if grep -q '"-fPIC"' "${EXECUTORCH_CMAKELISTS}"; then
+  echo "[Stage1] Patching ExecuTorch CMakeLists.txt to remove -fPIC..."
+  sed -i 's/"-fPIC"/# "-fPIC" # Disabled for baremetal/g' "${EXECUTORCH_CMAKELISTS}"
 fi
 
 cmake "${EXECUTORCH_SRC}" "${CMAKE_ARGS[@]}" -B .
