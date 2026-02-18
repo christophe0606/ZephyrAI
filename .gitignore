@@ -82,3 +82,7 @@ log.txt
 
 
 ram_report.html
+
+executorch/logs/
+!executorch/lib/EthosUBackend.cpp.obj
+!executorch/lib/VelaBinStream.cpp.obj

@@ -63,7 +63,9 @@ extern "C" {
 
 #include "init_drv_src.hpp"
 
+#if defined(CONFIG_PREBUILT_ET)
 #include "et.hpp"
+#endif 
 
 /*
  * Get button configuration from the devicetree sw0 alias. This is mandatory.
@@ -168,15 +170,17 @@ static int cmd_switch(const struct shell *shell, size_t argc, char **argv)
 
 SHELL_CMD_REGISTER(switch, NULL, "Switch between networks", cmd_switch);
 
+#if defined(CONFIG_PREBUILT_ET)
 static int cmd_et(const struct shell *shell, size_t argc, char **argv)
 {
-   et();
+   int err = et();
 
-   LOG_INF("Inference completed with result\n");
+   LOG_INF("Inference completed with result %d\n", err);
 
    return 0;
 }
 SHELL_CMD_REGISTER(et, NULL, "Executorch test", cmd_et);
+#endif 
 
 // Translate interrupt events into CMSIS Stream events
 void interrupt_thread_function(void *, void *, void *)
@@ -555,10 +559,10 @@ int main(void)
 	it has to be done in each node with a state variable.
 
 	*/
-	resume_scheduler_app(&contexts[currentNetwork]);
-	stream_start_threads(&contexts[currentNetwork]);
+	//resume_scheduler_app(&contexts[currentNetwork]);
+	//stream_start_threads(&contexts[currentNetwork]);
 
-	stream_wait_for_threads_end();
+	//stream_wait_for_threads_end();
 
 #if !defined(CONFIG_ONLY_LAST)
 	free_scheduler_appa();
@@ -572,6 +576,7 @@ int main(void)
 
 	stream_free_memory();
 
+	LOG_INF("End of main\n");
 	k_sleep(K_FOREVER);
 
 error:

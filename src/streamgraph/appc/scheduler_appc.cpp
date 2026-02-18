@@ -120,7 +120,7 @@ FIFO buffers
 
 
 typedef struct {
-    CameraFrame *lcd;
+    NullEventNode *lcd;
     ZephyrDebugVideoSource *video;
 } nodes_t;
 
@@ -150,7 +150,7 @@ int init_scheduler_appc(void *evtQueue_,AppcParams *params)
     CG_BEFORE_NODE_INIT;
     cg_status initError;
 
-    nodes.lcd = new (std::nothrow) CameraFrame;
+    nodes.lcd = new (std::nothrow) NullEventNode;
     if (nodes.lcd==NULL)
     {
         return(CG_MEMORY_ALLOCATION_FAILURE);

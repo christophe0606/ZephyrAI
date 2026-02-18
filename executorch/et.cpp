@@ -2,7 +2,8 @@
 
 extern int et_runner();
 
-void et()
+int et()
 {
-   (void)et_runner();
+   int err = et_runner();
+   return err;
 }

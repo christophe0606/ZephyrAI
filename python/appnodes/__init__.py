@@ -8,3 +8,4 @@ from .SlidingBuffer import *
 from .DebugDisplay import *
 from .KWSDisplay import *
 from .SpectrogramDisplay import *
+from .NullEventNode import *

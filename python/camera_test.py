@@ -10,7 +10,8 @@ def generate_camera_test(codeSizeOptimization=False):
     the_graph = Graph()
     
     src = ZephyrDebugVideoSource("video")
-    gain = CameraFrame("lcd")
+    #gain = CameraFrame("lcd")
+    gain = NullEventNode("lcd")
     
     the_graph.connect(src["oev0"],gain["iev0"])
     

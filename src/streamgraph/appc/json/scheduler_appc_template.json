@@ -1,9 +1,9 @@
 {
-    "CameraFrame": {
+    "NullEventNode": {
         "folder": "appnodes/",
         "isTemplate": false,
         "templateArgs": "",
-        "typename": "CameraFrame",
+        "typename": "NullEventNode",
         "isIdentified": true
     },
     "ZephyrDebugVideoSource": {

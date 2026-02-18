@@ -35,7 +35,7 @@ echo "[SDK] Copying headers..."
 if [[ -d "${STAGE1_INSTALL}/include/executorch/generated/assets" ]]; then
   rm -rf "${STAGE1_INSTALL}/include/executorch/generated/assets"
 fi
-rsync -a --delete "${STAGE1_INSTALL}/include/" "${OUT_DIR}/include/"
+rsync -a --no-times --no-perms --no-owner --no-group --no-acls --no-xattrs --delete "${STAGE1_INSTALL}/include/" "${OUT_DIR}/include/"
 
 # Add FlatBuffers headers produced by stage1 (flatc_ep) so downstream CMSIS builds resolve flatbuffers/flatbuffers.h.
 FLATBUF_SRC="${STAGE1_ROOT}/third-party/flatc_ep/include/flatbuffers"
@@ -44,7 +44,7 @@ FLATBUF_SRC="${STAGE1_ROOT}/third-party/flatc_ep/include/flatbuffers"
 FLATBUF_DST="${OUT_DIR}/include/third-party/flatbuffers/include/flatbuffers"
 if [[ -d "${FLATBUF_SRC}" ]]; then
   mkdir -p "${FLATBUF_DST}"
-  rsync -a "${FLATBUF_SRC}/" "${FLATBUF_DST}/"
+  rsync -a --no-times --no-perms --no-owner --no-group --no-acls --no-xattrs "${FLATBUF_SRC}/" "${FLATBUF_DST}/"
   echo "[SDK] Added FlatBuffers headers from ${FLATBUF_SRC}"
 else
   echo "[SDK] WARN: FlatBuffers headers not found at ${FLATBUF_SRC}" >&2
@@ -67,7 +67,7 @@ if [[ -n "${EXECUTORCH_SRC}" ]]; then
   FLATCC_DST="${OUT_DIR}/include/third-party/flatcc/include/flatcc"
   if [[ -d "${FLATCC_SRC}" ]]; then
     mkdir -p "${FLATCC_DST}"
-    rsync -a "${FLATCC_SRC}/" "${FLATCC_DST}/"
+    rsync -a --no-times --no-perms --no-owner --no-group --no-acls --no-xattrs "${FLATCC_SRC}/" "${FLATCC_DST}/"
     echo "[SDK] Added flatcc headers from ${FLATCC_SRC}"
   else
     echo "[SDK] WARN: flatcc headers not found at ${FLATCC_SRC}" >&2
@@ -78,7 +78,7 @@ if [[ -n "${EXECUTORCH_SRC}" ]]; then
   CORTEXM_DST="${OUT_DIR}/include/executorch/backends/cortex_m"
   if [[ -d "${CORTEXM_SRC}" ]]; then
     mkdir -p "${CORTEXM_DST}"
-    rsync -a --include='*/' --include='*.h' --exclude='*' \
+    rsync -a --no-times --no-perms --no-owner --no-group --no-acls --no-xattrs --include='*/' --include='*.h' --exclude='*' \
       "${CORTEXM_SRC}/" "${CORTEXM_DST}/"
     echo "[SDK] Added Cortex-M backend headers from ${CORTEXM_SRC}"
   else
@@ -90,7 +90,7 @@ fi
 
 echo "[SDK] Copying core libraries from Stage1..."
 if [[ -d "${STAGE1_INSTALL}/lib" ]]; then
-  rsync -a "${STAGE1_INSTALL}/lib/" "${OUT_DIR}/lib/"
+  rsync -a --no-times --no-perms --no-owner --no-group --no-acls --no-xattrs "${STAGE1_INSTALL}/lib/" "${OUT_DIR}/lib/"
 else
   echo "[SDK] WARN: ${STAGE1_INSTALL}/lib not found"
 fi

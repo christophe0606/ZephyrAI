@@ -11,10 +11,10 @@
 #include "GenericNodes.hpp"
 
 
-#include "appnodes/CameraFrame.hpp"
+#include "appnodes/NullEventNode.hpp"
 #include "nodes/ZephyrDebugVideoSource.hpp"
 
-template CStreamNode createStreamNode(CameraFrame &obj) ;
+template CStreamNode createStreamNode(NullEventNode &obj) ;
 template CStreamNode createStreamNode(ZephyrDebugVideoSource &obj) ;
 
 // Selector initializations

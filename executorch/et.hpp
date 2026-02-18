@@ -1,3 +1,3 @@
 #pragma once
 
-extern void et();
+extern int et();
