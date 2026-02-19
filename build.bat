@@ -1,6 +1,6 @@
-REM west build -p auto -b alif_e7_dk/ae722f80f55d5xx/rtss_he .
+REM west build -p auto -d out/Zephyr_M55_HE/AppKit-E7/Debug -b alif_e7_dk/ae722f80f55d5xx/rtss_he .
 
-west build -p auto -b  alif_e7_dk_rtss_he . 
+west build -p auto -b  alif_e7_dk_rtss_he -d out/Zephyr_M55_HE/AppKit-E7/Debug . 
 
 west build -t menuconfig -d out/Zephyr_M55_HE/AppKit-E7/Debug
 west build -t ram_report -d out/Zephyr_M55_HE/AppKit-E7/Debug

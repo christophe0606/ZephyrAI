@@ -173,7 +173,12 @@ SHELL_CMD_REGISTER(switch, NULL, "Switch between networks", cmd_switch);
 #if defined(CONFIG_PREBUILT_ET)
 static int cmd_et(const struct shell *shell, size_t argc, char **argv)
 {
-   int err = et();
+   float v = 1.0f;
+
+   if (argc > 1) {
+	 v = strtof(argv[1], NULL);
+   }
+   int err = et(v);
 
    LOG_INF("Inference completed with result %d\n", err);
 

@@ -39,9 +39,8 @@ target_sources(${APP} PRIVATE
 set_source_files_properties(
     ${ROOT}/zephyr/src/arm_executor_runner.cpp
     PROPERTIES
-    COMPILE_DEFINITIONS ET_LOG_DUMP_OUTPUT
+    COMPILE_DEFINITIONS "ET_LOG_DUMP_OUTPUT;ET_LOG_DUMP_INPUT;ET_DUMP_INPUT"
 )
-
 
 add_library(executorch_core STATIC IMPORTED)
 set_target_properties(executorch_core PROPERTIES
@@ -94,29 +93,34 @@ if(EXISTS ${ROOT}/lib/libexecutorch_delegate_ethos_u.a)
 endif()
 
 
-target_link_libraries(${APP} PRIVATE
+zephyr_link_libraries(
   # Core ExecuTorch runtime
   executorch
   executorch_core
 
   # Quantized operators (used by most models)
-  quantized_kernels
- 
+  -Wl,--whole-archive
   zephyr_ai_ops_lib
+  quantized_kernels
+  -Wl,--no-whole-archive
 )
 
 
 if(EXISTS ${ROOT}/lib/libportable_kernels.a)
-target_link_libraries(${APP} PRIVATE
+zephyr_link_libraries(
+   -Wl,--whole-archive
   portable_kernels
+   -Wl,--no-whole-archive
 )
 endif()
 
 # Add Cortex-M optimized kernels if available and targeting Cortex-M
 # Note: These require CMSIS-NN library, so only link if it's available
 if(CONFIG_CPU_CORTEX_M AND TARGET cortex_m_ops_lib AND TARGET CMSIS_NN)
-  target_link_libraries(${APP} PRIVATE
+  zephyr_link_libraries(
+    -Wl,--whole-archive
     cortex_m_kernels
+    -Wl,--no-whole-archive
   )
 endif()
 
@@ -124,23 +128,25 @@ endif()
 # The delegate contains static initializers that register the backend with ExecuTorch
 if(EXISTS ${ROOT}/lib/libexecutorch_delegate_ethos_u.a)
   # Link the delegate library 
-  target_link_libraries(${APP} PRIVATE
+  zephyr_link_libraries(
+    -Wl,--whole-archive
     ${ROOT}/lib/libexecutorch_delegate_ethos_u.a
+    -Wl,--no-whole-archive
     )
   
   # Link the object files directly to ensure static constructor is included
   # The static constructor _GLOBAL__sub_I_EthosUBackend.cpp registers the backend
   if(EXISTS ${ROOT}/lib/EthosUBackend.cpp.obj)
-    target_link_libraries(${APP} PRIVATE
+    zephyr_link_libraries(
       ${ROOT}/lib/EthosUBackend.cpp.obj
       ${ROOT}/lib/VelaBinStream.cpp.obj
     )
   endif()
   
   # Link Zephyr's Ethos-U driver if available
-  if(TARGET ethosu_core_driver)
-    target_link_libraries(${APP} PRIVATE ethosu_core_driver)
-  endif()
+  #if(TARGET ethosu_core_driver)
+  #  target_link_libraries(${APP} PRIVATE ethosu_core_driver)
+  #endif()
 endif()
 
 endfunction()

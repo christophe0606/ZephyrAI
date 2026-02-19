@@ -1,9 +1,9 @@
 #include "et.hpp"
 
-extern int et_runner();
+extern int et_runner(float);
 
-int et()
+int et(float v)
 {
-   int err = et_runner();
+   int err = et_runner(v);
    return err;
 }

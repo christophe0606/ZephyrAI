@@ -28,8 +28,8 @@ string(TOLOWER ${TARGET_CPU} CMAKE_SYSTEM_PROCESSOR)
 set(CMAKE_SYSTEM_NAME Generic)
 
 # Check for ARM toolchain in ExecuTorch installation path
-set(ARM_TOOLCHAIN_PATH "/workspace/executorch/examples/arm/ethos-u-scratch/arm-gnu-toolchain-13.3.rel1-arm-none-eabi/bin")
-set(ARM_TOOLCHAIN_PATH2 "/workspace/executorch/examples/arm/arm-scratch/arm-gnu-toolchain-13.3.rel1-arm-none-eabi/bin")
+set(ARM_TOOLCHAIN_PATH "/workspace/executorch/examples/arm/ethos-u-scratch/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin")
+set(ARM_TOOLCHAIN_PATH2 "/workspace/executorch/examples/arm/arm-scratch/arm-gnu-toolchain-14.3.rel1-x86_64-arm-none-eabi/bin")
 
 if(EXISTS "${ARM_TOOLCHAIN_PATH}/arm-none-eabi-gcc" AND EXISTS "${ARM_TOOLCHAIN_PATH}/arm-none-eabi-g++")
     message(STATUS "Found ARM toolchain in ExecuTorch path: ${ARM_TOOLCHAIN_PATH}")

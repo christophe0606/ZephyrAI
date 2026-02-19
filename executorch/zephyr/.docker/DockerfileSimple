@@ -103,6 +103,7 @@ USER developer
 WORKDIR /workspace/executorch
 RUN ./examples/arm/setup.sh --i-agree-to-the-contained-eula
 
+
 RUN ls ./examples/arm/*
 # Rename architecture-specific toolchain folder to neutral name for multi-arch host-support
 RUN cd ./examples/arm/arm-scratch && \
@@ -113,6 +114,15 @@ RUN cd ./examples/arm/arm-scratch && \
     else \
         echo "Toolchain already has neutral name or not found"; \
     fi
+
+COPY executorch/zephyr/.docker/get_gcc.sh /workspace/executorch/examples/arm/get_gcc.sh
+USER root
+RUN dos2unix /workspace/executorch/examples/arm/get_gcc.sh 
+RUN chmod +x /workspace/executorch/examples/arm/get_gcc.sh
+RUN chown developer:developer /workspace/executorch/examples/arm/get_gcc.sh 
+USER developer
+
+RUN ./examples/arm/get_gcc.sh
 
 # Test if ARM setup worked correctly
 RUN if [ -f "./examples/arm/ethos-u-setup/arm-none-eabi-gcc.cmake" ]; then \

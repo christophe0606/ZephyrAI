@@ -1,3 +1,3 @@
 #pragma once
 
-extern int et();
+extern int et(float);
