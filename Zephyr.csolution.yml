@@ -61,3 +61,4 @@ solution:
         device: :M55_HE
 
   compiler: GCC
+

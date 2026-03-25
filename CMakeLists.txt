@@ -17,6 +17,7 @@ add_subdirectory(src/streamgraph/streamnodes)
 target_sources(app PRIVATE src/main.cpp src/startup.c
   src/streamgraph/nodes_src/kws_img.c 
   src/streamgraph/nodes_src/kws_mfcc.c
+  src/streamgraph/nodes_src/classify.cpp
   
   src/streamgraph/nodes_src/init_drv_src.cpp
   src/networks/kws_micronet_m_vela_H128.tflite.cpp
@@ -24,6 +25,11 @@ target_sources(app PRIVATE src/main.cpp src/startup.c
   src/md5.c
   src/networks/network.cpp
 )
+
+# Workaround for Zephyr issue with gcc / Helium
+# The file classify.cpp uses arm_mve.h
+set_source_files_properties(src/streamgraph/nodes_src/classify.cpp
+PROPERTIES COMPILE_DEFINITIONS ZEPHYR_INCLUDE_TOOLCHAIN_STDINT_H_)
 
 if (CONFIG_DISPLAY)
   target_sources(app PRIVATE
