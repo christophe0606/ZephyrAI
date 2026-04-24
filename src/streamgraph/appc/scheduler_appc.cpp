@@ -144,6 +144,7 @@ CStreamNode* get_scheduler_appc_node(int32_t nodeID)
 int init_scheduler_appc(void *evtQueue_,AppcParams *params)
 {
     EventQueue *evtQueue = reinterpret_cast<EventQueue *>(evtQueue_);
+    (void)evtQueue;
 
     CG_BEFORE_FIFO_INIT;
 

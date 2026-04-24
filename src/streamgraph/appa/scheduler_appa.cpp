@@ -195,6 +195,7 @@ CStreamNode* get_scheduler_appa_node(int32_t nodeID)
 int init_scheduler_appa(void *evtQueue_,AppaParams *params)
 {
     EventQueue *evtQueue = reinterpret_cast<EventQueue *>(evtQueue_);
+    (void)evtQueue;
 
     CG_BEFORE_FIFO_INIT;
     fifos.fifo0 = new (std::nothrow) FIFO<sq15,FIFOSIZE0,1,0>(stream_appa_buf1);
@@ -495,6 +496,7 @@ uint32_t scheduler_appa(int *error)
 {
     int cgStaticError=0;
     uint32_t nbSchedule=0;
+
 
 
 

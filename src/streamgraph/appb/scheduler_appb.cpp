@@ -215,6 +215,7 @@ CStreamNode* get_scheduler_appb_node(int32_t nodeID)
 int init_scheduler_appb(void *evtQueue_,AppbParams *params)
 {
     EventQueue *evtQueue = reinterpret_cast<EventQueue *>(evtQueue_);
+    (void)evtQueue;
 
     CG_BEFORE_FIFO_INIT;
     fifos.fifo0 = new (std::nothrow) FIFO<sq15,FIFOSIZE0,1,0>(stream_appb_buf1);
@@ -643,6 +644,7 @@ uint32_t scheduler_appb(int *error)
 {
     int cgStaticError=0;
     uint32_t nbSchedule=0;
+
 
 
 
