@@ -389,7 +389,7 @@ class TFLite : public StreamNode
         tryInference();
     }
 
-    void processEvent(int dstPort, Event &&evt) final override
+    cg_status processEvent(int dstPort, Event &&evt) final override
     {
 
         if (evt.event_id == kValue)
@@ -413,6 +413,7 @@ class TFLite : public StreamNode
             
            
         }
+        return CG_SUCCESS;
     }
 
     void subscribe(int outputPort, StreamNode &dst, int dstPort) final override

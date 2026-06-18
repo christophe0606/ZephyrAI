@@ -76,7 +76,7 @@ class ZephyrDebugVideoSource: public StreamNode, public ContextSwitch
 	}
 
 
-	void processEvent(int dstPort, Event &&evt) final override
+	cg_status processEvent(int dstPort, Event &&evt) final override
 	{
 		if ((evt.event_id == kDo) && (must_refresh_.load())) {
 			uint16_t *frameBuffer_ = nullptr;
@@ -114,6 +114,7 @@ class ZephyrDebugVideoSource: public StreamNode, public ContextSwitch
 				
 			}
 		}
+		return CG_SUCCESS;
 	};
 
 	void subscribe(int outputPort, StreamNode &dst, int dstPort) final override

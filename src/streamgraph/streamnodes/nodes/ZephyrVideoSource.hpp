@@ -183,9 +183,9 @@ class ZephyrVideoSource : public StreamNode, public ContextSwitch
 	{
 	}
 
-	void processEvent(int dstPort, Event &&evt) final override
+	cg_status processEvent(int dstPort, Event &&evt) final override
 	{
-		
+		return CG_SUCCESS;
 		
 	};
 

@@ -43,7 +43,7 @@ class NullSink: public GenericSink<OUT, outputSamples>
     {
     }
 
-    void processEvent(int dstPort, Event &&evt) final override
+    cg_status processEvent(int dstPort, Event &&evt) final override
     {
         if (dstPort == 0)
         {
@@ -55,6 +55,7 @@ class NullSink: public GenericSink<OUT, outputSamples>
                 }
             }
         }
+        return CG_SUCCESS;
     };
 
     void subscribe(int outputPort, StreamNode &dst, int dstPort) final override

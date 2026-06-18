@@ -66,7 +66,7 @@ class SendToNetwork : public GenericSink<IN, inputSamples>, public ContextSwitch
 		return 0;
 	}
 
-    void processEvent(int dstPort, Event &&evt) final override
+    cg_status processEvent(int dstPort, Event &&evt) final override
     {
         if (dstPort == 0)
         {
@@ -76,6 +76,7 @@ class SendToNetwork : public GenericSink<IN, inputSamples>, public ContextSwitch
                 ready.store(true);
             }
         }
+        return CG_SUCCESS;
     }
 
     void subscribe(int outputPort, StreamNode &dst, int dstPort) final override

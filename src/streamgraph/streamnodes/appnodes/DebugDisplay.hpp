@@ -109,14 +109,14 @@ class DebugDisplay : public ZephyrLCD
         EventQueue::cg_eventQueue->push(LocalDestination{this, 0}, std::move(evt));
     }
 
-    void processEvent(int dstPort, Event &&evt) final override
+    cg_status processEvent(int dstPort, Event &&evt) final override
     {
         //LOG_INF("Debug Display: event %d\n", evt.event_id);
         if (evt.event_id == kDo)
         {
             genNewFrame();
         }
-
+return CG_SUCCESS;
         
     }
 protected:

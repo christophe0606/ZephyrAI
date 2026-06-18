@@ -62,7 +62,7 @@ class CameraFrame : public ZephyrLCD
         (void)canRender;
     }
 
-    void processEvent(int dstPort, Event &&evt) final override
+    cg_status processEvent(int dstPort, Event &&evt) final override
     {
         if (evt.event_id == kValue)
         {
@@ -75,7 +75,7 @@ class CameraFrame : public ZephyrLCD
                 }
             }
         }
-
+        return CG_SUCCESS;
         
     }
 protected:

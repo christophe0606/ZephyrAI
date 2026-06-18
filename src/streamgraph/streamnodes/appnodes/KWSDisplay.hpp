@@ -151,7 +151,7 @@ class KWSDisplay : public ZephyrLCD
         }
     }
 
-    void processEvent(int dstPort, Event &&evt) final override
+    cg_status processEvent(int dstPort, Event &&evt) final override
     {
         if (evt.event_id == kDo)
         {
@@ -166,6 +166,7 @@ class KWSDisplay : public ZephyrLCD
                 evt.apply<uint32_t>(&KWSDisplay::newValue, *this);
             }
         }
+        return CG_SUCCESS;
     }
 
   protected:
